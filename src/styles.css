@@ -2,3 +2,92 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+* {
+    font-family: 'iranSans'!important; 
+    text-align: right;
+   overflow-x: hidden;
+  }
+
+  @font-face {
+    font-family: iranSans;
+    src: url(assets/Fonts/iranSans/IRANSansRegular.ttf) format("opentype");
+  }
+
+.fa {
+  font-family: FontAwesome !important;
+}
+.mat-tab-nav-bar{
+  width: 100%;
+}
+.mat-tab-links{
+  width: 100%;
+  cursor: pointer;
+}
+.btnAdd{
+  margin-right: 1%!important;
+}
+.content{
+  margin: 1%!important;
+  margin-bottom: 4%!important;
+}
+.mat-raised-button{
+  background-color: #794c74 !important;
+}
+.titrCard{
+  position: static;
+  background-color: #794c74;
+ color:white;
+}
+ .titr{
+  overflow-y: hidden;
+ }
+
+.mat-sidenav-content{
+  padding-bottom: 5%;
+}
+.spinner{
+  position: absolute!important;
+  min-width: 100%!important;
+  min-height: 100%!important;
+  background-color: rgba(0, 0, 0, 0.0)!important;
+ 
+}
+.btnPrint{
+  background-color: #cd0a0a!important;
+   margin-right: 1%!important;
+   float:right;font-weight:bold!important;
+   position: fixed!important;
+   z-index: 1000;
+   padding-right: 2%!important;
+   padding-left: 2%!important;
+}
+.btnSave{
+  margin-right: 1%!important;
+
+   background-color:#335d2d!important;
+   }
+   .btnROllBack{
+
+    background-color:#cd0a0a!important;
+    margin-right: 2px!important;
+   }
+   .btnAdd{
+    background-color:#335d2d!important;
+   }
+   .mat-expansion-indicator::after, .mat-expansion-panel-header-description{
+    color:#f8f9fa;
+  } 
+  .mat-form-field-infix{
+    width: 105px!important;
+}
+button{
+  border-radius: 7px !important;
+  margin: 5px!important;
+}
+.cdk-global-overlay-wrapper {
+   display: flex;
+   position: absolute;
+   z-index: 1000;
+   overflow: auto;
+   pointer-events: auto;  
+ }
