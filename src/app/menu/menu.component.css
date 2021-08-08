@@ -140,6 +140,7 @@ mat-list-item.userInfoBox {
 
 .menu-item {
   display: grid;
+  color: #794c74;
 }
 .menu-item .menu-label {
   text-align: center;
@@ -164,4 +165,7 @@ mat-list-item.userInfoBox {
 }
 .panel{
   background-color:  #373737e6;
+}
+.menuIcons{
+  color: white;
 }

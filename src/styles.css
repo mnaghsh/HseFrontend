@@ -5,7 +5,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 * {
     font-family: 'iranSans'!important; 
     text-align: right;
-   overflow-x: hidden;
   }
 
   @font-face {
@@ -36,7 +35,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .titrCard{
   position: static;
   background-color: #794c74;
- color:white;
+  color:white;
+
 }
  .titr{
   overflow-y: hidden;
@@ -63,31 +63,18 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 .btnSave{
   margin-right: 1%!important;
-
    background-color:#335d2d!important;
    }
    .btnROllBack{
-
     background-color:#cd0a0a!important;
     margin-right: 2px!important;
    }
    .btnAdd{
     background-color:#335d2d!important;
    }
-   .mat-expansion-indicator::after, .mat-expansion-panel-header-description{
-    color:#f8f9fa;
-  } 
-  .mat-form-field-infix{
-    width: 105px!important;
-}
+  
+
 button{
   border-radius: 7px !important;
   margin: 5px!important;
 }
-.cdk-global-overlay-wrapper {
-   display: flex;
-   position: absolute;
-   z-index: 1000;
-   overflow: auto;
-   pointer-events: auto;  
- }

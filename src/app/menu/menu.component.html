@@ -2,7 +2,7 @@
   <div mat-tab-link class="flex-fill" *ngFor="let link of navBarItem" [routerLink]="link.path" routerLinkActive
     #rla="routerLinkActive" [active]="rla.isActive">
     <div class="menu-item">
-      <i class="fa fa-telegram" aria-hidden="true"></i>
+      <i [class]="link.icon" style="font-size: x-large;" aria-hidden="true"></i>
       <div class="menu-label">{{link.label}}</div>
     </div>
   </div>
@@ -13,11 +13,15 @@
   <mat-sidenav position="start" #drawer mode="over">
     <mat-list role="side">
       <mat-list-item class="userInfoBox">
+
       </mat-list-item>
 
-      <div >
-        <mat-list-item (click)="drawer.toggle()" role="listitem" *ngFor="let link of expertPages" [routerLink]="link.path">
-         
+      <div>
+
+        <mat-list-item (click)="drawer.toggle()" role="listitem" *ngFor="let link of navBarItem"
+          [routerLink]="link.path">
+          <i [class]="link.icon" style="font-size: large;" class="menuIcons" aria-hidden="true"></i>
+
           <span class="label">{{link.label}}</span>
           <mat-divider>
           </mat-divider>
@@ -28,8 +32,8 @@
 
   </mat-sidenav>
   <mat-sidenav-content>
-    <i class="fa fa-align-justify " style="font-size: x-large;" aria-hidden="true" (click)="drawer.toggle()"></i> 
-
+    <i class="fa fa-align-justify " style="color: red; font-size: xx-large; padding-top: 1%; padding-right: 1%;" aria-hidden="true" (click)="drawer.toggle()"></i>
+  
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>
