@@ -20,21 +20,17 @@ export class MenuComponent implements OnInit {
 
   ngOnInit() {
 
-
     this.navBarItem = [
       { label: ' صفحه اصلی', path: "/home", icon: "fa fa-home" },
-      { label: 'تعریف چک لیست', path: "/report/mainGridReport", icon: "fa fa-pencil" },
+      { label: 'تعریف چک لیست', path: "/createCheckList", icon: "fa fa-pencil" },
       { label: 'انجام ارزیابی', path: "/report/mainGridReportReadOnly", icon: "fa fa-print" },
       { label: 'چاپ گزارش', path: "/report/Contract", icon: "fa fa-newspaper-o" },
     ];
 
+   }
  
-    // this.adminPages = [
-    //   { label: ' تنظیمات اساتید', path: "/registerTeachers", icon: "fas fa-user-plus" },
 
-    // ];
- 
-  }
+
   logout() {
     this.auth.wasLoggedOut();
     this.myRoute.navigate(['login']);

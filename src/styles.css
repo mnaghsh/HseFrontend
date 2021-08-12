@@ -40,6 +40,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
  .titr{
   overflow-y: hidden;
+  padding-right: 3%;
  }
 
 .mat-sidenav-content{

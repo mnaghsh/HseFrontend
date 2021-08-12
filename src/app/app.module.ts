@@ -12,6 +12,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatListModule } from '@angular/material/list';
 import { MenuComponent } from './menu/menu.component';
 import { HomeComponent } from './home/home.component';
+import { CreateCheckListComponent } from './checkList/create-check-list/create-check-list.component';
+import { LoadingComponent } from './utils/loading/loading.component';
 
 
 
@@ -22,6 +24,7 @@ const myRoots: Routes = [
     children: [
       {path: 'home', component: HomeComponent},
       {path: 'menu', component: MenuComponent},
+      {path: 'createCheckList', component: CreateCheckListComponent},
      
     ]
   }
@@ -29,9 +32,11 @@ const myRoots: Routes = [
 
 @NgModule({
   declarations: [
+    LoadingComponent,
     AppComponent,
     HomeComponent,
-    MenuComponent
+    MenuComponent,
+    CreateCheckListComponent
   ],
   imports: [
     BrowserModule, SharedModule, 

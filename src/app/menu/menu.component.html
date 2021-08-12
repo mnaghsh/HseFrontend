@@ -2,7 +2,7 @@
   <div mat-tab-link class="flex-fill" *ngFor="let link of navBarItem" [routerLink]="link.path" routerLinkActive
     #rla="routerLinkActive" [active]="rla.isActive">
     <div class="menu-item">
-      <i [class]="link.icon" style="font-size: x-large;" aria-hidden="true"></i>
+      <i [class]="link.icon" style="font-size: x-large; text-align: center;" aria-hidden="true"></i>
       <div class="menu-label">{{link.label}}</div>
     </div>
   </div>
@@ -32,7 +32,7 @@
 
   </mat-sidenav>
   <mat-sidenav-content>
-    <i class="fa fa-align-justify " style="color: red; font-size: xx-large; padding-top: 1%; padding-right: 1%;" aria-hidden="true" (click)="drawer.toggle()"></i>
+    <i class="fa fa-align-justify rightMenuIcon "   aria-hidden="true" (click)="drawer.toggle()"></i>
   
     <router-outlet></router-outlet>
   </mat-sidenav-content>

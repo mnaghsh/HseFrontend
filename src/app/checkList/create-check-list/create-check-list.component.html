@@ -1,0 +1,38 @@
+
+<mat-card class="titrCard">
+    <h2 class="titr">
+     تعریف چک لیست
+    </h2>
+  </mat-card>
+  <app-loading *ngIf="commonService.loading==true"></app-loading>
+
+  <br>
+<mat-form-field>
+  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="جستجو در لیست اساتید">
+</mat-form-field>
+
+  <!-- <mat-progress-bar mode="indeterminate"></mat-progress-bar> -->
+
+
+
+<div class="mat-elevation-z8">
+  <table dir="rtl" mat-table [dataSource]="dataSource" matSort >
+
+    <ng-container matColumnDef="codChkHecli">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> کد چک لیست </th>
+      <td mat-cell *matCellDef="let row"> {{row.codChkHecli}} </td>
+    </ng-container>
+    <!-- ID Column -->
+    <ng-container matColumnDef="desChkHecli">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> نام چک لیست </th>
+      <td mat-cell *matCellDef="let row"> {{row.desChkHecli}} </td>
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row  *matRowDef="let row; columns: displayedColumns;">
+    </tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</div>

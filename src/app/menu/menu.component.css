@@ -94,6 +94,11 @@ mat-list-item {
   cursor: pointer;
   color: white;
   padding-left: 1%;
+  position: absolute;
+  z-index: 10;
+  font-size: xx-large; 
+  padding-top: 1%;
+   padding-right: 1%;
 }
 @media (max-width: 599px) {
   .mat-tab-link {
