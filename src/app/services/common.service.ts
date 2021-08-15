@@ -35,10 +35,11 @@ export class CommonService {
   reportUserName: any;
   constructor(  private snackBar: MatSnackBar,) { }
   showEventMessage(message,duration=3000,type?) {
+    debugger
     this.snackBar.open(message, '', {
       direction: 'rtl',
       duration: duration,
-      panelClass: type? type: 'background-color:red'
+      panelClass: type? type: 'background-color:red!important'
     });
   }
 

@@ -40,7 +40,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
  .titr{
   overflow-y: hidden;
-  padding-right: 3%;
+  font-size: large !important;
+  text-align: center;
+  font-weight: bold  !important;
  }
 
 .mat-sidenav-content{
@@ -65,17 +67,34 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .btnSave{
   margin-right: 1%!important;
    background-color:#335d2d!important;
+   color: white;
+
    }
    .btnROllBack{
     background-color:#cd0a0a!important;
     margin-right: 2px!important;
+    color: white;
    }
    .btnAdd{
     background-color:#335d2d!important;
+    color: white;
+
    }
   
 
 button{
   border-radius: 7px !important;
   margin: 5px!important;
+}
+.iconEdit{
+  color: green;
+  padding: 3px;
+  cursor: pointer;
+}
+.iconDelete{
+  color: red;
+  padding: 3px;
+  cursor: pointer;
+
+
 }

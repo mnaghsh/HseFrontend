@@ -9,7 +9,19 @@ export class CheckListService {
 
   constructor(public configService:ConfigService) { }
 
-public getListOfcheckLists():Observable<any>{
+public selectListOfcheckLists():Observable<any>{
   return this.configService.get('HseECheckLists');
 }
+
+public insertListOfcheckLists(body):Observable<any>{
+  return this.configService.post('HseECheckLists',body);
+}
+
+public updateListOfcheckLists(id,body):Observable<any>{
+  return this.configService.put('HseECheckLists/'+id,body);
+}
+public deleteListOfcheckLists(id):Observable<any>{
+  return this.configService.delete('HseECheckLists/'+id);
+}
+
 }

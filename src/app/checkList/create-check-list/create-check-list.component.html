@@ -1,38 +1,77 @@
-
 <mat-card class="titrCard">
-    <h2 class="titr">
-     تعریف چک لیست
-    </h2>
-  </mat-card>
-  <app-loading *ngIf="commonService.loading==true"></app-loading>
-
+  <h5 class="titr">
+    تعریف چک لیست
+  </h5>
+</mat-card>
+<app-loading *ngIf="commonService.loading==true"></app-loading>
+<div class="example-container ">
+  <mat-form-field>
+    <input matInput (keyup)="applyFilter($event)" placeholder="جستجو">
+  </mat-form-field>
   <br>
-<mat-form-field>
-  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="جستجو در لیست اساتید">
-</mat-form-field>
-
-  <!-- <mat-progress-bar mode="indeterminate"></mat-progress-bar> -->
-
+  <button mat-flat-button matTooltip="ذخیره " class=" btnROllBack"><i
+      class=" fa fa-trash float-right"></i> &nbsp; حذف &nbsp; </button>
+  <button mat-flat-button matTooltip="ذخیره " class=" btnSave" (click)="saveChanges()"><i
+      class=" fa fa-trash float-right"></i> &nbsp; ذخیره &nbsp; </button>
 
 
-<div class="mat-elevation-z8">
-  <table dir="rtl" mat-table [dataSource]="dataSource" matSort >
+  <table matSort class="table table-responsive table-bordered table-striped  table-hover" mat-table #table
+    [dataSource]="dataSource">
+
+    <!--- Note that these columns can be defined in any order.
+    The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- Position Column -->
+
+ 
+
+
+    <ng-container matColumnDef="number">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>ردیف </th>
+      <td mat-cell *matCellDef="let row;let index = index"> {{index+1}} </td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
 
     <ng-container matColumnDef="codChkHecli">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> کد چک لیست </th>
-      <td mat-cell *matCellDef="let row"> {{row.codChkHecli}} </td>
-    </ng-container>
-    <!-- ID Column -->
-    <ng-container matColumnDef="desChkHecli">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> نام چک لیست </th>
-      <td mat-cell *matCellDef="let row"> {{row.desChkHecli}} </td>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef> نام چک لیست</th>
+      <td mat-cell *matCellDef="let element">
+        <input *ngIf="edit" [placeholder]="" [(ngModel)]="element.codChkHecli" type="text">
+        <p *ngIf="!edit">{{element.codChkHecli}}</p>
+      </td>
+      <td mat-footer-cell *matFooterCellDef>
+        <input placeholder="کد" type="text">
+      </td>
     </ng-container>
 
+    <ng-container matColumnDef="desChkHecli">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef> نام چک لیست</th>
+      <td mat-cell *matCellDef="let element">
+        <input matInput [placeholder]="" [(ngModel)]="element.desChkHecli" type="text">
+      </td>
+      <td mat-footer-cell *matFooterCellDef>
+        <input placeholder="نام" type="text">
+      </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="process">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>عملیات </th>
+      <td mat-cell *matCellDef="let row;let index = index">
+         <i class=" fa fa-pencil-square-o  iconEdit" (click)="edit=!edit"></i> 
+         <i class=" fa fa-trash  iconDelete" (click)="deleteRow(row)"></i> </td>
+      <td mat-footer-cell *matFooterCellDef
+      ></td>
+    </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row  *matRowDef="let row; columns: displayedColumns;">
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr class="" mat-footer-row *matFooterRowDef="displayedColumns">
+
     </tr>
+
   </table>
 
-  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  <mat-paginator [pageSizeOptions]="[5,10, 25, 100]"></mat-paginator>
+
 </div>
