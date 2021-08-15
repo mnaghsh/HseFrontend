@@ -49,9 +49,10 @@ export class CreateCheckListComponent implements OnInit {
   selection = new SelectionModel<any>(true, [])
   userModel: Record;
   updateUserName;
-  displayedColumns = ['number', 'codChkHecli', 'desChkHecli', 'process'];
+  displayedColumns = ['number', 'desChkHecli', 'process'];
   public users: Record[];
   ListOfcheckLists: any;
+  newRowObj: any;
 
   constructor(
     public checkListService: CheckListService,
@@ -61,7 +62,7 @@ export class CreateCheckListComponent implements OnInit {
     this.getUsers();
   }
   ngOnInit() {
-    //this.userModel = {} as Record;
+    this.newRowObj={}
     this.getUsers();
   }
 
@@ -78,12 +79,34 @@ export class CreateCheckListComponent implements OnInit {
     });
   }
 
-  public saveChanges() {
-
-    this.checkListService.updateListOfcheckLists(3, this.ListOfcheckLists).subscribe((success) => {
-      
-      console.log('updateListOfcheckLists', success)
+  public addRow() {
+    debugger
+    let object = {
+      "desChkHecli":  this.newRowObj.desChkHecli,
+      "unitCehckListsHecli":   "string"
     }
+
+    this.checkListService.insertListOfcheckLists(object).subscribe((success) => {
+      this.commonService.showEventMessage("ایجاد ردیف با موفقیت انجام شد.", 3000, "green")
+      this.getUsers();
+      console.log('updateListOfcheckLists', success)
+    },
+      (error) => {
+        this.commonService.showEventMessage("خطایی به وجود آمده یا ارتباط با سرور قطع می باشد.", 3000, "green")
+      }
+    )
+  }
+
+  public updateRow(row) {
+    this.edit = !this.edit;
+    this.checkListService.updateListOfcheckLists(row['eCheckListId'], row).subscribe((success) => {
+      this.commonService.showEventMessage("ویرایش ردیف با موفقیت انجام شد.", 3000, "green")
+      this.getUsers();
+      console.log('updateListOfcheckLists', success)
+    },
+      (error) => {
+        this.commonService.showEventMessage("خطایی به وجود آمده یا ارتباط با سرور قطع می باشد.", 3000, "green")
+      }
     )
   }
 
@@ -93,8 +116,11 @@ export class CreateCheckListComponent implements OnInit {
     this.checkListService.deleteListOfcheckLists(row['eCheckListId']).subscribe(
       (success) => {
         this.getUsers();
-        this.commonService.showEventMessage("حذف با موفقیت انجام شد.",3000,"red")
+        this.commonService.showEventMessage("حذف ردیف با موفقیت انجام شد.", 3000, "red")
         console.log('sucess', success)
+      },
+      (error) => {
+        this.commonService.showEventMessage("خطایی به وجود آمده یا ارتباط با سرور قطع می باشد.", 3000, "green")
       }
     )
   }

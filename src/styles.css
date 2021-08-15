@@ -87,14 +87,23 @@ button{
   margin: 5px!important;
 }
 .iconEdit{
-  color: green;
+  color:  #794c74;
   padding: 3px;
-  cursor: pointer;
 }
 .iconDelete{
   color: red;
   padding: 3px;
+}
+
+.iconOk{
+  color: green;
+  padding: 3px;
+}
+.iconAdd{
+  color: green;
+  padding: 5px;
+}
+
+i{
   cursor: pointer;
-
-
 }
