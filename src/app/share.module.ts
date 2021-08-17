@@ -66,7 +66,7 @@ import { MatIconModule } from '@angular/material/icon';
      MatExpansionModule,
     TextFieldModule,
      MatSlideToggleModule,
-     MatIconModule
+     MatIconModule,
   ],
   providers: [],
   bootstrap: []

@@ -90,11 +90,18 @@ export class CreateCheckListComponent implements OnInit {
       this.commonService.showEventMessage("ایجاد ردیف با موفقیت انجام شد.", 3000, "green")
       this.getUsers();
       console.log('updateListOfcheckLists', success)
+      this.newRowObj={};
     },
       (error) => {
         this.commonService.showEventMessage("خطایی به وجود آمده یا ارتباط با سرور قطع می باشد.", 3000, "green")
       }
     )
+  }
+  public editRow(row){
+    this.edit=!this.edit;
+    row['editable']=true;
+    debugger
+
   }
 
   public updateRow(row) {
@@ -103,11 +110,14 @@ export class CreateCheckListComponent implements OnInit {
       this.commonService.showEventMessage("ویرایش ردیف با موفقیت انجام شد.", 3000, "green")
       this.getUsers();
       console.log('updateListOfcheckLists', success)
+      ;
+
     },
       (error) => {
         this.commonService.showEventMessage("خطایی به وجود آمده یا ارتباط با سرور قطع می باشد.", 3000, "green")
       }
     )
+
   }
 
   public deleteRow(row) {
@@ -115,9 +125,13 @@ export class CreateCheckListComponent implements OnInit {
     console.log('del', row)
     this.checkListService.deleteListOfcheckLists(row['eCheckListId']).subscribe(
       (success) => {
+       
         this.getUsers();
+        //this.edit = !this.edit;
         this.commonService.showEventMessage("حذف ردیف با موفقیت انجام شد.", 3000, "red")
         console.log('sucess', success)
+        
+
       },
       (error) => {
         this.commonService.showEventMessage("خطایی به وجود آمده یا ارتباط با سرور قطع می باشد.", 3000, "green")
