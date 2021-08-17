@@ -14,6 +14,10 @@ import { MenuComponent } from './menu/menu.component';
 import { HomeComponent } from './home/home.component';
 import { CreateCheckListComponent } from './checkList/create-check-list/create-check-list.component';
 import { LoadingComponent } from './utils/loading/loading.component';
+import { ChecklistReportComponent } from './checkList/checklist-report/checklist-report.component';
+import { ChecklistAssesmentComponent } from './checkList/checklist-assesment/checklist-assesment.component';
+import { ChecklistOptionsComponent } from './checkList/checklist-options/checklist-options.component';
+import { ChecklistQuestionsComponent } from './checkList/checklist-questions/checklist-questions.component';
 
 
 
@@ -22,10 +26,10 @@ const myRoots: Routes = [
     //canActivate: [LoginGuard],
     path: '', component: MenuComponent,
     children: [
-      {path: 'home', component: HomeComponent},
-      {path: 'menu', component: MenuComponent},
-      {path: 'createCheckList', component: CreateCheckListComponent},
-     
+      { path: 'home', component: HomeComponent },
+      { path: 'menu', component: MenuComponent },
+      { path: 'createCheckList', component: CreateCheckListComponent },
+
     ]
   }
 ];
@@ -36,10 +40,14 @@ const myRoots: Routes = [
     AppComponent,
     HomeComponent,
     MenuComponent,
-    CreateCheckListComponent
+    CreateCheckListComponent,
+    ChecklistReportComponent,
+    ChecklistAssesmentComponent,
+    ChecklistOptionsComponent,
+    ChecklistQuestionsComponent
   ],
   imports: [
-    BrowserModule, SharedModule, 
+    BrowserModule, SharedModule,
     MatTabsModule,
     MatListModule,
     MatSidenavModule,
