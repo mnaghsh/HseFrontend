@@ -40,6 +40,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   position: fixed !important ;
 
 }
+
+.titrCardDialog{
+
+  background-color: #794c74;
+  color:white;
+  width: 100%;
+
+}
  .titr{
   width: 100%;
   overflow-y: hidden;
@@ -47,6 +55,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   text-align: center;
   font-weight: bold  !important;
  }
+
+ 
 
 .mat-sidenav-content{
   padding-bottom: 5%;

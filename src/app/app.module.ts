@@ -29,6 +29,7 @@ const myRoots: Routes = [
       { path: 'home', component: HomeComponent },
       { path: 'menu', component: MenuComponent },
       { path: 'createCheckList', component: CreateCheckListComponent },
+      { path: 'questions', component: ChecklistQuestionsComponent },
 
     ]
   }
