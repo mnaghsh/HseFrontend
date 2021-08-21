@@ -39,8 +39,6 @@ export class CreateCheckListComponent implements OnInit {
 
   ) {
     this.fillDropDowns();
-    this.getUsers();
-
   }
   fillDropDowns() {
 
@@ -68,10 +66,10 @@ export class CreateCheckListComponent implements OnInit {
   }
   ngOnInit() {
     this.newRowObj = {}
-    this.getUsers();
+    this.getChecklists();
   }
 
-  public getUsers() {
+  public getChecklists() {
     this.commonService.loading = true;
     this.checkListService.selectListOfcheckLists().subscribe((success) => {
       this.ListOfcheckLists = success;
@@ -95,7 +93,7 @@ export class CreateCheckListComponent implements OnInit {
 
     this.checkListService.insertListOfcheckLists(object).subscribe((success) => {
       this.commonService.showEventMessage("ايجاد رديف با موفقيت انجام شد.", 3000, "green")
-      this.getUsers();
+      this.getChecklists();
       console.log('updateListOfcheckLists', success)
       this.newRowObj = {};
     },
@@ -116,7 +114,7 @@ export class CreateCheckListComponent implements OnInit {
     this.edit = !this.edit;
     this.checkListService.updateListOfcheckLists(row['eCheckListId'], row).subscribe((success) => {
       this.commonService.showEventMessage("ويرايش رديف با موفقيت انجام شد.", 3000, "green")
-      this.getUsers();
+      this.getChecklists();
       console.log('updateListOfcheckLists', success)
         ;
 
@@ -134,7 +132,7 @@ export class CreateCheckListComponent implements OnInit {
     this.checkListService.deleteListOfcheckLists(row['eCheckListId']).subscribe(
       (success) => {
 
-        this.getUsers();
+        this.getChecklists();
         //this.edit = !this.edit;
         this.commonService.showEventMessage("حذف رديف با موفقيت انجام شد.", 3000, "red")
         console.log('sucess', success)
@@ -152,7 +150,8 @@ export class CreateCheckListComponent implements OnInit {
       width: "85%",
       height: "85%",
       data: {
-        //field: field,
+        checkListId: row.eCheckListId,
+        checkListName: row.desChkHecli,
       }
     });
     dialogRef.afterClosed().subscribe(
@@ -166,7 +165,8 @@ export class CreateCheckListComponent implements OnInit {
       width: "85%",
       height: "85%",
       data: {
-        //field: field,
+        checkListId: row.eCheckListId,
+        checkListName: row.desChkHecli,
       }
     });
     dialogRef.afterClosed().subscribe(

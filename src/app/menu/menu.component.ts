@@ -33,7 +33,7 @@ export class MenuComponent implements OnInit {
 
   logout() {
     this.auth.wasLoggedOut();
-    this.myRoute.navigate(['login']);
+    this.myRoute.navigate(['createCheckList']);
 
   }
 }
