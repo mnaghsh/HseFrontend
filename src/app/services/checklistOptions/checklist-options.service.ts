@@ -10,8 +10,12 @@ export class ChecklistOptionsService {
   constructor(public configService: ConfigService) { }
 
 
-  public selectListOfcheckListsOptions(): Observable<any> {
+  public selectAllListOfcheckListsOptions(): Observable<any> {
     return this.configService.get('HseECheckListOptions');
+  }
+
+  public selectListOfOptionsOfCheckList(HecliECheckListId):Observable<any>{
+    return this.configService.get('HseECheckListOptions/GetHseECheckListOptionsOfChecklist/'+HecliECheckListId);
   }
 
   public insertListOfcheckListsOptions(body): Observable<any> {

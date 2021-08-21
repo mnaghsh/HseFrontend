@@ -51,7 +51,7 @@ export class ChecklistQuestionsComponent implements OnInit {
 
   public getChecklistQuestions() {
     this.commonService.loading = true;
-    this.checkListQuestionService.selectListOfcheckListsQuestions().subscribe((success) => {
+    this.checkListQuestionService.selectListOfQuestionsOfCheckList(this.checklistId).subscribe((success) => {
       this.ListOfcheckListsQuestions = success;
       console.log('ListOfcheckListsQuestions', this.ListOfcheckListsQuestions)
       this.dataSource = new MatTableDataSource(this.ListOfcheckListsQuestions);

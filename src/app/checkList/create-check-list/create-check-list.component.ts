@@ -167,6 +167,8 @@ export class CreateCheckListComponent implements OnInit {
       data: {
         checkListId: row.eCheckListId,
         checkListName: row.desChkHecli,
+        
+        
       }
     });
     dialogRef.afterClosed().subscribe(
