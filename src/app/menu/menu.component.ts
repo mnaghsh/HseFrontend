@@ -19,11 +19,12 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.myRoute.navigate(['checklistAssesment']);
 
     this.navBarItem = [
       { label: ' صفحه اصلی', path: "/home", icon: "fa fa-home" },
       { label: 'تعریف چک لیست', path: "/createCheckList", icon: "fa fa-pencil" },
-      { label: 'انجام ارزیابی', path: "/report/mainGridReportReadOnly", icon: "fa fa-print" },
+      { label: 'انجام ارزیابی', path: "/checklistAssesment", icon: "fa fa-print" },
       { label: 'چاپ گزارش', path: "/report/Contract", icon: "fa fa-newspaper-o" },
     ];
 
@@ -33,7 +34,7 @@ export class MenuComponent implements OnInit {
 
   logout() {
     this.auth.wasLoggedOut();
-    this.myRoute.navigate(['createCheckList']);
+    this.myRoute.navigate(['login']);
 
   }
 }
