@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, OnChanges, Inject } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import { delay } from 'q';
@@ -7,7 +7,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { CheckListService } from 'src/app/services/checkList/check-list.service';
 import { CommonService } from 'src/app/services/common.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ChecklistQuestionsComponent } from '../checklist-questions/checklist-questions.component';
 import { ChecklistOptionsComponent } from '../checklist-options/checklist-options.component';
 
@@ -33,12 +33,20 @@ export class CreateCheckListComponent implements OnInit {
   department: { value: number; viewValue: string; }[];
 
   constructor(
+    
+    // public dialogRef: MatDialogRef<any>,
+    // @Inject(MAT_DIALOG_DATA) public dialogData: any,
     public checkListService: CheckListService,
     public commonService: CommonService,
     private dialog: MatDialog,
 
   ) {
+    this.getChecklists();
     this.fillDropDowns();
+   
+  }
+  ngAfterViewInit(){
+    
   }
   fillDropDowns() {
 
@@ -66,7 +74,7 @@ export class CreateCheckListComponent implements OnInit {
   }
   ngOnInit() {
     this.newRowObj = {}
-    this.getChecklists();
+   
   }
 
   public getChecklists() {
@@ -83,7 +91,7 @@ export class CreateCheckListComponent implements OnInit {
   }
 
   public addRow() {
-    debugger
+    
     let object = {
       "desChkHecli": this.newRowObj.desChkHecli,
       "unitCehckListsHecli": this.newRowObj.unitCehckListsHecli,
@@ -106,7 +114,7 @@ export class CreateCheckListComponent implements OnInit {
     row.updateDate=new Date() 
     this.edit = !this.edit;
     row['editable'] = true;
-    debugger
+    
 
   }
 
@@ -186,4 +194,11 @@ export class CreateCheckListComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
+
+  selectRow(row){
+    console.log(row)
+    this.commonService.selectedCheckListRow=row;
+    // this.dialogRef.close(row)
+  }
+
 }

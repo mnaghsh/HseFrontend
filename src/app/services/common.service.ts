@@ -33,9 +33,10 @@ export class CommonService {
   userDetails: any;
   userDetailInfo: any;
   reportUserName: any;
+  selectedCheckListRow: any;
   constructor(  private snackBar: MatSnackBar,) { }
   showEventMessage(message,duration=3000,type?) {
-    debugger
+    
     this.snackBar.open(message, '', {
       direction: 'rtl',
       duration: duration,

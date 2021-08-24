@@ -20,19 +20,19 @@
             <form [formGroup]="firstFormGroup" style="text-align: center;">
                 <mat-form-field appearance="fill">
                     <mat-label>نام چک لیست</mat-label>
-                    <input matInput  formControlName="firstCtrl" required>
+                    <input (click)="selectCheckList()" matInput  formControlName="firstCtrl" required>
                 </mat-form-field>
                 <mat-form-field appearance="fill">
                     <mat-label>انتخاب مکان</mat-label>
-                    <input matInput  formControlName="firstCtrl" required>
+                    <input (click)="selectLocations()" matInput  formControlName="secondCtrl" required>
                 </mat-form-field>
                 <mat-form-field appearance="fill">
                     <mat-label>انتخاب ارزیاب</mat-label>
-                    <input matInput  formControlName="firstCtrl" required>
+                    <input matInput  formControlName="thirdCtrl" required>
                 </mat-form-field>
                 <mat-form-field appearance="fill">
                     <mat-label>توضیحات</mat-label>
-                    <input matInput  formControlName="firstCtrl" required>
+                    <input matInput  formControlName="thirdCtrl" required>
                 </mat-form-field>
                 <div>
                     <button mat-button matStepperNext>Next</button>
@@ -100,11 +100,26 @@
                 </div>
             </form>
         </mat-step>
-        <mat-step>
-            <ng-template matStepLabel>پایان</ng-template>
+        <mat-step [stepControl]="thirdFormGroup" label="پرکردن چک لیست ">
+            <form [formGroup]="thirdFormGroup">
+                <!-- <mat-form-field appearance="fill">
+                <mat-label>Address</mat-label>
+                <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY" required>
+            </mat-form-field> -->
+
+              
+                <div>
+                    <button style="float: right;"  mat-raised-button color="primary"  mat-button matStepperPrevious>مرحله قبل</button>
+                    <!-- <button style="float: left;"  mat-raised-button color="accent"  mat-button matStepperNext>مرحله بعد</button> -->
+                </div>
+            </form>
+        </mat-step>
+
+        <!-- <mat-step>
+            <ng-template matStepLabel>Done</ng-template>
             <p>You are now done.</p>
             <div>
-                <button mat-button matStepperPrevious>Back</button>
+              <button style="float: right;"  mat-raised-button color="primary" matStepperPrevious>بازگشت</button>
             </div>
-        </mat-step>
+          </mat-step> -->
     </mat-stepper>

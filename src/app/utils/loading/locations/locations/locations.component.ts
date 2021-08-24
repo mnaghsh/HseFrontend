@@ -7,25 +7,25 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { CheckListService } from 'src/app/services/checkList/check-list.service';
 import { CommonService } from 'src/app/services/common.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ChecklistQuestionService } from 'src/app/services/checklistQuestions/checklist-question.service';
 import { ChecklistOptionsService } from 'src/app/services/checklistOptions/checklist-options.service';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { LocationsService } from 'src/app/services/locations/locations.service';
 
 
 
 @Component({
-  selector: 'app-checklist-options',
-  templateUrl: './checklist-options.component.html',
-  styleUrls: ['./checklist-options.component.css']
+  selector: 'app-locations',
+  templateUrl: './locations.component.html',
+  styleUrls: ['./locations.component.css']
 })
-
-export class ChecklistOptionsComponent implements OnInit {
+export class LocationsComponent implements OnInit {
   edit = false;
   enable: boolean = true;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: MatTableDataSource<any>;
-  displayedColumns = ['number', 'desOptionHeclo', 'process'];
+  displayedColumns = ['number', 'namLocation', 'process'];
   ListOfcheckListsOptions: any;
   newRowObj: any;
   unit: { value: number; viewValue: string; }[];
@@ -34,25 +34,25 @@ export class ChecklistOptionsComponent implements OnInit {
   checklistName: any;
 
   constructor(
-    public checkListOptionsService: ChecklistOptionsService,
+    public locationsService: LocationsService,
     public commonService: CommonService,
     private dialog: MatDialog,
     public dialogRef: MatDialogRef<any>,
     @Inject(MAT_DIALOG_DATA) public recievedData
   ) {
-    this.checklistId = recievedData.checkListId
-    this.checklistName = recievedData.checkListName
-    
+    // this.checklistId = recievedData.checkListId
+    // this.checklistName = recievedData.checkListName
+    this.getLocations();
   }
 
   ngOnInit() {
     this.newRowObj = {}
-    this.getChecklistOptions();
+   
   }
 
-  public getChecklistOptions() {
+  public getLocations() {
     this.commonService.loading = true;
-    this.checkListOptionsService.selectListOfOptionsOfCheckList(this.checklistId).subscribe((success) => {
+    this.locationsService.selectAllListOflocations().subscribe((success) => {
       this.ListOfcheckListsOptions = success;
       console.log('ListOfcheckListsOptions', this.ListOfcheckListsOptions)
       this.dataSource = new MatTableDataSource(this.ListOfcheckListsOptions);
@@ -61,18 +61,19 @@ export class ChecklistOptionsComponent implements OnInit {
       this.commonService.loading = false;
     });
   }
+  
 
   public addRow() {
     
     let object = {
-      "desOptionHeclo": this.newRowObj.desOptionHeclo,
-      "hecliECheckListId": this.checklistId,
-      "createDate": new Date()
+      "namLocation": this.newRowObj.namLocation,
+     // "namLocation": this.checklistId,
+      // "createDate": new Date()
     }
 
-    this.checkListOptionsService.insertListOfcheckListsOptions(object).subscribe((success) => {
+    this.locationsService.insertListOflocations(object).subscribe((success) => {
       this.commonService.showEventMessage("ايجاد رديف با موفقيت انجام شد.", 3000, "green")
-      this.getChecklistOptions();
+      this.getLocations();
       console.log('updateListOfcheckLists', success)
       this.newRowObj = {};
     },
@@ -89,9 +90,9 @@ export class ChecklistOptionsComponent implements OnInit {
 
   public updateRow(row) {
     this.edit = !this.edit;
-    this.checkListOptionsService.updateListOfcheckListsOptions(row['eOptionId'], row).subscribe((success) => {
+    this.locationsService.updateListOflocations(row['locationId'], row).subscribe((success) => {
       this.commonService.showEventMessage("ويرايش رديف با موفقيت انجام شد.", 3000, "green")
-      this.getChecklistOptions();
+      this.getLocations();
       console.log('updateListOfcheckListsQuestions', success)
         ;
 
@@ -106,10 +107,10 @@ export class ChecklistOptionsComponent implements OnInit {
   public deleteRow(row) {
 
     console.log('del', row)
-    this.checkListOptionsService.deleteListOfcheckListsOptions(row['eOptionId']).subscribe(
+    this.locationsService.deleteListOflocations(row['locationId']).subscribe(
       (success) => {
 
-        this.getChecklistOptions();
+        this.getLocations();
         //this.edit = !this.edit;
         this.commonService.showEventMessage("حذف رديف با موفقيت انجام شد.", 3000, "red")
         console.log('sucess', success)
@@ -120,6 +121,11 @@ export class ChecklistOptionsComponent implements OnInit {
         this.commonService.showEventMessage("خطايي به وجود آمده يا ارتباط با سرور قطع مي باشد.", 3000, "green")
       }
     )
+  }
+
+  selectRow(row){
+    console.log(row)
+    this.dialogRef.close(row)
   }
 
  
@@ -133,4 +139,5 @@ export class ChecklistOptionsComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
+ 
 }

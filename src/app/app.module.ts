@@ -18,6 +18,7 @@ import { ChecklistReportComponent } from './checkList/checklist-report/checklist
 import { ChecklistAssesmentComponent } from './checkList/checklist-assesment/checklist-assesment.component';
 import { ChecklistOptionsComponent } from './checkList/checklist-options/checklist-options.component';
 import { ChecklistQuestionsComponent } from './checkList/checklist-questions/checklist-questions.component';
+import { LocationsComponent } from './utils/loading/locations/locations/locations.component';
 
 
 
@@ -31,6 +32,7 @@ const myRoots: Routes = [
       { path: 'createCheckList', component: CreateCheckListComponent },
       { path: 'questions', component: ChecklistQuestionsComponent },
       { path: 'checklistAssesment', component: ChecklistAssesmentComponent },
+      { path: 'locations', component: LocationsComponent },
       
 
     ]
@@ -47,7 +49,8 @@ const myRoots: Routes = [
     ChecklistReportComponent,
     ChecklistAssesmentComponent,
     ChecklistOptionsComponent,
-    ChecklistQuestionsComponent
+    ChecklistQuestionsComponent,
+    LocationsComponent
   ],
   imports: [
     BrowserModule, SharedModule,
@@ -63,6 +66,8 @@ const myRoots: Routes = [
 
     BrowserAnimationsModule,
   ],
+
+
   providers: [],
   bootstrap: [AppComponent]
 })

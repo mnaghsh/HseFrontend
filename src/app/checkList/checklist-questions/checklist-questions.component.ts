@@ -62,7 +62,7 @@ export class ChecklistQuestionsComponent implements OnInit {
   }
 
   public addRow() {
-    debugger
+    
     let object = {
       "desQuestionHeclq": this.newRowObj.desQuestionHeclq,
       "hecliECheckListId": this.checklistId,
