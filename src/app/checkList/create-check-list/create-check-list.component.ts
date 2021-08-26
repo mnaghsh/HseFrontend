@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnChanges, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, OnChanges, Inject, Optional } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import { delay } from 'q';
@@ -34,8 +34,8 @@ export class CreateCheckListComponent implements OnInit {
 
   constructor(
     
-    // public dialogRef: MatDialogRef<any>,
-    // @Inject(MAT_DIALOG_DATA) public dialogData: any,
+     public dialogRef: MatDialogRef<any>,
+     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: any,
     public checkListService: CheckListService,
     public commonService: CommonService,
     private dialog: MatDialog,
@@ -197,8 +197,7 @@ export class CreateCheckListComponent implements OnInit {
 
   selectRow(row){
     console.log(row)
-    this.commonService.selectedCheckListRow=row;
-    // this.dialogRef.close(row)
+     this.dialogRef.close(row)
   }
 
 }

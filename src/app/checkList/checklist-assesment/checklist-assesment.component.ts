@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { StepperOrientation } from '@angular/material/stepper';
 import { Observable } from 'rxjs';
@@ -40,55 +40,39 @@ export class ChecklistAssesmentComponent implements OnInit {
   dataSource = ELEMENT_DATA;
 
 
-  firstFormGroup = this._formBuilder.group({
-    firstCtrl: ['', Validators.required],
-    secondCtrl: ['', Validators.required],
-    thirdCtrl: ['', Validators.required]
-  });
-  secondFormGroup = this._formBuilder.group({
+  secondFormGroup = this.fb.group({
     secondCtrl: ['', Validators.required]
   });
-  thirdFormGroup = this._formBuilder.group({
-    thirdCtrl: ['', Validators.required]
-  });
+  // thirdFormGroup = this._formBuilder.group({
+  //   thirdCtrl: ['', Validators.required]
+  // });
   stepperOrientation: Observable<StepperOrientation>;
   locationId: any;
   checkListId: any;
+  firstLevel = this.fb.group({
+    firstCtrl: ['', Validators.required],
+    secondCtrl: ['', Validators.required],
+    thirdCtrl: ['', Validators.required],
+    forthCtrl: ['']
+  });
+  namLocation: any;
+  desChkHecli: any;
+  nextLevelPermision = true;
+  requestChecklistObject: { locationIdHsrch: any; namLocationHsrch: any; hecliECheckListId: any; assessorIdHsrch: any; namAssessorHsrch: string; requestDescriptionHsrch: any; createDate: Date; };
 
 
-  constructor(private _formBuilder: FormBuilder,
+  constructor(private fb: FormBuilder,
     private dialog: MatDialog,
     public commonService: CommonService,
     public requestCheckListService: RequestChecklistService,
-    
     breakpointObserver: BreakpointObserver) {
     this.stepperOrientation = breakpointObserver.observe('(min-width: 800px)')
       .pipe(map(({ matches }) => matches ? 'horizontal' : 'vertical'));
   }
 
-  ngOnInit(): void {
-  }
-  selectLocations() {
-    {
-      const dialogRef = this.dialog.open(LocationsComponent, {
-        width: "auto%",
-        height: "auto%",
-        data: {
-          // checkListId: row.eCheckListId,
-          //  checkListName: row.desChkHecli,
-        }
-      });
-      dialogRef.afterClosed().subscribe(
-        (data) => {
-          debugger
-          this.locationId = data.locationId;
-          this.firstFormGroup = this._formBuilder.group({
-            secondCtrl: [data.namLocation, Validators.required]
-          });
 
-        }
-      )
-    }
+  ngOnInit(): void {
+
   }
   selectCheckList() {
     const dialogRef = this.dialog.open(CreateCheckListComponent, {
@@ -102,34 +86,83 @@ export class ChecklistAssesmentComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(
       (data) => {
-        data = this.commonService.selectedCheckListRow;
+
         this.checkListId = data.eCheckListId;
-        this.firstFormGroup = this._formBuilder.group({
-          firstCtrl: [data.desChkHecli, Validators.required]
-        });
+        this.desChkHecli = data.desChkHecli;
+        // this.firstLevel.value.firstCtrl=data.desChkHecli
+        this.firstLevel.controls['firstCtrl'].setValue(data.desChkHecli);
+        // this.firstLevel = this.fb.group({
+        //   firstCtrl: [data.desChkHecli, Validators.required]
+
+        // });
 
       }
     )
 
   }
-  public addRow() {
-    
-    let object = {
-      "desQuestionHeclq": "",
-      "hecliECheckListId": "",
+  selectLocations() {
+    {
+      const dialogRef = this.dialog.open(LocationsComponent, {
+        width: "auto%",
+        height: "auto%",
+        data: {
+          // checkListId: row.eCheckListId,
+          //  checkListName: row.desChkHecli,
+        }
+      });
+      dialogRef.afterClosed().subscribe(
+        (data) => {
+
+          this.locationId = data.locationId;
+          this.namLocation = data.namLocation;
+          // this.firstLevel.value.secondCtrl=data.namLocation
+          this.firstLevel.controls['secondCtrl'].setValue(data.namLocation);
+
+          // this.firstLevel = this.fb.group({
+          //   secondCtrl: [data.namLocation, Validators.required]
+          // });
+        }
+      )
+    }
+  }
+  addRequestChecklist() {
+    // const chklist = this.firstLevel.get('firstCtrl').validator({} as AbstractControl);
+    // const loc = this.firstLevel.get('secondCtrl').validator({} as AbstractControl);
+    // const assesor = this.firstLevel.get('thirdCtrl').validator({} as AbstractControl);
+    // if (chklist && chklist.required && chklist && chklist.required && assesor && assesor.required) {
+    //   return true;
+    // }
+
+    if (!this.firstLevel.valid) {
+      this.commonService.showEventMessage("لطفا همه ی فیلد های ستاره دار را تکمیل کنید.", 5000, "green")
+      return;
+    }
+    this.requestChecklistObject = {
+      "locationIdHsrch": this.locationId,
+      "namLocationHsrch": this.desChkHecli,
+      "hecliECheckListId": this.checkListId,
+      "assessorIdHsrch": this.firstLevel.value.thirdCtrl,
+      "namAssessorHsrch": "نقش",
+      "requestDescriptionHsrch": this.firstLevel.value.forthCtrl,
       "createDate": new Date()
     }
+    console.log('addRequestChecklist', this.requestChecklistObject)
 
-    this.requestCheckListService.insertListOfRequestCheckLists(object).subscribe((success) => {
-      this.commonService.showEventMessage("ايجاد رديف با موفقيت انجام شد.", 3000, "green")
-      //this.getChecklistQuestions();
-      console.log('updateListOfcheckLists', success)
-      //this.newRowObj = {};
-    },
-      (error) => {
-        this.commonService.showEventMessage("خطايي به وجود آمده يا ارتباط با سرور قطع مي باشد.", 3000, "green")
-      }
-    )
+    // this.requestCheckListService.insertListOfRequestCheckLists(this.requestChecklistObject).subscribe((success) => {
+    //   this.commonService.showEventMessage("ايجاد رديف با موفقيت انجام شد.", 3000, "green")
+    //   console.log('updateListOfcheckLists', success)
+    //   this.nextLevelPermision=true;
+
+    // },
+    //   (error) => {
+    //     this.commonService.showEventMessage("خطايي به وجود آمده يا ارتباط با سرور قطع مي باشد.", 3000, "green")
+    //     this.nextLevelPermision=false;
+
+    //   }
+    // )
   }
+  
+  
+
 
 }
