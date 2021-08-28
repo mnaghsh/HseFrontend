@@ -12,20 +12,20 @@ export class CommonService {
   teachers: any[];
   @Output() saveTotalMainGrid = new EventEmitter();
 
- // public saveTotalMainGrid: Subject<any> = new Subject<any>();
+  // public saveTotalMainGrid: Subject<any> = new Subject<any>();
   public showSaveBtn: boolean;
   public showSaveBtnTotal: boolean;
   public rollback: Subject<any> = new Subject<any>();
-  loading:boolean;
+  loading: boolean;
   coursesList;
   teacherList;
   usersList;
   categoryList;
-  reportUserId:any; 
-  termId; 
+  reportUserId: any;
+  termId;
   usersWithCourse;
   onlineUserDepartmentId;
-  showTotalValueTable=true;
+  showTotalValueTable = true;
   activeUser: any;
   termName: any;
   allPersonsList;
@@ -33,13 +33,13 @@ export class CommonService {
   userDetails: any;
   userDetailInfo: any;
   reportUserName: any;
-  constructor(  private snackBar: MatSnackBar,) { }
-  showEventMessage(message,duration=3000,type?) {
-    
+  constructor(private snackBar: MatSnackBar,) { }
+  showEventMessage(message, duration = 3000, type?) {
+
     this.snackBar.open(message, '', {
       direction: 'rtl',
       duration: duration,
-      panelClass: type? type: 'background-color:red!important'
+      panelClass: type ? type : 'background-color:red!important'
     });
   }
 

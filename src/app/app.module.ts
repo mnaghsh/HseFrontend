@@ -19,7 +19,7 @@ import { ChecklistAssesmentComponent } from './checkList/checklist-assesment/che
 import { ChecklistOptionsComponent } from './checkList/checklist-options/checklist-options.component';
 import { ChecklistQuestionsComponent } from './checkList/checklist-questions/checklist-questions.component';
 import { LocationsComponent } from './utils/loading/locations/locations/locations.component';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 
 
@@ -70,10 +70,8 @@ const myRoots: Routes = [
 
 
   providers: [
-    {
-      provide: MatDialogRef,
-      useValue: {}
-    }
+    { provide: MAT_DIALOG_DATA, useValue: {} },
+    { provide: MatDialogRef, useValue: {} }
   ],
   bootstrap: [AppComponent]
 })

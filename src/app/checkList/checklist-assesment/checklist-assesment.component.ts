@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { StepperOrientation } from '@angular/material/stepper';
@@ -9,26 +9,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { LocationsComponent } from 'src/app/utils/loading/locations/locations/locations.component';
 import { CreateCheckListComponent } from '../create-check-list/create-check-list.component';
 import { RequestChecklistService } from 'src/app/services/requestChecklistService/RequestChecklistService';
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-  { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
-  { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
-  { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
-  { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
-  { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
-  { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
-  { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
-  { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
-  { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
-];
+import { ChecklistQuestionService } from 'src/app/services/checklistQuestions/checklist-question.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-checklist-assesment',
@@ -36,19 +20,23 @@ const ELEMENT_DATA: PeriodicElement[] = [
   styleUrls: ['./checklist-assesment.component.css']
 })
 export class ChecklistAssesmentComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'weight', 'symbol'];
-  dataSource = ELEMENT_DATA;
-
-
+  displayedColumns = ['number', 'desQuestionHeclq', 'process'];
+  edit = false;
+  newRowObj: any;
+  checklistId: any;
+  checklistName: any;
+  enable: boolean = true;
   secondFormGroup = this.fb.group({
     secondCtrl: ['', Validators.required]
   });
   // thirdFormGroup = this._formBuilder.group({
   //   thirdCtrl: ['', Validators.required]
   // });
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+  dataSource: MatTableDataSource<any>;
   stepperOrientation: Observable<StepperOrientation>;
   locationId: any;
-  checkListId: any;
   firstLevel = this.fb.group({
     firstCtrl: ['', Validators.required],
     secondCtrl: ['', Validators.required],
@@ -57,21 +45,29 @@ export class ChecklistAssesmentComponent implements OnInit {
   });
   namLocation: any;
   desChkHecli: any;
-  nextLevelPermision = true;
   requestChecklistObject: { locationIdHsrch: any; namLocationHsrch: any; hecliECheckListId: any; assessorIdHsrch: any; namAssessorHsrch: string; requestDescriptionHsrch: any; createDate: Date; };
+  openQuestions = false;
+
+  ListOfcheckListsQuestions: any;
+
+
 
 
   constructor(private fb: FormBuilder,
+    public checkListQuestionService: ChecklistQuestionService,
     private dialog: MatDialog,
     public commonService: CommonService,
     public requestCheckListService: RequestChecklistService,
     breakpointObserver: BreakpointObserver) {
     this.stepperOrientation = breakpointObserver.observe('(min-width: 800px)')
       .pipe(map(({ matches }) => matches ? 'horizontal' : 'vertical'));
+    this.openQuestions = false
   }
 
 
   ngOnInit(): void {
+    this.newRowObj = {}
+  
 
   }
   selectCheckList() {
@@ -87,7 +83,7 @@ export class ChecklistAssesmentComponent implements OnInit {
     dialogRef.afterClosed().subscribe(
       (data) => {
 
-        this.checkListId = data.eCheckListId;
+        this.checklistId = data.eCheckListId;
         this.desChkHecli = data.desChkHecli;
         // this.firstLevel.value.firstCtrl=data.desChkHecli
         this.firstLevel.controls['firstCtrl'].setValue(data.desChkHecli);
@@ -135,34 +131,112 @@ export class ChecklistAssesmentComponent implements OnInit {
 
     if (!this.firstLevel.valid) {
       this.commonService.showEventMessage("لطفا همه ی فیلد های ستاره دار را تکمیل کنید.", 5000, "green")
+      this.openQuestions = false
       return;
+
     }
-    this.requestChecklistObject = {
-      "locationIdHsrch": this.locationId,
-      "namLocationHsrch": this.desChkHecli,
-      "hecliECheckListId": this.checkListId,
-      "assessorIdHsrch": this.firstLevel.value.thirdCtrl,
-      "namAssessorHsrch": "نقش",
-      "requestDescriptionHsrch": this.firstLevel.value.forthCtrl,
+    else {
+      this.getChecklistQuestions();
+      this.openQuestions = true
+      this.requestChecklistObject = {
+        "locationIdHsrch": this.locationId,
+        "namLocationHsrch": this.desChkHecli,
+        "hecliECheckListId": this.checklistId,
+        "assessorIdHsrch": this.firstLevel.value.thirdCtrl,
+        "namAssessorHsrch": "نقش",
+        "requestDescriptionHsrch": this.firstLevel.value.forthCtrl,
+        "createDate": new Date()
+      }
+      console.log('addRequestChecklist', this.requestChecklistObject)
+
+      // this.requestCheckListService.insertListOfRequestCheckLists(this.requestChecklistObject).subscribe((success) => {
+      //   this.commonService.showEventMessage("ايجاد رديف با موفقيت انجام شد.", 3000, "green")
+      //   console.log('updateListOfcheckLists', success)
+      //   this.nextLevelPermision=true;
+
+      // },
+      //   (error) => {
+      //     this.commonService.showEventMessage("خطايي به وجود آمده يا ارتباط با سرور قطع مي باشد.", 3000, "green")
+      //     this.nextLevelPermision=false;
+
+      //   }
+      // )
+    }
+  }
+
+  public getChecklistQuestions() {
+    this.commonService.loading = true;
+   
+    this.checkListQuestionService.selectListOfQuestionsOfCheckList(this.checklistId).subscribe((success) => {
+      this.ListOfcheckListsQuestions = success;
+      console.log('ListOfcheckListsQuestions', this.ListOfcheckListsQuestions)
+      this.dataSource = new MatTableDataSource(this.ListOfcheckListsQuestions);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      this.commonService.loading = false;
+    });
+  }
+
+  public addRow() {
+
+    let object = {
+      "desQuestionHeclq": this.newRowObj['desQuestionHeclq'],
+      "hecliECheckListId": this.checklistId,
       "createDate": new Date()
     }
-    console.log('addRequestChecklist', this.requestChecklistObject)
 
-    // this.requestCheckListService.insertListOfRequestCheckLists(this.requestChecklistObject).subscribe((success) => {
-    //   this.commonService.showEventMessage("ايجاد رديف با موفقيت انجام شد.", 3000, "green")
-    //   console.log('updateListOfcheckLists', success)
-    //   this.nextLevelPermision=true;
-
-    // },
-    //   (error) => {
-    //     this.commonService.showEventMessage("خطايي به وجود آمده يا ارتباط با سرور قطع مي باشد.", 3000, "green")
-    //     this.nextLevelPermision=false;
-
-    //   }
-    // )
+    this.checkListQuestionService.insertListOfcheckListsQuestions(object).subscribe((success) => {
+      this.commonService.showEventMessage("ايجاد رديف با موفقيت انجام شد.", 3000, "green")
+      this.getChecklistQuestions();
+      console.log('updateListOfcheckLists', success)
+      this.newRowObj = {};
+    },
+      (error) => {
+        this.commonService.showEventMessage("خطايي به وجود آمده يا ارتباط با سرور قطع مي باشد.", 3000, "green")
+      }
+    )
   }
-  
-  
+  public editRow(row) {
+    row.updateDate = new Date()
+    this.edit = !this.edit;
+    row['editable'] = true;
+  }
+
+  public updateRow(row) {
+    this.edit = !this.edit;
+    this.checkListQuestionService.updateListOfcheckListsQuestions(row['eQuestionId'], row).subscribe((success) => {
+      this.commonService.showEventMessage("ويرايش رديف با موفقيت انجام شد.", 3000, "green")
+      this.getChecklistQuestions();
+      console.log('updateListOfcheckListsQuestions', success)
+        ;
+
+    },
+      (error) => {
+        this.commonService.showEventMessage("خطايي به وجود آمده يا ارتباط با سرور قطع مي باشد.", 3000, "green")
+      }
+    )
+
+  }
+
+  public deleteRow(row) {
+
+    console.log('del', row)
+    this.checkListQuestionService.deleteListOfcheckListsQuestions(row['eQuestionId']).subscribe(
+      (success) => {
+
+        this.getChecklistQuestions();
+        //this.edit = !this.edit;
+        this.commonService.showEventMessage("حذف رديف با موفقيت انجام شد.", 3000, "red")
+        console.log('sucess', success)
+
+
+      },
+      (error) => {
+        this.commonService.showEventMessage("خطايي به وجود آمده يا ارتباط با سرور قطع مي باشد.", 3000, "green")
+      }
+    )
+  }
+
 
 
 }

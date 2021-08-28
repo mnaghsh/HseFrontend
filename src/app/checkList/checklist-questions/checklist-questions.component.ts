@@ -31,7 +31,7 @@ export class ChecklistQuestionsComponent implements OnInit {
   department: { value: number; viewValue: string; }[];
   checklistId: any;
   checklistName: any;
-
+ 
   constructor(
     public checkListQuestionService: ChecklistQuestionService,
     public commonService: CommonService,
@@ -41,13 +41,14 @@ export class ChecklistQuestionsComponent implements OnInit {
   ) {
     this.checklistId = recievedData.checkListId
     this.checklistName = recievedData.checkListName
-    
     this.getChecklistQuestions();
+ 
   }
 
   ngOnInit() {
     this.newRowObj = {}
   }
+
 
   public getChecklistQuestions() {
     this.commonService.loading = true;
@@ -62,7 +63,7 @@ export class ChecklistQuestionsComponent implements OnInit {
   }
 
   public addRow() {
-    
+
     let object = {
       "desQuestionHeclq": this.newRowObj.desQuestionHeclq,
       "hecliECheckListId": this.checklistId,
