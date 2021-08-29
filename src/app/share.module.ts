@@ -24,6 +24,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatIconModule } from '@angular/material/icon';
+import {MatRadioModule} from '@angular/material/radio';
 
 
 
@@ -31,42 +32,43 @@ import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
-    
+
   ],
   imports: [
     CommonModule,
   ],
-  exports:[
+  exports: [
     MatSliderModule,
-    
-     MatPaginatorModule,
-     MatSidenavModule,
-     MatButtonModule,
-     MatCheckboxModule,
-     MatCardModule,
-     MatInputModule,
-     FormsModule,
+
+    MatPaginatorModule,
+    MatSidenavModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatCardModule,
+    MatInputModule,
+    FormsModule,
+    MatRadioModule,
     ReactiveFormsModule,
-     MatFormFieldModule,
-     MatCardModule,
-     MatSelectModule,
-     MatCardModule,
-     MatInputModule,
-     MatFormFieldModule,
-     MatSnackBarModule,
-     MatAutocompleteModule,
-     MatTableModule,
-     MatDialogModule,
-     MatDividerModule,
-     MatSortModule,
-     MatTooltipModule,
-     MatStepperModule,
-     MatProgressSpinnerModule,
-     MatProgressBarModule,
-     MatExpansionModule,
+    MatFormFieldModule,
+    MatCardModule,
+    MatSelectModule,
+    MatCardModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSnackBarModule,
+    MatAutocompleteModule,
+    MatTableModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatSortModule,
+    MatTooltipModule,
+    MatStepperModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule,
+    MatExpansionModule,
     TextFieldModule,
-     MatSlideToggleModule,
-     MatIconModule,
+    MatSlideToggleModule,
+    MatIconModule,
   ],
   providers: [],
   bootstrap: []

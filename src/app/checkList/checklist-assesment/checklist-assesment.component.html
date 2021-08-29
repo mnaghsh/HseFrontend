@@ -41,22 +41,19 @@
                 </div>
             </form>
         </mat-step>
-        <mat-step [stepControl]="secondFormGroup" label="پرکردن چک لیست ">
-            <form [formGroup]="secondFormGroup">
+        <mat-step  [stepControl]="secondFormGroup" label="پرکردن چک لیست ">
+            <form >
                 <div class="example-container ">
 
                     <table dir="rtl" matSort class="table table-responsive table-bordered  table-striped  table-hover" mat-table #table
                       [dataSource]="dataSource">
-                  
-                      <!--- Note that these columns can be defined in any order.
-                        The actual rendered columns are set as a property on the row definition" -->
-                  
+                                    
                       <!-- Position Column -->
                       <ng-container matColumnDef="number">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>ردیف </th>
                         <td mat-cell *matCellDef="let row;let index = index"> {{index+1}} </td>
                         <td mat-footer-cell *matFooterCellDef>
-                          <p  style="font-weight: bold;">  ایجاد سوال جدید برای چک لیست {{checklistName}} </p>
+                          <p  style="font-weight: bold;">  ایجاد سوال جدید برای چک لیست {{desChkHecli}} </p>
                         </td>
                       </ng-container>
                   
@@ -64,13 +61,13 @@
                         <th mat-header-cell mat-sort-header *matHeaderCellDef> شرح سوال</th>
                         <td mat-cell *matCellDef="let element">
                           <mat-form-field *ngIf="edit" class="example-full-width" appearance="fill">
-                            <input matInput *ngIf="edit" [placeholder]="" [(ngModel)]="element.desQuestionHeclq" type="text">
+                            <input matInput *ngIf="edit" [placeholder]="" [(ngModel)]="element.desQuestionHeclq" type="text"  [ngModelOptions]="{standalone: true}">
                           </mat-form-field>
                           <p *ngIf="!edit">{{element.desQuestionHeclq}}</p>
                         </td>
                         <td mat-footer-cell *matFooterCellDef>
                           <mat-form-field style="max-height: 52px;" class="example-full-width" appearance="fill">
-                            <input matInput placeholder="نام چک لیست" [(ngModel)]="newRowObj.desQuestionHeclq" type="text">
+                            <input matInput placeholder="نام چک لیست" [(ngModel)]="newRowObj.desQuestionHeclq" type="text"  [ngModelOptions]="{standalone: true}">
                           </mat-form-field>
                         </td>
                       </ng-container>
@@ -78,12 +75,27 @@
                       <ng-container matColumnDef="process">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>عملیات </th>
                         <td mat-cell *matCellDef="let row;let index = index">
-                          <!-- <i *ngIf="edit==false " class="fa fa-pencil-square-o iconEdit" (click)="editRow(row)"></i> -->
-                          <!-- <i *ngIf="edit==true && row.editable==true" class="fa fa-check-square-o iconOk" (click)="updateRow(row)"></i> -->
-                          <!-- <i *ngIf="edit==false " class="fa fa-trash iconDelete" (click)="deleteRow(row)"></i> -->
+                          <i *ngIf="edit==false " class="fa fa-pencil-square-o iconEdit" (click)="editRow(row)"></i>
+                          <i *ngIf="edit==true && row.editable==true" class="fa fa-check-square-o iconOk" (click)="updateRow(row)"></i>
+                          <i *ngIf="edit==false " class="fa fa-trash iconDelete" (click)="deleteRow(row)"></i>
                         </td>
                         <td mat-footer-cell *matFooterCellDef="let row;let index = index">
-                          <!-- <i *ngIf="edit==false " class="fa fa-plus-square iconAdd" (click)="addRow()"></i> -->
+                          <i *ngIf="edit==false " class="fa fa-plus-square iconAdd" (click)="addRow()"></i>
+                        </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="options">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>گزینه ها </th>
+                        <td mat-cell *matCellDef="let row;let index = index">
+                            <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+                                [(ngModel)]="row.SelectedOptionId"  [ngModelOptions]="{standalone: true}">
+                                <mat-radio-button class="example-radio-button" *ngFor="let eachCheckListsOption of ListOfcheckListsOptions"
+                                    [value]="eachCheckListsOption.eOptionId">
+                                    {{eachCheckListsOption.desOptionHeclo}}
+                                </mat-radio-button>
+                            </mat-radio-group>
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef="let row;let index = index">
                         </td>
                       </ng-container>
                   
@@ -101,7 +113,7 @@
                 <!-- <app-checklist-questions *ngIf="openQuestions==true" recivedChecklistId="checklistId"></app-checklist-questions> -->
                 <div>
                     <button style="float: right;"  mat-raised-button color="primary"  mat-button matStepperPrevious>مرحله قبل</button>
-                    <button style="float: left;"  mat-raised-button color="accent"  mat-button matStepperNext>مرحله بعد</button>
+                    <button style="float: left;"  mat-raised-button color="accent" (click)="gotoStep3()"  mat-button matStepperNext>مرحله بعد</button>
                 </div>
             </form>
         </mat-step>

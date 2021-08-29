@@ -122,8 +122,6 @@ export class ChecklistQuestionsComponent implements OnInit {
     )
   }
 
-
-
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -132,4 +130,6 @@ export class ChecklistQuestionsComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
+
+ 
 }

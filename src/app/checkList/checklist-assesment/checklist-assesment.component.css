@@ -15,13 +15,20 @@
       
       }
   
-  table {
-    width: 100%;
+ 
+  .example-radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+    display:inline-block;margin-right:10px;
   }
   
-  
+  .example-radio-button {
+    margin: 5px;
+  }
+ 
   .example-container table{
-    width: 100%;
+    /*width: 100%;*/
     text-align: center !important;
   }
   th.mat-header-cell {

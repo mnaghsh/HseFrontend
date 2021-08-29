@@ -13,6 +13,8 @@ import { ChecklistQuestionService } from 'src/app/services/checklistQuestions/ch
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import { ChecklistOptionsService } from 'src/app/services/checklistOptions/checklist-options.service';
+import { checklistAssesmentService } from 'src/app/services/checklistAssesmentService/checklistAssesmentService';
 
 @Component({
   selector: 'app-checklist-assesment',
@@ -20,7 +22,9 @@ import { MatPaginator } from '@angular/material/paginator';
   styleUrls: ['./checklist-assesment.component.css']
 })
 export class ChecklistAssesmentComponent implements OnInit {
-  displayedColumns = ['number', 'desQuestionHeclq', 'process'];
+  favoriteSeason: string;
+  seasons: string[] = [];
+  displayedColumns = ['number', 'desQuestionHeclq', 'options', 'process'];
   edit = false;
   newRowObj: any;
   checklistId: any;
@@ -37,24 +41,26 @@ export class ChecklistAssesmentComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   stepperOrientation: Observable<StepperOrientation>;
   locationId: any;
+  namLocation: any;
+  desChkHecli: any;
+  requestChecklistObject: { locationIdHsrch: any; namLocationHsrch: any; hecliECheckListId: any; assessorIdHsrch: any; namAssessorHsrch: string; requestDescriptionHsrch: any; createDate: Date; };
+  openQuestions = false;
+  ListOfcheckListsQuestions: any;
+  ListOfcheckListsOptions: any;
   firstLevel = this.fb.group({
     firstCtrl: ['', Validators.required],
     secondCtrl: ['', Validators.required],
     thirdCtrl: ['', Validators.required],
     forthCtrl: ['']
   });
-  namLocation: any;
-  desChkHecli: any;
-  requestChecklistObject: { locationIdHsrch: any; namLocationHsrch: any; hecliECheckListId: any; assessorIdHsrch: any; namAssessorHsrch: string; requestDescriptionHsrch: any; createDate: Date; };
-  openQuestions = false;
-
-  ListOfcheckListsQuestions: any;
-
+  ListOfcheckListsAssesment: any;
 
 
 
   constructor(private fb: FormBuilder,
     public checkListQuestionService: ChecklistQuestionService,
+    public checkListOptionsService: ChecklistOptionsService,
+    public checkListAssesment: checklistAssesmentService,
     private dialog: MatDialog,
     public commonService: CommonService,
     public requestCheckListService: RequestChecklistService,
@@ -67,7 +73,7 @@ export class ChecklistAssesmentComponent implements OnInit {
 
   ngOnInit(): void {
     this.newRowObj = {}
-  
+
 
   }
   selectCheckList() {
@@ -136,7 +142,8 @@ export class ChecklistAssesmentComponent implements OnInit {
 
     }
     else {
-      this.getChecklistQuestions();
+      this.getChecklistOptions()
+
       this.openQuestions = true
       this.requestChecklistObject = {
         "locationIdHsrch": this.locationId,
@@ -149,24 +156,13 @@ export class ChecklistAssesmentComponent implements OnInit {
       }
       console.log('addRequestChecklist', this.requestChecklistObject)
 
-      // this.requestCheckListService.insertListOfRequestCheckLists(this.requestChecklistObject).subscribe((success) => {
-      //   this.commonService.showEventMessage("ايجاد رديف با موفقيت انجام شد.", 3000, "green")
-      //   console.log('updateListOfcheckLists', success)
-      //   this.nextLevelPermision=true;
-
-      // },
-      //   (error) => {
-      //     this.commonService.showEventMessage("خطايي به وجود آمده يا ارتباط با سرور قطع مي باشد.", 3000, "green")
-      //     this.nextLevelPermision=false;
-
-      //   }
-      // )
+     
     }
   }
 
   public getChecklistQuestions() {
     this.commonService.loading = true;
-   
+
     this.checkListQuestionService.selectListOfQuestionsOfCheckList(this.checklistId).subscribe((success) => {
       this.ListOfcheckListsQuestions = success;
       console.log('ListOfcheckListsQuestions', this.ListOfcheckListsQuestions)
@@ -237,6 +233,68 @@ export class ChecklistAssesmentComponent implements OnInit {
     )
   }
 
+  public getChecklistOptions() {
+    this.commonService.loading = true;
+    this.checkListOptionsService.selectListOfOptionsOfCheckList(this.checklistId).subscribe((success) => {
+      this.getChecklistQuestions();
+      this.ListOfcheckListsOptions = success;
+      console.log('ListOfcheckListsOptions', this.ListOfcheckListsOptions)
+      let OptionsArray = [];
+      // this.ListOfcheckListsOptions.forEach(eachCheckListOption => {
+      //   OptionsArray.push[eachCheckListOption['desOptionHeclo']] 
+      // });
+      // console.log('OptionsArray', OptionsArray)
+
+    });
+  }
+
+  gotoStep3() {
+
+
+ this.requestCheckListService.insertListOfRequestCheckLists(this.requestChecklistObject).subscribe((success) => {
+        console.log('updateListOfcheckLists', success)
+        let ResponseRequest=success
+        
+
+  this.ListOfcheckListsQuestions.forEach(eachQuestion => {
+      let checklistAssesmentObject = {
+        "hecliECheckListId": this.checklistId,
+        "heclqEQuestionId": eachQuestion['eQuestionId'],
+        "hecloEOptionId": eachQuestion['SelectedOptionId'],
+        "hsrchERequestId": ResponseRequest['eRequestId'],
+        "createDate": new Date()
+      }
+ 
+
+    this.checkListAssesment.insertListOfChecklistAssesment(checklistAssesmentObject).subscribe((success) => {
+      this.ListOfcheckListsAssesment= success;
+      console.log('ListOfcheckListsQuestions', this.ListOfcheckListsAssesment)
+      // this.dataSource = new MatTableDataSource(this.ListOfcheckListsQuestions);
+      // this.dataSource.paginator = this.paginator;
+      // this.dataSource.sort = this.sort;
+      this.commonService.loading = false;
+      this.commonService.showEventMessage("ايجاد رديف با موفقيت انجام شد.", 3000, "green")
+
+    });
+  });
+
+
+
+      },
+        (error) => {
+          this.commonService.showEventMessage("خطايي به وجود آمده يا ارتباط با سرور قطع مي باشد.", 3000, "green")
+
+        }
+      )
+
+
+
+
+    console.log('ListOfcheckListsOptions', this.ListOfcheckListsOptions)
+    console.log('ListOfcheckListsOptions', this.ListOfcheckListsQuestions)
+  
+
+  }
 
 
 }
