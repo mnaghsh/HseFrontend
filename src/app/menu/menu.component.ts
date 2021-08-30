@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Router } from '@angular/router';
 import { CommonService } from 'src/app/services/common.service';
+import { CheckListService } from '../services/checkList/check-list.service';
 
 @Component({
   selector: 'app-menu',
@@ -14,11 +15,13 @@ export class MenuComponent implements OnInit {
 
   constructor(private auth: AuthenticationService,
     public commonService: CommonService,
+    public checkListService: CheckListService,
     private myRoute: Router) {
     //this.onlineUser = this.commonService.activeUser[0].type
   }
 
   ngOnInit() {
+    this.getChecklists();
     this.myRoute.navigate(['checklistAssesment']);
 
     this.navBarItem = [
@@ -37,4 +40,10 @@ export class MenuComponent implements OnInit {
     this.myRoute.navigate(['login']);
 
   }
+  public getChecklists() {
+  this.commonService.loading = true;
+  this.checkListService.selectListOfcheckLists().subscribe((success) => {
+    this.commonService.ListOfcheckLists = success;});
+    this.commonService.loading = false;
+}
 }

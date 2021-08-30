@@ -33,9 +33,9 @@ export class CreateCheckListComponent implements OnInit {
   department: { value: number; viewValue: string; }[];
 
   constructor(
-    
-     public dialogRef: MatDialogRef<any>,
-     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: any,
+
+    public dialogRef: MatDialogRef<any>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: any,
     public checkListService: CheckListService,
     public commonService: CommonService,
     private dialog: MatDialog,
@@ -43,10 +43,10 @@ export class CreateCheckListComponent implements OnInit {
   ) {
     this.getChecklists();
     this.fillDropDowns();
-   
+
   }
-  ngAfterViewInit(){
-    
+  ngAfterViewInit() {
+
   }
   fillDropDowns() {
 
@@ -74,29 +74,26 @@ export class CreateCheckListComponent implements OnInit {
   }
   ngOnInit() {
     this.newRowObj = {}
-   
+
   }
 
   public getChecklists() {
-    this.commonService.loading = true;
-    this.checkListService.selectListOfcheckLists().subscribe((success) => {
-      this.ListOfcheckLists = success;
-      //this.userModel.roles = [{id: 282}];
+    this.ListOfcheckLists=this.commonService.ListOfcheckLists;
       console.log('ListOfcheckLists', this.ListOfcheckLists)
       this.dataSource = new MatTableDataSource(this.ListOfcheckLists);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-      this.commonService.loading = false;
-    });
+    
+    
   }
 
   public addRow() {
-    
+
     let object = {
       "desChkHecli": this.newRowObj.desChkHecli,
       "unitCehckListsHecli": this.newRowObj.unitCehckListsHecli,
       "namDepartmentHecli": this.newRowObj.namDepartmentHecli,
-      "createDate": new Date()   
+      "createDate": new Date()
     }
 
     this.checkListService.insertListOfcheckLists(object).subscribe((success) => {
@@ -111,10 +108,10 @@ export class CreateCheckListComponent implements OnInit {
     )
   }
   public editRow(row) {
-    row.updateDate=new Date() 
+    row.updateDate = new Date()
     this.edit = !this.edit;
     row['editable'] = true;
-    
+
 
   }
 
@@ -153,7 +150,7 @@ export class CreateCheckListComponent implements OnInit {
     )
   }
 
-  public addQuestions(row){
+  public addQuestions(row) {
     const dialogRef = this.dialog.open(ChecklistQuestionsComponent, {
       width: "85%",
       height: "85%",
@@ -164,24 +161,24 @@ export class CreateCheckListComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(
       (data) => {
-     
+
       }
     )
   }
-  public addOptions(row){
+  public addOptions(row) {
     const dialogRef = this.dialog.open(ChecklistOptionsComponent, {
       width: "85%",
       height: "85%",
       data: {
         checkListId: row.eCheckListId,
         checkListName: row.desChkHecli,
-        
-        
+
+
       }
     });
     dialogRef.afterClosed().subscribe(
       (data) => {
-     
+
       }
     )
   }
@@ -195,9 +192,9 @@ export class CreateCheckListComponent implements OnInit {
     }
   }
 
-  selectRow(row){
+  selectRow(row) {
     console.log(row)
-     this.dialogRef.close(row)
+    this.dialogRef.close(row)
   }
 
 }

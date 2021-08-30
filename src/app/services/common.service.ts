@@ -33,6 +33,7 @@ export class CommonService {
   userDetails: any;
   userDetailInfo: any;
   reportUserName: any;
+  ListOfcheckLists: any;
   constructor(private snackBar: MatSnackBar,) { }
   showEventMessage(message, duration = 3000, type?) {
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { StepperOrientation } from '@angular/material/stepper';
@@ -24,7 +24,7 @@ import { checklistAssesmentService } from 'src/app/services/checklistAssesmentSe
 export class ChecklistAssesmentComponent implements OnInit {
   favoriteSeason: string;
   seasons: string[] = [];
-  displayedColumns = ['number', 'desQuestionHeclq', 'options', 'process'];
+  displayedColumns = ['number', 'desQuestionHeclq', 'options', 'desExplainQuestionHscha', 'process'];
   edit = false;
   newRowObj: any;
   checklistId: any;
@@ -38,6 +38,7 @@ export class ChecklistAssesmentComponent implements OnInit {
   // });
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('topScrollAnchor') topScroll: ElementRef;
   dataSource: MatTableDataSource<any>;
   stepperOrientation: Observable<StepperOrientation>;
   locationId: any;
@@ -53,7 +54,12 @@ export class ChecklistAssesmentComponent implements OnInit {
     thirdCtrl: ['', Validators.required],
     forthCtrl: ['']
   });
+  secondLevel = this.fb.group({
+    radioCtrl: ['', Validators.required],
+  });
+
   ListOfcheckListsAssesment: any;
+  namLocationHsrch: any;
 
 
 
@@ -91,6 +97,7 @@ export class ChecklistAssesmentComponent implements OnInit {
 
         this.checklistId = data.eCheckListId;
         this.desChkHecli = data.desChkHecli;
+        //this.namLocationHsrch = data.namLocationHsrch;
         // this.firstLevel.value.firstCtrl=data.desChkHecli
         this.firstLevel.controls['firstCtrl'].setValue(data.desChkHecli);
         // this.firstLevel = this.fb.group({
@@ -147,7 +154,7 @@ export class ChecklistAssesmentComponent implements OnInit {
       this.openQuestions = true
       this.requestChecklistObject = {
         "locationIdHsrch": this.locationId,
-        "namLocationHsrch": this.desChkHecli,
+        "namLocationHsrch": this.namLocation,
         "hecliECheckListId": this.checklistId,
         "assessorIdHsrch": this.firstLevel.value.thirdCtrl,
         "namAssessorHsrch": "نقش",
@@ -156,7 +163,7 @@ export class ChecklistAssesmentComponent implements OnInit {
       }
       console.log('addRequestChecklist', this.requestChecklistObject)
 
-     
+
     }
   }
 
@@ -250,33 +257,44 @@ export class ChecklistAssesmentComponent implements OnInit {
 
   gotoStep3() {
 
+    let Validation: boolean;
+    this.ListOfcheckListsQuestions.forEach(eachQuestion => {
 
- this.requestCheckListService.insertListOfRequestCheckLists(this.requestChecklistObject).subscribe((success) => {
-        console.log('updateListOfcheckLists', success)
-        let ResponseRequest=success
-        
-
-  this.ListOfcheckListsQuestions.forEach(eachQuestion => {
-      let checklistAssesmentObject = {
-        "hecliECheckListId": this.checklistId,
-        "heclqEQuestionId": eachQuestion['eQuestionId'],
-        "hecloEOptionId": eachQuestion['SelectedOptionId'],
-        "hsrchERequestId": ResponseRequest['eRequestId'],
-        "createDate": new Date()
+      if (eachQuestion['SelectedOptionId'] == undefined) {
+        this.commonService.showEventMessage("لطفا همه گزینه ها را تکمیل کنید", 3000, "green")
+        debugger
+        this.topScroll.nativeElement.scrollIntoView({ behavior: 'smooth' });
+        Validation = false;
       }
- 
+    })
+    if (Validation != false) {
+      this.requestCheckListService.insertListOfRequestCheckLists(this.requestChecklistObject).subscribe((success) => {
+        console.log('updateListOfcheckLists', success)
+        let ResponseRequest = success
+        this.ListOfcheckListsQuestions.forEach(eachQuestion => {
 
-    this.checkListAssesment.insertListOfChecklistAssesment(checklistAssesmentObject).subscribe((success) => {
-      this.ListOfcheckListsAssesment= success;
-      console.log('ListOfcheckListsQuestions', this.ListOfcheckListsAssesment)
-      // this.dataSource = new MatTableDataSource(this.ListOfcheckListsQuestions);
-      // this.dataSource.paginator = this.paginator;
-      // this.dataSource.sort = this.sort;
-      this.commonService.loading = false;
-      this.commonService.showEventMessage("ايجاد رديف با موفقيت انجام شد.", 3000, "green")
 
-    });
-  });
+          let checklistAssesmentObject = {
+            "hecliECheckListId": this.checklistId,
+            "heclqEQuestionId": eachQuestion['eQuestionId'],
+            "hecloEOptionId": eachQuestion['SelectedOptionId'],
+            "hsrchERequestId": ResponseRequest['eRequestId'],
+            "desExplainQuestionHscha": eachQuestion['desExplainQuestionHscha'],
+            "createDate": new Date()
+          }
+
+
+          this.checkListAssesment.insertListOfChecklistAssesment(checklistAssesmentObject).subscribe((success) => {
+            this.ListOfcheckListsAssesment = success;
+            console.log('ListOfcheckListsQuestions', this.ListOfcheckListsAssesment)
+            // this.dataSource = new MatTableDataSource(this.ListOfcheckListsQuestions);
+            // this.dataSource.paginator = this.paginator;
+            // this.dataSource.sort = this.sort;
+            this.commonService.loading = false;
+            this.commonService.showEventMessage("ايجاد رديف با موفقيت انجام شد.", 3000, "green")
+
+          });
+        });
 
 
 
@@ -290,11 +308,11 @@ export class ChecklistAssesmentComponent implements OnInit {
 
 
 
-    console.log('ListOfcheckListsOptions', this.ListOfcheckListsOptions)
-    console.log('ListOfcheckListsOptions', this.ListOfcheckListsQuestions)
-  
+      console.log('ListOfcheckListsOptions', this.ListOfcheckListsOptions)
+      console.log('ListOfcheckListsOptions', this.ListOfcheckListsQuestions)
+
+
+    }
 
   }
-
-
 }
