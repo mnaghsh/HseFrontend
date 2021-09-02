@@ -44,7 +44,6 @@ export class ChecklistAssesmentComponent implements OnInit {
   locationId: any;
   namLocation: any;
   desChkHecli: any;
-  requestChecklistObject: { locationIdHsrch: any; namLocationHsrch: any; hecliECheckListId: any; assessorIdHsrch: any; namAssessorHsrch: string; requestDescriptionHsrch: any; createDate: Date; };
   openQuestions = false;
   ListOfcheckListsQuestions: any;
   ListOfcheckListsOptions: any;
@@ -60,6 +59,7 @@ export class ChecklistAssesmentComponent implements OnInit {
 
   ListOfcheckListsAssesment: any;
   namLocationHsrch: any;
+  requestChecklistObject: { locationIdHsrch: any; namLocationHsrch: any; hecliECheckListId: any; assessorIdHsrch: any; namAssessorHsrch: string; requestDescriptionHsrch: any; requestDateHsrch: Date; createDate: Date; };
 
 
 
@@ -159,6 +159,7 @@ export class ChecklistAssesmentComponent implements OnInit {
         "assessorIdHsrch": this.firstLevel.value.thirdCtrl,
         "namAssessorHsrch": "نقش",
         "requestDescriptionHsrch": this.firstLevel.value.forthCtrl,
+        "requestDateHsrch": new Date(),
         "createDate": new Date()
       }
       console.log('addRequestChecklist', this.requestChecklistObject)
@@ -314,5 +315,13 @@ export class ChecklistAssesmentComponent implements OnInit {
 
     }
 
+  }
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 }

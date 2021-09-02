@@ -34,6 +34,7 @@ export class CommonService {
   userDetailInfo: any;
   reportUserName: any;
   ListOfcheckLists: any;
+  repeatGetChecklist: boolean;
   constructor(private snackBar: MatSnackBar,) { }
   showEventMessage(message, duration = 3000, type?) {
 

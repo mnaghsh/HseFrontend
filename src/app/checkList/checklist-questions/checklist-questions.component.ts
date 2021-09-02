@@ -51,6 +51,7 @@ export class ChecklistQuestionsComponent implements OnInit {
 
 
   public getChecklistQuestions() {
+    this.commonService.repeatGetChecklist = true
     this.commonService.loading = true;
     this.checkListQuestionService.selectListOfQuestionsOfCheckList(this.checklistId).subscribe((success) => {
       this.ListOfcheckListsQuestions = success;

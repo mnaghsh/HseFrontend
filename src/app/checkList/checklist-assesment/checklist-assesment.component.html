@@ -43,10 +43,12 @@
         </div>
       </form>
     </mat-step>
-    <mat-step [stepControl]="secondFormGroup" label="پرکردن چک لیست ">
+    <mat-step [stepControl]="secondFormGroup" label="">
       <form>
+        <mat-form-field class="example-container ">
+          <input matInput (keyup)="applyFilter($event)" placeholder="جستجو">
+        </mat-form-field>
         <div #topScrollAnchor class="example-container ">
-
           <table dir="rtl" matSort class="table table-responsive table-bordered  table-striped  table-hover" mat-table
             #table [dataSource]="dataSource">
 
@@ -96,7 +98,7 @@
             <ng-container matColumnDef="desExplainQuestionHscha">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>گزینه ها </th>
               <td mat-cell *matCellDef="let element">
-                <mat-form-field  class="example-full-width" appearance="fill">
+                <mat-form-field class="example-full-width" appearance="fill">
                   <input matInput [placeholder]="" [(ngModel)]="element.desExplainQuestionHscha" type="text"
                     [ngModelOptions]="{standalone: true}">
                 </mat-form-field>
@@ -138,14 +140,15 @@
         </div>
       </form>
     </mat-step>
-    <!-- <mat-step [stepControl]="thirdFormGroup" label="پرکردن چک لیست ">
-            <form [formGroup]="thirdFormGroup">
-                          
-                <div>
-                    <button style="float: right;"  mat-raised-button color="primary"  mat-button matStepperPrevious>مرحله قبل</button>
-                </div>
-            </form>
-        </mat-step> -->
+    <!-- <mat-step label="پرکردن چک لیست ">
+      <form>
+
+        <div>
+          <button style="float: right;" mat-raised-button color="primary" mat-button matStepperPrevious>مرحله
+            قبل</button>
+        </div>
+      </form>
+    </mat-step> -->
 
 
   </mat-stepper>

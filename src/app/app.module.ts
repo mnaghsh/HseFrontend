@@ -34,6 +34,8 @@ const myRoots: Routes = [
       { path: 'questions', component: ChecklistQuestionsComponent },
       { path: 'checklistAssesment', component: ChecklistAssesmentComponent },
       { path: 'locations', component: LocationsComponent },
+      { path: 'checklistReport', component: ChecklistReportComponent },
+
       
 
     ]

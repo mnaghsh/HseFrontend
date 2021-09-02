@@ -9,13 +9,17 @@ export class checklistAssesmentService {
 
   constructor(public configService:ConfigService) { }
 
-  public selectAllListOfChecklistAssesment():Observable<any>{
-    return this.configService.get('HseEChecklistAssessments');
-  }
+  // public selectAllListOfChecklistAssesment():Observable<any>{
+  //   return this.configService.get('HseEChecklistAssessments');
+  // }
   // public selectListOfRequestOfCheckList(HecliECheckListId):Observable<any>{
   //   return this.configService.get('HseECheckListRequest/GetHseECheckListRequestOfChecklist/'+HecliECheckListId);
   // }
   
+  public selectAllListOfChecklistReport():Observable<any>{
+    return this.configService.get('checklistReport');
+  }
+
   public insertListOfChecklistAssesment(body):Observable<any>{
     return this.configService.post('HseEChecklistAssessments',body);
   }
