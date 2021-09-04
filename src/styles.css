@@ -128,3 +128,8 @@ i{
 .example-container{
   overflow-x: auto
 }
+.btnExcel{
+  background-color: green !important;
+  color: white !important;
+}
+

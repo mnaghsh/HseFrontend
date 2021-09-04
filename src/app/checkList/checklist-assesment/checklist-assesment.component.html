@@ -43,7 +43,7 @@
         </div>
       </form>
     </mat-step>
-    <mat-step [stepControl]="secondFormGroup" label="">
+    <mat-step [stepControl]="secondFormGroup" label=" پرکردن چک لیست ">
       <form>
         <mat-form-field class="example-container ">
           <input matInput (keyup)="applyFilter($event)" placeholder="جستجو">
@@ -139,6 +139,10 @@
             matStepperNext>مرحله بعد</button>
         </div>
       </form>
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup" label=" پایان ">
+      <h2>چک لیست با موفقیت ذخیره شد.</h2>
+      <h3>از منو چاپ گزارش میتوانید از چک لیست های ذخیره شده گزارش بگیرید.</h3>
     </mat-step>
     <!-- <mat-step label="پرکردن چک لیست ">
       <form>

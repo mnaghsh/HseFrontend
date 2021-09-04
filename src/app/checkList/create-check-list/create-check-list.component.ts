@@ -78,13 +78,18 @@ export class CreateCheckListComponent implements OnInit {
   }
 
   public getChecklists() {
-    this.ListOfcheckLists=this.commonService.ListOfcheckLists;
+    this.commonService.loading = true;
+    this.checkListService.selectListOfcheckLists().subscribe((success) => {
+      this.ListOfcheckLists=success
+      this.commonService.loading = false;
       console.log('ListOfcheckLists', this.ListOfcheckLists)
       this.dataSource = new MatTableDataSource(this.ListOfcheckLists);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-    
-    
+      this.commonService.repeatGetChecklist = false
+
+    });
+
   }
 
   public addRow() {

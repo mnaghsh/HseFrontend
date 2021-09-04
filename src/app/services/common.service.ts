@@ -1,7 +1,6 @@
 import { Injectable, EventEmitter, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
-
+import * as XLSX from "xlsx";
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -44,6 +43,14 @@ export class CommonService {
       panelClass: type ? type : 'background-color:red!important'
     });
   }
-
+  exportToExcel(tableId: string, name?: string) {
+    let myDate = new Date().toLocaleDateString('fa-IR');
+    //let timeSpan = new Date().toISOString();
+    let prefix = name || "گزارش چک لیست ";
+    let fileName = `${prefix}-${myDate}`;
+    let targetTableElm = document.getElementById(tableId);
+    let wb = XLSX.utils.table_to_book(targetTableElm, <XLSX.Table2SheetOpts>{ sheet: prefix });
+    XLSX.writeFile(wb, `${fileName}.xlsx`);
+  }
 
 }
