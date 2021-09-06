@@ -34,6 +34,7 @@ export class CommonService {
   reportUserName: any;
   ListOfcheckLists: any;
   repeatGetChecklist: boolean;
+  fullName="محمد نقش"
   constructor(private snackBar: MatSnackBar,) { }
   showEventMessage(message, duration = 3000, type?) {
 

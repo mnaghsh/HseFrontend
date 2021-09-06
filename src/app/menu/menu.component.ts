@@ -11,6 +11,7 @@ import { CheckListService } from '../services/checkList/check-list.service';
 })
 export class MenuComponent implements OnInit {
   navBarItem: { label: string; path: string; icon: string; }[];
+  rightMenu: { label: string; path: string; icon: string; }[];
  
 
   constructor(private auth: AuthenticationService,
@@ -28,6 +29,13 @@ export class MenuComponent implements OnInit {
       { label: 'تعریف چک لیست', path: "/createCheckList", icon: "fa fa-pencil" },
       { label: 'انجام ارزیابی', path: "/checklistAssesment", icon: "fa fa-print" },
       { label: 'چاپ گزارش', path: "/checklistReport", icon: "fa fa-newspaper-o" },
+    ];
+    this.rightMenu = [
+      // { label: ' صفحه اصلی', path: "/home", icon: "fa fa-home" },
+      { label: 'تعریف چک لیست', path: "/createCheckList", icon: "fa fa-pencil" },
+      { label: 'انجام ارزیابی', path: "/checklistAssesment", icon: "fa fa-print" },
+      { label: 'چاپ گزارش', path: "/checklistReport", icon: "fa fa-newspaper-o" },
+      { label: 'خروج', path: "/login", icon: "fa fa-sign-out" },
     ];
 
    }

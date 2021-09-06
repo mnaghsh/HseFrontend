@@ -18,7 +18,16 @@
 
       <div>
 
-        <mat-list-item (click)="drawer.toggle()" role="listitem" *ngFor="let link of navBarItem"
+        <mat-list-item (click)="drawer.toggle()" role="listitem" *ngFor="let link of [{}]" [routerLink]="link.path">
+          <i class="fa fa-user-circle" style=" color: white; font-size: 200%;" aria-hidden="true"
+            (click)="drawer.toggle()"></i>
+
+          <label style="font-weight: bold!important;" class="label">{{this.commonService.fullName}}</label>
+          <mat-divider>
+          </mat-divider>
+        </mat-list-item>
+
+        <mat-list-item (click)="drawer.toggle()" role="listitem" *ngFor="let link of rightMenu"
           [routerLink]="link.path">
           <i [class]="link.icon" style="font-size: large;" class="menuIcons" aria-hidden="true"></i>
 
@@ -32,8 +41,8 @@
 
   </mat-sidenav>
   <mat-sidenav-content>
-    <i class="fa fa-align-justify rightMenuIcon "   aria-hidden="true" (click)="drawer.toggle()"></i>
-  
+    <i class="fa fa-align-justify rightMenuIcon " aria-hidden="true" (click)="drawer.toggle()"></i>
+
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

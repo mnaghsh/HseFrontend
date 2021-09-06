@@ -20,12 +20,15 @@ import { ChecklistOptionsComponent } from './checkList/checklist-options/checkli
 import { ChecklistQuestionsComponent } from './checkList/checklist-questions/checklist-questions.component';
 import { LocationsComponent } from './utils/loading/locations/locations/locations.component';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { LoginComponent } from './login/login.component';
+import { UsersComponent } from './users/users.component';
 
 
 
 const myRoots: Routes = [
+  { path: 'login', component: LoginComponent },
   {
-    //canActivate: [LoginGuard],
+   // canActivate: [LoginGuard],
     path: '', component: MenuComponent,
     children: [
       { path: 'home', component: HomeComponent },
@@ -35,11 +38,11 @@ const myRoots: Routes = [
       { path: 'checklistAssesment', component: ChecklistAssesmentComponent },
       { path: 'locations', component: LocationsComponent },
       { path: 'checklistReport', component: ChecklistReportComponent },
-
-      
-
+      { path: 'users', component: UsersComponent },
     ]
   }
+
+
 ];
 
 @NgModule({
@@ -48,12 +51,14 @@ const myRoots: Routes = [
     AppComponent,
     HomeComponent,
     MenuComponent,
+    LoginComponent,
     CreateCheckListComponent,
     ChecklistReportComponent,
     ChecklistAssesmentComponent,
     ChecklistOptionsComponent,
     ChecklistQuestionsComponent,
-    LocationsComponent
+    LocationsComponent,
+    UsersComponent
   ],
   imports: [
     BrowserModule, SharedModule,

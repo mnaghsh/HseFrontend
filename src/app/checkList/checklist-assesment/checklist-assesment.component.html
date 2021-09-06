@@ -13,11 +13,13 @@
   <br>
   <br>
 
+
   <app-loading *ngIf="commonService.loading==true"></app-loading>
 
   <mat-stepper class="example-stepper" [orientation]="(stepperOrientation | async)!">
     <mat-step [stepControl]="firstLevel" label=" انتخاب چک لیست ">
       <form [formGroup]="firstLevel" style="text-align: center;">
+
         <mat-form-field appearance="fill">
           <mat-label>نام چک لیست</mat-label>
           <input (click)="selectCheckList()" matInput formControlName="firstCtrl" required>

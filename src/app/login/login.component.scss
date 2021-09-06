@@ -1,0 +1,63 @@
+p.error{
+  color: #f5554a;
+  //text-size: 15px;
+  text-align: center;
+  padding: 20px;
+  background-color: #fff6f6;
+  margin-top: 15px;
+  margin-bottom: 0;
+}
+
+.full-width{
+  width: 250px;
+
+  /* margin:auto;
+  width: 20%;
+  padding: 10px; */
+}
+
+.ltr{
+  direction: ltr;
+}
+.center{
+  text-align: center;
+
+}
+.button{
+  background-color: orange
+}
+
+input{
+  text-align: left;
+  direction: ltr;
+}
+
+.logoIrisa{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  max-width: 20%;
+  padding-right: 4%;
+}
+
+.about{
+
+
+  
+  position: fixed;
+  bottom: 0;
+  text-align: center;
+  left: 42%;
+  text-align: center;
+  font-size: small;
+  margin: 0 auto;
+}
+.card{
+  background-color: #fff7fedb;
+  margin: 0 auto;
+  min-height: 100%;
+  padding-top: 7%; 
+}
+
+
