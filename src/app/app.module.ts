@@ -28,7 +28,7 @@ import { UsersComponent } from './users/users.component';
 const myRoots: Routes = [
   { path: 'login', component: LoginComponent },
   {
-   // canActivate: [LoginGuard],
+    canActivate: [LoginGuard],
     path: '', component: MenuComponent,
     children: [
       { path: 'home', component: HomeComponent },

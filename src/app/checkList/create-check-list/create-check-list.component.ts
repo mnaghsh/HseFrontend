@@ -199,7 +199,9 @@ export class CreateCheckListComponent implements OnInit {
 
   selectRow(row) {
     console.log(row)
-    this.dialogRef.close(row)
+    if(!this.edit){
+      this.dialogRef.close(row)
+    }
   }
 
 }

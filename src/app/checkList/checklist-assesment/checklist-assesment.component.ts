@@ -84,8 +84,8 @@ export class ChecklistAssesmentComponent implements OnInit {
   }
   selectCheckList() {
     const dialogRef = this.dialog.open(CreateCheckListComponent, {
-      width: "auto%",
-      height: "auto%",
+      width: "80%",
+      height: "80%",
       direction: "rtl",
       data: {
         // checkListId: row.eCheckListId,
@@ -112,8 +112,8 @@ export class ChecklistAssesmentComponent implements OnInit {
   selectLocations() {
     {
       const dialogRef = this.dialog.open(LocationsComponent, {
-        width: "auto%",
-        height: "auto%",
+        width: "80%",
+        height: "80%",
         data: {
           // checkListId: row.eCheckListId,
           //  checkListName: row.desChkHecli,
