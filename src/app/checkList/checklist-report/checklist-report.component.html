@@ -12,8 +12,13 @@
     <button mat-raised-button class="btnExcel" (click)="exportTable()">
         <i class="fa fa-file-excel-o" aria-hidden="true"></i> &nbsp; انتقال به اکسل &nbsp;
     </button>
+    <button mat-raised-button color="primary" class="btnPrint" (click)="print()">
+        <i class="fa fa-print" aria-hidden="true"></i> چاپ
+    </button>
+
+
     <br>
-    <mat-form-field class="example-container ">
+    <mat-form-field class="example-container">
         <input matInput (keyup)="applyFilter($event)" placeholder=" جستجو در چک لیست های ذخیره شده">
     </mat-form-field>
 
@@ -32,10 +37,10 @@
     </mat-form-field> -->
 
 </div>
-<div class="example-container ">
+<div id="print-section" class="example-container">
 
-    <table id="mainTable" dir="rtl" matSort class="table table-responsive table-bordered  table-striped  table-hover" mat-table #table
-        [dataSource]="dataSource">
+    <table id="mainTable" dir="rtl" matSort class="table table-responsive table-bordered  table-striped  table-hover"
+        mat-table #table [dataSource]="dataSource">
 
         <!--- Note that these columns can be defined in any order.
        The actual rendered columns are set as a property on the row definition" -->
@@ -145,7 +150,5 @@
         <!-- </tr> -->
 
     </table>
-
-    <mat-paginator [pageSizeOptions]="[25,50, 100,1000]"></mat-paginator>
-
 </div>
+<mat-paginator [pageSizeOptions]="[25,50, 100,1000]"></mat-paginator>

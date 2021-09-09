@@ -3,14 +3,14 @@
     سامانه ایمنی و بهداشت مجتمع فولاد مبارکه اصفهان
   </h2>
 </mat-card>
-<div style="  height: 90.9%; background-image: url('../assets/blackboard.jpg');">
+<div style="  height: 89.9%; background-image: url('../assets/blackboard.jpg');">
 <mat-card class="card">
   <mat-card-header>
 
   </mat-card-header>
 
   <form [formGroup]="loginForm" (ngSubmit)="login()" class="center" (keydown)="keyDownFunction($event)">
-    <img class="logoIrisa full-width"   src="../assets/IrisaPlus.svg">
+    <img class="logoHse full-width"   src="../assets/hseIcon.png">
 
 
 
@@ -33,7 +33,7 @@
     </button>
 
 
-
+    <br>
     <button disabled *ngIf="!connectToServer" mat-raised-button type="submit" color="primary">
       <!-- <i class="fa fa-key fa-spin 1a-3x fa-fw" style="padding: 2px;" aria-hidden="true"></i> ورود</button> <mat-spinner [diameter]="20"    *ngIf="commonService.loading==true"  style="   position: absolute; margin-right: 48%;" ></mat-spinner>  -->
       <i class="fa fa-key " style="padding: 2px;" aria-hidden="true"></i> ورود
@@ -42,27 +42,39 @@
 
 
 
-    <mat-spinner [diameter]="30" *ngIf="commonService.loading==true" style="   position: absolute; margin-right: 48%;">
+    <mat-spinner [diameter]="30" *ngIf="commonService.loading==true" style=" position: absolute; margin-right: 48%;">
     </mat-spinner>
 
     <!-- <mat-progress-bar *ngIf="commonService.loading==true" mode="indeterminate"></mat-progress-bar> -->
   </form>
-  <mat-card-footer *ngIf="message != null ">
+  <!-- <mat-card-footer *ngIf="message != null ">
     <p class="error">
       {{message}}
     </p>
-  </mat-card-footer>
+  </mat-card-footer> -->
   <mat-card-actions style="text-align: center;">
-    <br>
+  
 
-  تمامی حقوق این سامانه برای شرکت فولاد مبارکه محفوظ است
+  
+  
+  <img class="iconFolad"  src="../assets/foolad.svg">
+  <img class="logoIrisa "   src="../assets/IrisaPlus.svg">
+
 
   <br>
 
-      Made with   <i style="color: red !important;" class="fa fa-heart" aria-hidden="true"></i>
-    by <a  target="_blank" href="https://www.linkedin.com/in/mohammad-naghsh-40aa0360">  Mohammad Naghsh</a>
-      <br>
-       <img style="max-width: 80px;  "  src="../assets/foolad.svg">
+     
+    
+          <p class="about">تمامی حقوق این سامانه برای شرکت فولاد مبارکه اصفهان محفوظ است</p>
+          <br>
+     
+          <a  target="_blank" href="https://www.linkedin.com/in/mohammad-naghsh-40aa0360"> 
+            <h5 class="about">Mohammad Naghsh</h5> </a>
+            <h6 class="about"> &nbsp; By &nbsp;</h6>
+            <i style="color: purple !important;" class="fa fa-heart" aria-hidden="true"></i>
+  
+            <h6 class="about" >&nbsp; Made With&nbsp;</h6>
+
 
   </mat-card-actions>
 </mat-card>

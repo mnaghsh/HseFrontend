@@ -76,7 +76,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   background-color: #cd0a0a!important;
    margin-right: 1%!important;
    float:right;font-weight:bold!important;
-   position: fixed!important;
+/*position: fixed!important;*/
    z-index: 1000;
    padding-right: 2%!important;
    padding-left: 2%!important;
@@ -133,4 +133,9 @@ i{
   background-color: green !important;
   color: white !important;
 }
+th{
+  font-size: larger;
+  font-weight:bolder !important;
+ padding-right: 2%!important;
 
+}

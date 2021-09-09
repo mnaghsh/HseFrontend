@@ -38,46 +38,39 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.connectToServer=true
+    this.connectToServer = true
   }
 
   public login() {
     if (this.loginForm.valid) {
-      // let body = {
-      //   userName: this.loginForm.value.username,
-      //   password: this.loginForm.value.password,
-      // }
-      // this.commonService.loading = true;
-      // this.configService.post("users", body).subscribe(
-      //   (data: any) => {
-      //    // debugger
-      //     if(data=="[]"){
-      //       this.message = 'نام کاربری یا کلمه عبور اشتباه است'
-      //       this.commonService.loading = false;
-      //       return;
-      //     }
+      let body = {
+        userName: this.loginForm.value.username,
+        password: this.loginForm.value.password,
+      }
+      this.commonService.loading = true;
+      this.configService.post("Users/Login", body).subscribe(
+        (data: any) => {
+          debugger
+          if (data == null) {
 
-      //     this.commonService.loading = false;
-      //     this.commonService.activeUser = JSON.parse(data)
-      //     console.log(JSON.parse(data));
-      //     data = JSON.parse(data);
-      //     data.forEach(element => {
-      //       if (element.username == this.loginForm.value.username) {
-    
-               this.auth.wasLoggedIn();
-      this.myRoute.navigate(['menu']);
-      //         }
-      //         else {
-      //           this.message = 'نام کاربری یا کلمه عبور اشتباه است'
-      //         }
-      //       });
-      //     }
-      //   )
-      // }
+            this.commonService.showEventMessage("نام کاربری یا کلمه عبور اشتباه است.")
+
+            this.commonService.loading = false;
+            return;
+          }
+
+          this.commonService.loading = false;
+          this.commonService.activeUser = (data)
+          this.auth.wasLoggedIn();
+          this.myRoute.navigate(['menu']);
+
+        }
+      )
     }
   }
 
- 
+
+
 
   public keyDownFunction(event) {
     if (event.keyCode === 13) {
@@ -85,7 +78,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
- 
+
 
 
 }

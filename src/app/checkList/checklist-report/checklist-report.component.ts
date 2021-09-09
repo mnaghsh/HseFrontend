@@ -80,6 +80,59 @@ export class ChecklistReportComponent implements OnInit {
   exportTable() {
     this.commonService.exportToExcel("mainTable");
   }
+  print(): void {
+    let printContents, popupWin;
+    printContents = document.getElementById('print-section').innerHTML;
+    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+    popupWin.document.open();
+    popupWin.document.write(`
+      <html>
+        <head>
+          <title>پرینت قرارداد </title>
+          <style>
+          *{
+             direction:rtl;
+             font-family: 'b mitra'!important; 
+             text-align: right;
+
+           }
+           td{
+               
+             border: 0px solid gray;
+             border-left: 1px solid gray;
+             border-bottom: 1px solid gray;
+             font-size: medium;
+            
+           }
+         
+           .table-striped tbody tr:nth-of-type(odd) {
+             background-color: rgba(0,0,0,.05);
+         }
+
+        .headerGridTotal{
+         font-size: medium !important;
+        }
+        .gridTotal{
+         width:100%;
+        }
+          
+           .mat-sort-header-button{
+             border-bottom: 1px solid gray;
+             font-size: medium;
+             background-color: white;
+             border: 0px solid gray;
+             text-align: center;
+           }
+          
+         //........Customized style.......
+         </style>
+        </head>
+    <body onload="window.print();window.close()">${printContents}</body>
+      </html>`
+    );
+    popupWin.document.close();
+  }
+
 
 
 }
