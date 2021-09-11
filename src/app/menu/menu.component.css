@@ -97,8 +97,9 @@ mat-list-item {
   position: fixed;
   z-index: 10;
   font-size: xx-large; 
-  padding-top: 1%;
-   padding-right: 1%;
+  padding-top: 10px;
+   padding-right: 5px;
+   font-size: 210% !important;
 }
 @media (max-width: 599px) {
   .mat-tab-link {

@@ -13,7 +13,7 @@ import { CommonService } from 'src/app/services/common.service';
   styleUrls: ['./checklist-report.component.css']
 })
 export class ChecklistReportComponent implements OnInit {
-  displayedColumns = ['number', 'desChkHecli', 'requestDescriptionHsrch',
+  displayedColumns = ['number', 'namChkHecli', 'requestDescriptionHsrch',
     'desQuestionHeclq', 'desOptionHeclo', 'desExplainQuestionHscha', 'requestDateHsrch',
     'namAssessorHsrch', 'namLocationHsrch', 'unitCehckListsHecli', 'namDepartmentHecli'];
   @ViewChild(MatPaginator) paginator: MatPaginator;

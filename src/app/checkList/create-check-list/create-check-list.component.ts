@@ -26,7 +26,7 @@ export class CreateCheckListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: MatTableDataSource<any>;
-  displayedColumns = ['number', 'desChkHecli', 'unitCehckListsHecli', 'namDepartmentHecli', 'process'];
+  displayedColumns = ['number', 'namChkHecli', 'unitCehckListsHecli', 'namDepartmentHecli', 'process'];
   ListOfcheckLists: any;
   newRowObj: any;
   unit: { value: number; viewValue: string; }[];
@@ -53,23 +53,23 @@ export class CreateCheckListComponent implements OnInit {
     this.unit = [
       { value: 1, viewValue: 'بهداشت محيط ' },
       { value: 2, viewValue: 'ايمني' },
-      { value: 3, viewValue: 'محيط زيست' },
-      { value: 4, viewValue: 'بهداشت و ارگونومي' },
+      { value: 3, viewValue: 'محیط زیست' },
+      { value: 4, viewValue: 'بهداشت و ارگونومی' },
     ];
 
     this.department = [
-      { value: 1, viewValue: 'آهن سازي' },
-      { value: 2, viewValue: 'فولاد سازي' },
+      { value: 1, viewValue: 'آهن سازی' },
+      { value: 2, viewValue: 'فولاد سازی' },
       { value: 3, viewValue: 'نورد گرم' },
       { value: 4, viewValue: 'نورد سرد' },
-      { value: 4, viewValue: 'انرژي سيالات' },
-      { value: 4, viewValue: 'مديريت شهري' },
-      { value: 4, viewValue: 'تعميرگاه مرکزي' },
+      { value: 4, viewValue: 'انرژی سیالات' },
+      { value: 4, viewValue: 'مدیریت شهری' },
+      { value: 4, viewValue: 'تعمیرگاه مرکزی' },
       { value: 4, viewValue: 'حمل و نقل' },
       { value: 4, viewValue: 'کنترل مواد' },
       { value: 4, viewValue: 'تعميرات مرکزي' },
       { value: 4, viewValue: 'ستادي' },
-      { value: 4, viewValue: 'خدمات عمومي' },
+      { value: 4, viewValue: 'خدمات عمومی' },
     ];
   }
   ngOnInit() {
@@ -95,7 +95,7 @@ export class CreateCheckListComponent implements OnInit {
   public addRow() {
 
     let object = {
-      "desChkHecli": this.newRowObj.desChkHecli,
+      "namChkHecli": this.newRowObj.namChkHecli,
       "unitCehckListsHecli": this.newRowObj.unitCehckListsHecli,
       "namDepartmentHecli": this.newRowObj.namDepartmentHecli,
       "createDate": new Date()
@@ -161,7 +161,7 @@ export class CreateCheckListComponent implements OnInit {
       height: "85%",
       data: {
         checkListId: row.eCheckListId,
-        checkListName: row.desChkHecli,
+        checkListName: row.namChkHecli,
       }
     });
     dialogRef.afterClosed().subscribe(
@@ -176,7 +176,7 @@ export class CreateCheckListComponent implements OnInit {
       height: "85%",
       data: {
         checkListId: row.eCheckListId,
-        checkListName: row.desChkHecli,
+        checkListName: row.namChkHecli,
 
 
       }

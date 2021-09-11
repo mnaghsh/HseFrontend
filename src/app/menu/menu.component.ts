@@ -36,6 +36,7 @@ export class MenuComponent implements OnInit {
       { label: 'انجام ارزیابی', path: "/checklistAssesment", icon: "fa fa-print" },
       { label: 'چاپ گزارش', path: "/checklistReport", icon: "fa fa-newspaper-o" },
       { label: 'مدیریت کاربران ', path: "/users", icon: "fa fa-users" },
+      { label: 'مدیریت مکان ها ', path: "/locations", icon: "fa fa-map-marker" },
       { label: 'خروج', path: "/login", icon: "fa fa-sign-out" },
     ];
 

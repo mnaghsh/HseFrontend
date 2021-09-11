@@ -42,12 +42,12 @@ export class ChecklistOptionsComponent implements OnInit {
   ) {
     this.checklistId = recievedData.checkListId
     this.checklistName = recievedData.checkListName
-    
+    this.getChecklistOptions();
+
   }
 
   ngOnInit() {
     this.newRowObj = {}
-    this.getChecklistOptions();
   }
 
   public getChecklistOptions() {

@@ -50,7 +50,7 @@ export class ChecklistAssesmentComponent implements OnInit {
   firstLevel = this.fb.group({
     firstCtrl: ['', Validators.required],
     secondCtrl: ['', Validators.required],
-    thirdCtrl: ['', Validators.required],
+  //thirdCtrl: ['', Validators.required],
     forthCtrl: ['']
   });
   secondLevel = this.fb.group({
@@ -60,6 +60,8 @@ export class ChecklistAssesmentComponent implements OnInit {
   ListOfcheckListsAssesment: any;
   namLocationHsrch: any;
   requestChecklistObject: { locationIdHsrch: any; namLocationHsrch: any; hecliECheckListId: any; assessorIdHsrch: any; namAssessorHsrch: string; requestDescriptionHsrch: any; requestDateHsrch: Date; createDate: Date; };
+  namChkHecli: any;
+  Validation=false;
 
 
 
@@ -96,10 +98,10 @@ export class ChecklistAssesmentComponent implements OnInit {
       (data) => {
 
         this.checklistId = data.eCheckListId;
-        this.desChkHecli = data.desChkHecli;
+        this.namChkHecli = data.namChkHecli;
         //this.namLocationHsrch = data.namLocationHsrch;
         // this.firstLevel.value.firstCtrl=data.desChkHecli
-        this.firstLevel.controls['firstCtrl'].setValue(data.desChkHecli);
+        this.firstLevel.controls['firstCtrl'].setValue(data.namChkHecli);
         // this.firstLevel = this.fb.group({
         //   firstCtrl: [data.desChkHecli, Validators.required]
 
@@ -156,8 +158,8 @@ export class ChecklistAssesmentComponent implements OnInit {
         "locationIdHsrch": this.locationId,
         "namLocationHsrch": this.namLocation,
         "hecliECheckListId": this.checklistId,
-        "assessorIdHsrch": this.firstLevel.value.thirdCtrl,
-        "namAssessorHsrch": "نقش",
+        "assessorIdHsrch": this.commonService.activeUser.id,
+        "namAssessorHsrch": this.commonService.activeUser.firstname+this.commonService.activeUser.lastname,
         "requestDescriptionHsrch": this.firstLevel.value.forthCtrl,
         "requestDateHsrch": new Date(),
         "createDate": new Date()
@@ -258,17 +260,20 @@ export class ChecklistAssesmentComponent implements OnInit {
 
   gotoStep3() {
 
-    let Validation: boolean;
+   
     this.ListOfcheckListsQuestions.forEach(eachQuestion => {
 
       if (eachQuestion['SelectedOptionId'] == undefined) {
         this.commonService.showEventMessage("لطفا همه گزینه ها را تکمیل کنید", 3000, "green")
         debugger
         this.topScroll.nativeElement.scrollIntoView({ behavior: 'smooth' });
-        Validation = false;
+       this.Validation = false;
+      }
+      else{
+        this.Validation = true;
       }
     })
-    if (Validation != false) {
+    if (this.Validation != false) {
       this.requestCheckListService.insertListOfRequestCheckLists(this.requestChecklistObject).subscribe((success) => {
         console.log('updateListOfcheckLists', success)
         let ResponseRequest = success
