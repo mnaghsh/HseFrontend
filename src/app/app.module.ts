@@ -18,10 +18,11 @@ import { ChecklistReportComponent } from './checkList/checklist-report/checklist
 import { ChecklistAssesmentComponent } from './checkList/checklist-assesment/checklist-assesment.component';
 import { ChecklistOptionsComponent } from './checkList/checklist-options/checklist-options.component';
 import { ChecklistQuestionsComponent } from './checkList/checklist-questions/checklist-questions.component';
-import { LocationsComponent } from './utils/loading/locations/locations/locations.component';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { LoginComponent } from './login/login.component';
 import { UsersComponent } from './users/users.component';
+import { LocationsComponent } from './utils/loading/locations/locations/locations.component';
+import { MessagesComponent } from './utils/messages/messages.component';
 
 
 
@@ -39,6 +40,7 @@ const myRoots: Routes = [
       { path: 'locations', component: LocationsComponent },
       { path: 'checklistReport', component: ChecklistReportComponent },
       { path: 'users', component: UsersComponent },
+      { path: 'messages', component: MessagesComponent },
     ]
   }
 
@@ -58,7 +60,8 @@ const myRoots: Routes = [
     ChecklistOptionsComponent,
     ChecklistQuestionsComponent,
     LocationsComponent,
-    UsersComponent
+    UsersComponent,
+    MessagesComponent
   ],
   imports: [
     BrowserModule, SharedModule,

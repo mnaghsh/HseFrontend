@@ -24,6 +24,9 @@ export class ChecklistReportComponent implements OnInit {
   selectedArchiveNews: any;
   all: any;
   arrayForFilterDesExplainQuestionHscha: any[];
+  filteredArray: any;
+  firstFilter: any[];
+  secoundFilter: any[];
   constructor(public commonService: CommonService,
     public checklistAssesmentService: checklistAssesmentService,
   ) {
@@ -54,6 +57,22 @@ export class ChecklistReportComponent implements OnInit {
       this.commonService.loading = false;
     });
   }
+  // applyFilter(event: Event) {
+  //   this.filteredArray = this.dataSource['_data']['_value']
+ 
+  //   this.filteredArray.forEach(eachReport => {
+  //     if (eachReport.namAssessorHsrch == event
+  //     ) {
+  //       this.firstFilter.push (eachReport) ;
+  //     }
+  //     this.dataSource = new MatTableDataSource(this.firstFilter);
+
+  //     console.log('local',  this.firstFilter)
+  //   });
+
+  // }
+
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -61,6 +80,33 @@ export class ChecklistReportComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  applyFilter2(event: Event) {
+    
+    this.firstFilter.forEach(eachReport => {
+      if (eachReport.desOptionHeclo == event
+      ) {
+        this.secoundFilter.push (eachReport) ;
+      }
+      this.dataSource = new MatTableDataSource(this.secoundFilter);
+
+      console.log('local',  this.secoundFilter)
+    });
+
+
+    
+
+
+    // let obj = this.filteredArray.find((o, i) => {
+    //   if (o.name === 'string 1') {
+    //     this.filteredArray[i] = { name: 'new string', value: 'this', other: 'that' };
+    //     return true; // stop searching
+    //   }
+    // });
+
+
+
   }
 
   // applyFilter(label, id) {
