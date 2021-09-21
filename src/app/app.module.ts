@@ -23,6 +23,7 @@ import { LoginComponent } from './login/login.component';
 import { UsersComponent } from './users/users.component';
 import { LocationsComponent } from './utils/loading/locations/locations/locations.component';
 import { MessagesComponent } from './utils/messages/messages.component';
+import { SchedulingComponent } from './checkList/scheduling/scheduling.component';
 
 
 
@@ -41,6 +42,7 @@ const myRoots: Routes = [
       { path: 'checklistReport', component: ChecklistReportComponent },
       { path: 'users', component: UsersComponent },
       { path: 'messages', component: MessagesComponent },
+      { path: 'scheduling', component: SchedulingComponent },
     ]
   }
 
@@ -61,7 +63,8 @@ const myRoots: Routes = [
     ChecklistQuestionsComponent,
     LocationsComponent,
     UsersComponent,
-    MessagesComponent
+    MessagesComponent,
+    SchedulingComponent
   ],
   imports: [
     BrowserModule, SharedModule,

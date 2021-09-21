@@ -50,7 +50,6 @@ export class LoginComponent implements OnInit {
       this.commonService.loading = true;
       this.configService.post("Users/Login", body).subscribe(
         (data: any) => {
-          debugger
           if (data == null) {
 
             this.commonService.showEventMessage("نام کاربری یا کلمه عبور اشتباه است.")

@@ -20,6 +20,10 @@ export class checklistAssesmentService {
     return this.configService.get('checklistReport');
   }
 
+  public filterListOfChecklistReport(body):Observable<any>{
+    return this.configService.post('checklistReport/FilterReportChecklist',body);
+  }
+
   public insertListOfChecklistAssesment(body):Observable<any>{
     return this.configService.post('HseEChecklistAssessments',body);
   }

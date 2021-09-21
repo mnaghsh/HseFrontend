@@ -265,7 +265,6 @@ export class ChecklistAssesmentComponent implements OnInit {
 
       if (eachQuestion['SelectedOptionId'] == undefined) {
         this.commonService.showEventMessage("لطفا همه گزینه ها را تکمیل کنید", 3000, "green")
-        debugger
         this.topScroll.nativeElement.scrollIntoView({ behavior: 'smooth' });
        this.Validation = false;
       }

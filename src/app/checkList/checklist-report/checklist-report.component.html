@@ -8,41 +8,56 @@
 
 <div>
     <app-loading *ngIf="commonService.loading==true"></app-loading>
+  
+    
+
+<mat-card>
+    <mat-form-field class="example-container">
+        <input matInput [(ngModel)]="namChkHecliFilter" placeholder="فیلتر نام چک لیست">
+    </mat-form-field>
+
+    <mat-form-field class="example-container">
+        <input matInput [(ngModel)]="namDepartmentHecliFilter" placeholder=" فیلتر نام ناحیه">
+    </mat-form-field>
+
+    <mat-form-field class="example-container">
+        <input matInput [(ngModel)]="namAssessorHsrchFilter" placeholder=" فیلتر نام ارزیاب">
+    </mat-form-field>
+
+    <mat-form-field class="example-container">
+        <input matInput [(ngModel)]="namLocationHsrchFilter" placeholder=" فیلتر نام مکان">
+    </mat-form-field>
+
+    <mat-form-field class="example-container">
+        <input matInput [(ngModel)]="desQuestionHeclqFilter" placeholder="فیلتر شرح سوال">
+    </mat-form-field>
+
+    <mat-form-field class="example-container">
+        <input matInput [(ngModel)]="desOptionHecloFilter" placeholder="فیلتر شرح گزینه">
+    </mat-form-field>
     <br>
-    <button mat-raised-button class="btnExcel" (click)="exportTable()">
-        <i class="fa fa-file-excel-o" aria-hidden="true"></i> &nbsp; انتقال به اکسل &nbsp;
+    <button mat-raised-button color="accent"  (click)="serverFilter()">
+        <i class="fa fa-filter" aria-hidden="true"></i> اعمال فیلتر
     </button>
-    <button mat-raised-button color="primary" class="btnPrint" (click)="print()">
+    <button mat-raised-button color="primary"  (click)="getChecklistQuestions()">
+        <i class="fa fa-times" aria-hidden="true"></i> لغو فیلتر
+    </button>
+    <button mat-raised-button class="btnExcel"  (click)="exportTable()">
+        <i class="fa fa-file-excel-o" aria-hidden="true"></i>  انتقال به اکسل 
+    </button>
+    <button mat-raised-button color="warn"  (click)="print()">
         <i class="fa fa-print" aria-hidden="true"></i> چاپ
     </button>
-
-
-    <br>
-    <mat-form-field class="example-container">
-        <input matInput (keyup)="applyFilter($event)" placeholder=" جستجو در چک لیست های ذخیره شده">
-    </mat-form-field>
-    <!-- <mat-form-field class="example-container">
-        <input matInput (keyup)="applyFilter2($event.target.value)" placeholder=" جستجو در چک لیست های ذخیره شده">
-    </mat-form-field> -->
-
-
-    <!-- <mat-form-field>
-        <input matInput (keyup)="applySearch($event.target.value)" placeholder="جستجو"/>
-      </mat-form-field> -->
-    <!-- <mat-form-field class="col-2">
-        <mat-select placeholder="طبقه بندی" [(value)]="selectedArchiveNews" (selectionChange)="applyFilter($event)">
-            <mat-option [value]="all">
-                همه
-            </mat-option>
-            <mat-option *ngFor="let q of arrayForFilterDesExplainQuestionHscha" [value]="q.val">
-                {{q.val}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field> -->
-
+</mat-card>
 </div>
-<div id="print-section" class="example-container">
 
+
+
+<div id="print-section" class="example-container">
+    <mat-form-field  style="min-width: 100%;"class="example-container">
+        <input  matInput [(ngModel)]="search" (keyup)="applyFilter($event)" placeholder=" جستجو در چک لیست های فیلتر شده">
+    </mat-form-field>
+    
     <table id="mainTable" dir="rtl" matSort class="table table-responsive table-bordered  table-striped  table-hover"
         mat-table #table [dataSource]="dataSource">
 

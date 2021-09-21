@@ -27,6 +27,13 @@ export class ChecklistReportComponent implements OnInit {
   filteredArray: any;
   firstFilter: any[];
   secoundFilter: any[];
+  namChkHecliFilter: any;
+  namDepartmentHecliFilter: any;
+  namAssessorHsrchFilter: any;
+  namLocationHsrchFilter: any;
+  desQuestionHeclqFilter: any;
+  desOptionHecloFilter: any;
+  search: any;
   constructor(public commonService: CommonService,
     public checklistAssesmentService: checklistAssesmentService,
   ) {
@@ -36,6 +43,12 @@ export class ChecklistReportComponent implements OnInit {
     this.getChecklistQuestions()
   }
   public getChecklistQuestions() {
+    this.namChkHecliFilter = ""
+    this.namDepartmentHecliFilter = ""
+    this.namAssessorHsrchFilter = ""
+    this.namLocationHsrchFilter = ""
+    this.desQuestionHeclqFilter = ""
+    this.desOptionHecloFilter = ""
     this.commonService.loading = true;
     this.checklistAssesmentService.selectAllListOfChecklistReport().subscribe((success) => {
       this.ListOfcheckListAssesments = success;
@@ -59,7 +72,7 @@ export class ChecklistReportComponent implements OnInit {
   }
   // applyFilter(event: Event) {
   //   this.filteredArray = this.dataSource['_data']['_value']
- 
+
   //   this.filteredArray.forEach(eachReport => {
   //     if (eachReport.namAssessorHsrch == event
   //     ) {
@@ -82,41 +95,27 @@ export class ChecklistReportComponent implements OnInit {
     }
   }
 
-  applyFilter2(event: Event) {
-    
-    this.firstFilter.forEach(eachReport => {
-      if (eachReport.desOptionHeclo == event
-      ) {
-        this.secoundFilter.push (eachReport) ;
-      }
-      this.dataSource = new MatTableDataSource(this.secoundFilter);
+  serverFilter() {
+    this.search = ""
+    const body = {
 
-      console.log('local',  this.secoundFilter)
-    });
+      namChkHecli: this.namChkHecliFilter,
+      namDepartmentHecli: this.namDepartmentHecliFilter,
+      namAssessorHsrch: this.namAssessorHsrchFilter,
+      namLocationHsrch: this.namLocationHsrchFilter,
+      desQuestionHeclq: this.desQuestionHeclqFilter,
+      desOptionHeclo: this.desOptionHecloFilter
 
+    }
+    this.commonService.loading = true;
+    this.checklistAssesmentService.filterListOfChecklistReport(body).subscribe((success) => {
+      this.dataSource = new MatTableDataSource(success);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      this.commonService.loading = false;
 
-    
-
-
-    // let obj = this.filteredArray.find((o, i) => {
-    //   if (o.name === 'string 1') {
-    //     this.filteredArray[i] = { name: 'new string', value: 'this', other: 'that' };
-    //     return true; // stop searching
-    //   }
-    // });
-
-
-
+    })
   }
-
-  // applyFilter(label, id) {
-  //   this.dataSource.filterPredicate = (row, filter) => {
-  //     if (filter == 'all')
-  //       return true;
-  //     return row[label].id == filter;
-  //   }
-  //   this.dataSource.filter = id.trim().toLowerCase();;
-  // }
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
