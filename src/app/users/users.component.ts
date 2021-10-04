@@ -37,7 +37,7 @@ export class UsersComponent implements OnInit {
     this.getAllUsers();
   }
 
-  public getAllUsers() {
+  public getAllUsers() { 
     this.commonService.loading = true;
     this.usersService.selectAllUsers().subscribe((success) => {
       this.listOfAllUsers = success;

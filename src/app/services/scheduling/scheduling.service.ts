@@ -11,21 +11,21 @@ export class SchedulingService {
 
 
   public selectAllListOfScheduling():Observable<any>{
-    return this.configService.get('scheduling');
+    return this.configService.get('HseChecklistSchedulings');
   }
   // public selectListOfQuestionsOfCheckList(HecliECheckListId):Observable<any>{
   //   return this.configService.get('HseECheckListQuestions/GetHseECheckListQuestionsOfChecklist/'+HecliECheckListId);
   // }
   
   public insertListOfScheduling(body):Observable<any>{
-    return this.configService.post('scheduling',body);
+    return this.configService.post('HseChecklistSchedulings',body);
   }
   
   public updateListOfScheduling(id,body):Observable<any>{
-    return this.configService.put('scheduling/'+id,body);
+    return this.configService.put('HseChecklistSchedulings/'+id,body);
   }
   public deleteListOfScheduling(id):Observable<any>{
-    return this.configService.delete('scheduling/'+id);
+    return this.configService.delete('HseChecklistSchedulings/'+id);
   }
 
 }
