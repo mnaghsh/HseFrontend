@@ -29,15 +29,15 @@ export class UsersComponent implements OnInit {
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: any,
     @Inject(MAT_DIALOG_DATA) public recievedData
   ) {
-
+    this.getAllUsers();
   }
 
   ngOnInit() {
     this.newRowObj = {}
-    this.getAllUsers();
+   
   }
 
-  public getAllUsers() { 
+  public getAllUsers() {
     this.commonService.loading = true;
     this.usersService.selectAllUsers().subscribe((success) => {
       this.listOfAllUsers = success;
@@ -119,4 +119,12 @@ export class UsersComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
+
+  selectRow(row) {
+    console.log(row)
+    if(!this.edit){
+      this.dialogRef.close(row)
+    }
+  }
+
 }

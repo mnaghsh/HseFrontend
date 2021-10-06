@@ -41,13 +41,14 @@
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
                     <mat-form-field style="max-height: 52px;" class="example-full-width" appearance="fill">
-                        <input matInput placeholder="نام " [(ngModel)]="newRowObj.namAssessorHsrch" type="text">
+                        <input (click)="selectAssessor()" matInput  [(ngModel)]="newRowObj.namAssessorHsrch" type="text">
                     </mat-form-field>
                 </td>
             </ng-container>
 
+
             <ng-container matColumnDef="hecliECheckListId">
-                <th mat-header-cell mat-sort-header *matHeaderCellDef> نام خانوادگی</th>
+                <th mat-header-cell mat-sort-header *matHeaderCellDef> نام چک لیست</th>
                 <td mat-cell *matCellDef="let element">
                     <mat-form-field *ngIf="edit" class="example-full-width" appearance="fill">
                         <input matInput *ngIf="edit" [placeholder]="" [(ngModel)]="element.hecliECheckListId" type="text">
@@ -56,7 +57,7 @@
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
                     <mat-form-field style="max-height: 52px;" class="example-full-width" appearance="fill">
-                        <input matInput placeholder="نام  خانوادگی" [(ngModel)]="newRowObj.hecliECheckListId" type="text">
+                        <input matInput  (click)="selectCheckList()"  [(ngModel)]="newRowObj.namChkHecli" type="text">
                     </mat-form-field>
                 </td>
             </ng-container>

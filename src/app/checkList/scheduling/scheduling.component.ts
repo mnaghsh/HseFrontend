@@ -1,9 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { CommonService } from 'src/app/services/common.service';
 import { SchedulingService } from 'src/app/services/scheduling/scheduling.service';
+import { UsersComponent } from 'src/app/users/users.component';
+import { CreateCheckListComponent } from '../create-check-list/create-check-list.component';
 
 @Component({
   selector: 'app-scheduling',
@@ -12,7 +15,7 @@ import { SchedulingService } from 'src/app/services/scheduling/scheduling.servic
 })
 export class SchedulingComponent implements OnInit {
 
-  displayedColumns = ['number', 'namAssessorHsrch', 'hecliECheckListId', 'datSchedulingHscls', 'namLocationHsrch','process'];
+  displayedColumns = ['number', 'namAssessorHsrch', 'hecliECheckListId', 'datSchedulingHscls', 'namLocationHsrch', 'process'];
   listOfAllSchedulings: any;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -22,6 +25,7 @@ export class SchedulingComponent implements OnInit {
   enable: boolean = true;
   constructor(public commonService: CommonService,
     public schedulingService: SchedulingService,
+    private dialog: MatDialog,
 
   ) { }
 
@@ -46,11 +50,11 @@ export class SchedulingComponent implements OnInit {
 
     let object = {
       "eSchedulingId": this.newRowObj.eSchedulingId,
-     // "assessorIdHsrch":  this.newRowObj.eSchedulingId,
-      "hecliECheckListId":  this.newRowObj.hecliECheckListId,
-      "datSchedulingHscls":  this.newRowObj.datSchedulingHscls,
-     // "locationIdHsrch":  this.newRowObj.eSchedulingId,
-      "namLocationHsrch":  this.newRowObj.namLocationHsrch,
+      "assessorIdHsrch": this.newRowObj.assessorId,
+      "hecliECheckListId": this.newRowObj.hecliECheckListId,
+      "datSchedulingHscls": this.newRowObj.datSchedulingHscls,
+      // "locationIdHsrch":  this.newRowObj.eSchedulingId,
+      "namLocationHsrch": this.newRowObj.namLocationHsrch,
       "namAssessorHsrch": this.newRowObj.namAssessorHsrch,
     }
 
@@ -112,6 +116,47 @@ export class SchedulingComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  selectAssessor() {
+    const dialogRef = this.dialog.open(UsersComponent, {
+      width: "80%",
+      height: "80%",
+      direction: "rtl",
+      data: {
+        // checkListId: row.eCheckListId,
+        //  checkListName: row.desChkHecli,
+      }
+    });
+    dialogRef.afterClosed().subscribe(
+      (data) => {
+
+        this.newRowObj.assessorId = data.id;
+        this.newRowObj.namAssessorHsrch = data.firstname + ' ' + data.lastname;
+        // this.firstLevel.controls['firstCtrl'].setValue(data.namChkHecli);
+      }
+    )
+
+  }
+  selectCheckList() {
+    const dialogRef = this.dialog.open(CreateCheckListComponent, {
+      width: "80%",
+      height: "80%",
+      direction: "rtl",
+      data: {
+        // checkListId: row.eCheckListId,
+        //  checkListName: row.desChkHecli,
+      }
+    });
+    dialogRef.afterClosed().subscribe(
+      (data) => {
+
+        this.newRowObj.hecliECheckListId = data.eCheckListId;
+        this.newRowObj.namChkHecli = data.namChkHecli;
+        
+      }
+    )
+
   }
 
 }
