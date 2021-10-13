@@ -105,17 +105,17 @@ button{
 }
 .iconEdit{
   color:  #f514db;
-  padding: 3px;
+  padding: 5px;
   
 }
 .iconDelete{
   color: red;
-  padding: 3px;
+  padding: 5px;
 }
 
 .iconOk{
   color: green;
-  padding: 3px;
+  padding: 5px;
 }
 .iconAdd{
   color: green;

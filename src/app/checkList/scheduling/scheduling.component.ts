@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { CommonService } from 'src/app/services/common.service';
 import { SchedulingService } from 'src/app/services/scheduling/scheduling.service';
 import { UsersComponent } from 'src/app/users/users.component';
+import { LocationsComponent } from 'src/app/utils/loading/locations/locations/locations.component';
 import { CreateCheckListComponent } from '../create-check-list/create-check-list.component';
 
 @Component({
@@ -15,7 +16,12 @@ import { CreateCheckListComponent } from '../create-check-list/create-check-list
 })
 export class SchedulingComponent implements OnInit {
 
-  displayedColumns = ['number', 'namAssessorHsrch', 'hecliECheckListId', 'datSchedulingHscls', 'namLocationHsrch', 'process'];
+  unit = [
+    { value: 1, viewValue: 'هفتگی' },
+    { value: 2, viewValue: 'ماهانه' },
+    { value: 3, viewValue: 'سالانه' }]
+
+  displayedColumns = ['number', 'namAssessorHsrch', 'namChkHecli', 'namPeriodHsrch', 'namLocationHsrch', 'process'];
   listOfAllSchedulings: any;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -52,10 +58,22 @@ export class SchedulingComponent implements OnInit {
       "eSchedulingId": this.newRowObj.eSchedulingId,
       "assessorIdHsrch": this.newRowObj.assessorId,
       "hecliECheckListId": this.newRowObj.hecliECheckListId,
-      "datSchedulingHscls": this.newRowObj.datSchedulingHscls,
-      // "locationIdHsrch":  this.newRowObj.eSchedulingId,
+      "namPeriodHsrch": this.newRowObj.namPeriodHsrch,
+      "locationIdHsrch": this.newRowObj.locationIdHsrch,
       "namLocationHsrch": this.newRowObj.namLocationHsrch,
       "namAssessorHsrch": this.newRowObj.namAssessorHsrch,
+      "namChkHecli": this.newRowObj.namChkHecli
+    }
+    switch (this.newRowObj.namPeriodHsrch) {
+      case 'هفتگی':
+        object['numPeriodHsrch'] = 1;
+        break;
+      case 'ماهانه':
+        object['numPeriodHsrch'] = 2;
+        break;
+      case 'سالانه':
+        object['numPeriodHsrch'] = 3;
+        break;
     }
 
     this.schedulingService.insertListOfScheduling(object).subscribe((success) => {
@@ -153,10 +171,32 @@ export class SchedulingComponent implements OnInit {
 
         this.newRowObj.hecliECheckListId = data.eCheckListId;
         this.newRowObj.namChkHecli = data.namChkHecli;
-        
+
+
       }
     )
 
+  }
+
+  selectLocations() {
+    {
+      const dialogRef = this.dialog.open(LocationsComponent, {
+        width: "80%",
+        height: "80%",
+        data: {
+          // checkListId: row.eCheckListId,
+          //  checkListName: row.desChkHecli,
+        }
+      });
+      dialogRef.afterClosed().subscribe(
+        (data) => {
+
+          this.newRowObj.locationIdHsrch = data.locationId;
+          this.newRowObj.namLocationHsrch = data.namLocation;
+
+        }
+      )
+    }
   }
 
 }

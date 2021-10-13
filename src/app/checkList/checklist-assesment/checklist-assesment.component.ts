@@ -159,7 +159,7 @@ export class ChecklistAssesmentComponent implements OnInit {
         "namLocationHsrch": this.namLocation,
         "hecliECheckListId": this.checklistId,
         "assessorIdHsrch": this.commonService.activeUser.id,
-        "namAssessorHsrch": this.commonService.activeUser.firstname+this.commonService.activeUser.lastname,
+        "namAssessorHsrch": this.commonService.activeUser.firstname+' '+this.commonService.activeUser.lastname,
         "requestDescriptionHsrch": this.firstLevel.value.forthCtrl,
         "requestDateHsrch": new Date(),
         "createDate": new Date()
