@@ -34,6 +34,8 @@ export class ChecklistReportComponent implements OnInit {
   desQuestionHeclqFilter: any;
   desOptionHecloFilter: any;
   search: any;
+  percentage: any;
+  counts: string;
   constructor(public commonService: CommonService,
     public checklistAssesmentService: checklistAssesmentService,
   ) {
@@ -52,6 +54,8 @@ export class ChecklistReportComponent implements OnInit {
     this.commonService.loading = true;
     this.checklistAssesmentService.selectAllListOfChecklistReport().subscribe((success) => {
       this.ListOfcheckListAssesments = success;
+      console.log(' this.ListOfcheckListAssesment', this.ListOfcheckListAssesments)
+      this.viewThePercentageOfOptions(success);
       this.arrayForFilterDesExplainQuestionHscha = [];
       this.ListOfcheckListAssesments.forEach(eachAssesment => {
         this.arrayForFilterDesExplainQuestionHscha.push({ val: eachAssesment['assessmentId'] });
@@ -70,6 +74,7 @@ export class ChecklistReportComponent implements OnInit {
       this.commonService.loading = false;
     });
   }
+
   // applyFilter(event: Event) {
   //   this.filteredArray = this.dataSource['_data']['_value']
 
@@ -89,6 +94,7 @@ export class ChecklistReportComponent implements OnInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+   this.viewThePercentageOfOptions(this.dataSource.filteredData) 
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
@@ -109,6 +115,7 @@ export class ChecklistReportComponent implements OnInit {
     }
     this.commonService.loading = true;
     this.checklistAssesmentService.filterListOfChecklistReport(body).subscribe((success) => {
+      this.viewThePercentageOfOptions(success)
       this.dataSource = new MatTableDataSource(success);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -177,7 +184,33 @@ export class ChecklistReportComponent implements OnInit {
     );
     popupWin.document.close();
   }
+  viewThePercentageOfOptions(data) {
+    let optionsText = [];
+    data.forEach(eachRowOfReport => {
+      if (optionsText != eachRowOfReport['desOptionHeclo']) {
+        optionsText.push(eachRowOfReport['desOptionHeclo'])
+      }
+    }); console.log('optionsText', optionsText)
 
+    var counts = {};
 
+    for (var i = 0; i < optionsText.length; i++) {
+      if (!counts.hasOwnProperty(optionsText[i]=optionsText[i])) {
+        counts[optionsText[i]] = 1;
+      }
+      else {
+        counts[optionsText[i]]++;
+      }
+    }
+
+    console.log('counts', counts);
+    this.counts = JSON.stringify(counts)
+    let sum = Object.keys(counts).reduce((s, k) => s += counts[k], 0);
+
+    this.percentage = Object.keys(counts).map(k => ({  [k]:'%'+ (counts[k] / sum * 100).toFixed(2) }));
+    this.percentage = JSON.stringify(this.percentage)
+    console.log('percentage', this.percentage);
+
+  }
 
 }

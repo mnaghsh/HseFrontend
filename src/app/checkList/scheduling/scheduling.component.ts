@@ -19,7 +19,9 @@ export class SchedulingComponent implements OnInit {
   unit = [
     { value: 1, viewValue: 'هفتگی' },
     { value: 2, viewValue: 'ماهانه' },
-    { value: 3, viewValue: 'سالانه' }]
+    { value: 3, viewValue: 'سالانه' },
+    { value: 4, viewValue: 'روزانه' }
+  ]
 
   displayedColumns = ['number', 'namAssessorHsrch', 'namChkHecli', 'namPeriodHsrch', 'namLocationHsrch', 'process'];
   listOfAllSchedulings: any;
