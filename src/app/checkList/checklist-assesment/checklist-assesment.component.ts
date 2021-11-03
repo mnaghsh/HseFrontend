@@ -50,7 +50,7 @@ export class ChecklistAssesmentComponent implements OnInit {
   firstLevel = this.fb.group({
     firstCtrl: ['', Validators.required],
     secondCtrl: ['', Validators.required],
-  //thirdCtrl: ['', Validators.required],
+   //thirdCtrl: ['', Validators.required],
     forthCtrl: ['']
   });
   secondLevel = this.fb.group({
@@ -59,9 +59,13 @@ export class ChecklistAssesmentComponent implements OnInit {
 
   ListOfcheckListsAssesment: any;
   namLocationHsrch: any;
-  requestChecklistObject: { locationIdHsrch: any; namLocationHsrch: any; hecliECheckListId: any; assessorIdHsrch: any; namAssessorHsrch: string; requestDescriptionHsrch: any; requestDateHsrch: Date; createDate: Date; };
   namChkHecli: any;
   Validation=false;
+  requestChecklistObject: {
+    locationIdHsrch: any; namLocationHsrch: any; hecliECheckListId: any; assessorIdHsrch: any; namAssessorHsrch: string;
+    //"requestDescriptionHsrch": this.firstLevel.value.thirdCtrl,
+    areaUnderAssessment: any; requestDateHsrch: Date; createDate: Date;
+  };
 
 
 
@@ -160,7 +164,8 @@ export class ChecklistAssesmentComponent implements OnInit {
         "hecliECheckListId": this.checklistId,
         "assessorIdHsrch": this.commonService.activeUser.id,
         "namAssessorHsrch": this.commonService.activeUser.firstname+' '+this.commonService.activeUser.lastname,
-        "requestDescriptionHsrch": this.firstLevel.value.forthCtrl,
+        //"requestDescriptionHsrch": this.firstLevel.value.thirdCtrl,
+        "areaUnderAssessment": this.firstLevel.value.forthCtrl,
         "requestDateHsrch": new Date(),
         "createDate": new Date()
       }

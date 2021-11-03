@@ -76,6 +76,9 @@ export class SchedulingComponent implements OnInit {
       case 'سالانه':
         object['numPeriodHsrch'] = 3;
         break;
+        case 'روزانه':
+        object['numPeriodHsrch'] = 4;
+        break;
     }
 
     this.schedulingService.insertListOfScheduling(object).subscribe((success) => {

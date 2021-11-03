@@ -1,11 +1,13 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { ViewChild } from '@angular/core';
+import { ElementRef, ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { checklistAssesmentService } from 'src/app/services/checklistAssesmentService/checklistAssesmentService';
 import { CommonService } from 'src/app/services/common.service';
+import { FormGroup, FormControl } from '@angular/forms';
+import moment from 'moment';
 
 @Component({
   selector: 'app-checklist-report',
@@ -13,6 +15,8 @@ import { CommonService } from 'src/app/services/common.service';
   styleUrls: ['./checklist-report.component.css']
 })
 export class ChecklistReportComponent implements OnInit {
+  campaignOne: FormGroup;
+  campaignTwo: FormGroup;
   displayedColumns = ['number', 'namChkHecli', 'requestDescriptionHsrch',
     'desQuestionHeclq', 'desOptionHeclo', 'desExplainQuestionHscha', 'requestDateHsrch',
     'namAssessorHsrch', 'namLocationHsrch', 'unitCehckListsHecli', 'namDepartmentHecli'];
@@ -36,10 +40,15 @@ export class ChecklistReportComponent implements OnInit {
   search: any;
   percentage: any;
   counts: string;
+  @ViewChild('startDate') startDate: ElementRef;
+  @ViewChild('endDate') endDate: ElementRef;
+
   constructor(public commonService: CommonService,
     public checklistAssesmentService: checklistAssesmentService,
   ) {
+
   }
+
 
   ngOnInit(): void {
     this.getChecklistQuestions()
@@ -94,7 +103,7 @@ export class ChecklistReportComponent implements OnInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-   this.viewThePercentageOfOptions(this.dataSource.filteredData) 
+    this.viewThePercentageOfOptions(this.dataSource.filteredData)
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
@@ -102,6 +111,11 @@ export class ChecklistReportComponent implements OnInit {
   }
 
   serverFilter() {
+    console.log('startDate',this.startDate.nativeElement.value)
+    console.log('endDate',this.endDate.nativeElement.value)
+   //console.log('startDate', moment( this.startDate.nativeElement.value, 'YYYY/MM/DD').locale('en').format('YYYY/MM/DD'))
+    //console.log('endDate', moment(this.endDate.nativeElement.value, 'YYYY/MM/DD').locale('en').format('YYYY/MM/DD'))
+
     this.search = ""
     const body = {
 
@@ -110,7 +124,9 @@ export class ChecklistReportComponent implements OnInit {
       namAssessorHsrch: this.namAssessorHsrchFilter,
       namLocationHsrch: this.namLocationHsrchFilter,
       desQuestionHeclq: this.desQuestionHeclqFilter,
-      desOptionHeclo: this.desOptionHecloFilter
+      desOptionHeclo: this.desOptionHecloFilter,
+      startdateHsrch: this.startDate.nativeElement.value,
+      enddateHsrch: this.endDate.nativeElement.value
 
     }
     this.commonService.loading = true;
@@ -195,7 +211,7 @@ export class ChecklistReportComponent implements OnInit {
     var counts = {};
 
     for (var i = 0; i < optionsText.length; i++) {
-      if (!counts.hasOwnProperty(optionsText[i]=optionsText[i])) {
+      if (!counts.hasOwnProperty(optionsText[i] = optionsText[i])) {
         counts[optionsText[i]] = 1;
       }
       else {
@@ -207,7 +223,7 @@ export class ChecklistReportComponent implements OnInit {
     this.counts = JSON.stringify(counts)
     let sum = Object.keys(counts).reduce((s, k) => s += counts[k], 0);
 
-    this.percentage = Object.keys(counts).map(k => ({  [k]:'%'+ (counts[k] / sum * 100).toFixed(2) }));
+    this.percentage = Object.keys(counts).map(k => ({ [k]: '%' + (counts[k] / sum * 100).toFixed(2) }));
     this.percentage = JSON.stringify(this.percentage)
     console.log('percentage', this.percentage);
 

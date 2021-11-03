@@ -24,6 +24,7 @@ import { UsersComponent } from './users/users.component';
 import { LocationsComponent } from './utils/loading/locations/locations/locations.component';
 import { MessagesComponent } from './utils/messages/messages.component';
 import { SchedulingComponent } from './checkList/scheduling/scheduling.component';
+import { NgPersianDatepickerModule } from 'ng-persian-datepicker';
 
 
 
@@ -66,7 +67,8 @@ const myRoots: Routes = [
     MessagesComponent,
     SchedulingComponent
   ],
-  imports: [
+  imports: [      NgPersianDatepickerModule,
+
     BrowserModule, SharedModule,
     MatTabsModule,
     MatListModule,
