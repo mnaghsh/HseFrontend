@@ -18,7 +18,7 @@ export class ChecklistReportComponent implements OnInit {
   campaignOne: FormGroup;
   campaignTwo: FormGroup;
   displayedColumns = ['number', 'namChkHecli', 'requestDescriptionHsrch',
-    'desQuestionHeclq', 'desOptionHeclo', 'desExplainQuestionHscha', 'requestDateHsrch',
+    'desQuestionHeclq', 'desOptionHeclo', 'desExplainQuestionHscha', 'requestDateJalaliHsrch',
     'namAssessorHsrch', 'namLocationHsrch', 'unitCehckListsHecli', 'namDepartmentHecli'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

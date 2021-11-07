@@ -62,14 +62,15 @@ export class CreateCheckListComponent implements OnInit {
       { value: 2, viewValue: 'فولاد سازی' },
       { value: 3, viewValue: 'نورد گرم' },
       { value: 4, viewValue: 'نورد سرد' },
-      { value: 4, viewValue: 'انرژی سیالات' },
-      { value: 4, viewValue: 'مدیریت شهری' },
-      { value: 4, viewValue: 'تعمیرگاه مرکزی' },
-      { value: 4, viewValue: 'حمل و نقل' },
-      { value: 4, viewValue: 'کنترل مواد' },
-      { value: 4, viewValue: 'تعميرات مرکزي' },
-      { value: 4, viewValue: 'ستادي' },
-      { value: 4, viewValue: 'خدمات عمومی' },
+      { value: 5, viewValue: 'انرژی سیالات' },
+      { value: 6, viewValue: 'مدیریت شهری' },
+      { value: 7, viewValue: 'تعمیرگاه مرکزی' },
+      { value: 8, viewValue: 'حمل و نقل' },
+      { value: 9, viewValue: 'کنترل مواد' },
+      { value: 10, viewValue: 'تعميرات مرکزي' },
+      { value: 11, viewValue: 'ستادي' },
+      { value: 12, viewValue: 'خدمات عمومی' },
+      { value: 13, viewValue: 'خارج از فولاد' },
     ];
   }
   ngOnInit() {
