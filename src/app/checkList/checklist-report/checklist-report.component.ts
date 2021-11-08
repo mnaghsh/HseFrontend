@@ -7,7 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { checklistAssesmentService } from 'src/app/services/checklistAssesmentService/checklistAssesmentService';
 import { CommonService } from 'src/app/services/common.service';
 import { FormGroup, FormControl } from '@angular/forms';
-import moment from 'moment';
+import * as moment from 'jalali-moment'
 
 @Component({
   selector: 'app-checklist-report',
@@ -111,9 +111,14 @@ export class ChecklistReportComponent implements OnInit {
   }
 
   serverFilter() {
-    console.log('startDate',this.startDate.nativeElement.value)
-    console.log('endDate',this.endDate.nativeElement.value)
-   //console.log('startDate', moment( this.startDate.nativeElement.value, 'YYYY/MM/DD').locale('en').format('YYYY/MM/DD'))
+    debugger
+    let start = moment(this.startDate.nativeElement.value, 'jYYYY/jM/jD');
+    let end = moment(this.endDate.nativeElement.value, 'jYYYY/jM/jD');
+    let startdate = start.locale('en').format('YYYY/M/D');
+    let enddate = end.locale('en').format('YYYY/M/D');
+    console.log('startDate', startdate)
+    console.log('endDate', enddate)
+    //console.log('startDate', moment( this.startDate.nativeElement.value, 'YYYY/MM/DD').locale('en').format('YYYY/MM/DD'))
     //console.log('endDate', moment(this.endDate.nativeElement.value, 'YYYY/MM/DD').locale('en').format('YYYY/MM/DD'))
 
     this.search = ""
@@ -125,8 +130,8 @@ export class ChecklistReportComponent implements OnInit {
       namLocationHsrch: this.namLocationHsrchFilter,
       desQuestionHeclq: this.desQuestionHeclqFilter,
       desOptionHeclo: this.desOptionHecloFilter,
-      startdateHsrch: this.startDate.nativeElement.value,
-      enddateHsrch: this.endDate.nativeElement.value
+      startdateHsrch: startdate,
+      enddateHsrch: enddate
 
     }
     this.commonService.loading = true;

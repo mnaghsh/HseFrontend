@@ -5,11 +5,7 @@
         </h5>
     </mat-card>
 </div>
-
 <div>
-
-
-
     <mat-card>
         <mat-form-field class="example-container">
             <input matInput [(ngModel)]="namChkHecliFilter" placeholder="فیلتر نام چک لیست">
@@ -35,13 +31,13 @@
             <input matInput [(ngModel)]="desOptionHecloFilter" placeholder="فیلتر شرح گزینه">
         </mat-form-field> 
         <mat-form-field style="overflow-x: hidden;" class="example-container" >
-            <input placeholder="از تاریخ"  matInput  type="text" #startDate />
-            <ng-persian-datepicker [dateFormat]="'YYYY-MM-DD'" [input]="startDate" >
+            <input placeholder="از تاریخ"   matInput  type="text" #startDate />
+            <ng-persian-datepicker [timeEnable]="false" [uiTheme]="'blue'" [dateFormat]="'jYYYY-jMM-jDD'" [input]="startDate" >
             </ng-persian-datepicker>
         </mat-form-field>
         <mat-form-field style="overflow-x: hidden;" class="example-container">
             <input placeholder="تا تاریخ" matInput  type="text" #endDate />
-            <ng-persian-datepicker [dateFormat]="'YYYY-MM-DD'" [input]="endDate" >
+            <ng-persian-datepicker [timeEnable]="false" [uiTheme]="'blue'" [dateFormat]="'jYYYY-jMM-jDD'" [input]="endDate" >
             </ng-persian-datepicker>
         </mat-form-field>
         <br>
