@@ -63,6 +63,10 @@ export class LoginComponent implements OnInit {
           this.auth.wasLoggedIn();
           this.myRoute.navigate(['menu']);
 
+        },
+        (error)=>{
+          this.commonService.showEventMessage("خطایی به وجود آمده یا ارتباط با سرور قطع می باشد")
+
         }
       )
     }

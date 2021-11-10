@@ -15,6 +15,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { ChecklistOptionsService } from 'src/app/services/checklistOptions/checklist-options.service';
 import { checklistAssesmentService } from 'src/app/services/checklistAssesmentService/checklistAssesmentService';
+import * as moment from 'jalali-moment'
 
 @Component({
   selector: 'app-checklist-assesment',
@@ -39,6 +40,7 @@ export class ChecklistAssesmentComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('topScrollAnchor') topScroll: ElementRef;
+  @ViewChild('dateOfInspection') dateOfInspection: ElementRef;
   dataSource: MatTableDataSource<any>;
   stepperOrientation: Observable<StepperOrientation>;
   locationId: any;
@@ -50,7 +52,7 @@ export class ChecklistAssesmentComponent implements OnInit {
   firstLevel = this.fb.group({
     firstCtrl: ['', Validators.required],
     secondCtrl: ['', Validators.required],
-   //thirdCtrl: ['', Validators.required],
+   thirdCtrl: ['', Validators.required],
     forthCtrl: ['']
   });
   secondLevel = this.fb.group({
@@ -61,11 +63,10 @@ export class ChecklistAssesmentComponent implements OnInit {
   namLocationHsrch: any;
   namChkHecli: any;
   Validation=false;
-  requestChecklistObject: {
-    locationIdHsrch: any; namLocationHsrch: any; hecliECheckListId: any; assessorIdHsrch: any; namAssessorHsrch: string;
-    //"requestDescriptionHsrch": this.firstLevel.value.thirdCtrl,
-    areaUnderAssessment: any; requestDateHsrch: Date; createDate: Date;
-  };
+  requestChecklistObject: any;
+
+
+ 
 
 
 
@@ -156,6 +157,11 @@ export class ChecklistAssesmentComponent implements OnInit {
     }
     else {
       this.getChecklistOptions()
+      let start = moment(this.dateOfInspection.nativeElement.value, 'jYYYY/jM/jD HH:mm:ss');
+      let dateOfInspection = start.locale('en').format('YYYY/M/D HH:mm:ss');
+      debugger
+      console.log('Date', this.firstLevel.value.thirdCtrl)
+      console.log('Date2', this.dateOfInspection.nativeElement.value)
 
       this.openQuestions = true
       this.requestChecklistObject = {
@@ -166,7 +172,7 @@ export class ChecklistAssesmentComponent implements OnInit {
         "namAssessorHsrch": this.commonService.activeUser.firstname+' '+this.commonService.activeUser.lastname,
         //"requestDescriptionHsrch": this.firstLevel.value.thirdCtrl,
         "areaUnderAssessment": this.firstLevel.value.forthCtrl,
-        "requestDateHsrch": new Date(),
+        "requestDateHsrch": new Date(dateOfInspection),
         "createDate": new Date()
       }
       console.log('addRequestChecklist', this.requestChecklistObject)
