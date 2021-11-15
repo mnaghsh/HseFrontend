@@ -19,7 +19,7 @@ export class ChecklistReportComponent implements OnInit {
   campaignTwo: FormGroup;
   displayedColumns = ['number', 'namChkHecli', 'requestDescriptionHsrch',
     'desQuestionHeclq', 'desOptionHeclo', 'desExplainQuestionHscha', 'requestDateJalaliHsrch',
-    'namAssessorHsrch', 'namLocationHsrch', 'unitCehckListsHecli', 'namDepartmentHecli'];
+    'namAssessorHsrch', 'namLocationHsrch', 'unitCehckListsHecli', 'namDepartmentHecli','namEvaluationAreaHsrch'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: MatTableDataSource<any>
@@ -37,6 +37,7 @@ export class ChecklistReportComponent implements OnInit {
   namLocationHsrchFilter: any;
   desQuestionHeclqFilter: any;
   desOptionHecloFilter: any;
+  namEvaluationAreaHsrch: any;
   search: any;
   percentage: any;
   counts: string;
@@ -60,6 +61,7 @@ export class ChecklistReportComponent implements OnInit {
     this.namLocationHsrchFilter = ""
     this.desQuestionHeclqFilter = ""
     this.desOptionHecloFilter = ""
+    this.namEvaluationAreaHsrch = ""
     this.commonService.loading = true;
     this.checklistAssesmentService.selectAllListOfChecklistReport().subscribe((success) => {
       this.ListOfcheckListAssesments = success;
@@ -130,6 +132,7 @@ export class ChecklistReportComponent implements OnInit {
       namLocationHsrch: this.namLocationHsrchFilter,
       desQuestionHeclq: this.desQuestionHeclqFilter,
       desOptionHeclo: this.desOptionHecloFilter,
+      namEvaluationAreaHsrch: this.namEvaluationAreaHsrch,
       startdateHsrch: startdate,
       enddateHsrch: enddate
 

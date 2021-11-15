@@ -28,8 +28,14 @@
           <mat-label>انتخاب مکان</mat-label>
           <input (click)="selectLocations()" matInput formControlName="secondCtrl" required>
         </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label> ناحیه در حال بازرسی</mat-label>
+          <mat-select style="margin-bottom: -1px;" formControlName="thirdCtrl">
+            <mat-option *ngFor="let f of department" [value]="f.viewValue">{{f.viewValue}}</mat-option>
+          </mat-select>
+        </mat-form-field>
         <!-- <mat-form-field appearance="fill">
-          <mat-label> ناحیه مکان در حال بازرسی</mat-label>
+          <mat-label> ناحیه در حال بازرسی</mat-label>
           <input  matInput formControlName="thirdCtrl" required>
         </mat-form-field> -->
         <!-- <mat-form-field appearance="fill">
@@ -52,11 +58,11 @@
     <mat-step [stepControl]="secondFormGroup" label=" پرکردن چک لیست ">
       <form>
         <div>
-          <button  style="float: right;" mat-raised-button color="primary" mat-button matStepperPrevious>مرحله
+          <button style="float: right;" mat-raised-button color="primary" mat-button matStepperPrevious>مرحله
             قبل</button>
-          <button class="btnPrint" style="float: left;" mat-raised-button color="accent" (click)="gotoStep3()" mat-button
-            matStepperNext>ثبت چک لیست</button>
-        
+          <button class="btnPrint" style="float: left;" mat-raised-button color="accent" (click)="gotoStep3()"
+            mat-button matStepperNext>ثبت چک لیست</button>
+
         </div>
         <mat-form-field class="example-container ">
           <input matInput (keyup)="applyFilter($event)" placeholder="جستجو">
@@ -111,7 +117,7 @@
             <ng-container matColumnDef="desExplainQuestionHscha">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> توضیحات </th>
               <td mat-cell *matCellDef="let element">
-                <mat-form-field style="max-height: 52px;"  class="example-full-width" appearance="fill">
+                <mat-form-field style="max-height: 52px;" class="example-full-width" appearance="fill">
                   <input matInput [placeholder]="" [(ngModel)]="element.desExplainQuestionHscha" type="text"
                     [ngModelOptions]="{standalone: true}">
                 </mat-form-field>

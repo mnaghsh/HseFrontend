@@ -28,6 +28,11 @@
         </mat-form-field>
 
         <mat-form-field class="example-container">
+            <input matInput [(ngModel)]="namEvaluationAreaHsrch" placeholder="ناحیه مکان ارزیابی شده">
+        </mat-form-field>
+
+
+        <mat-form-field class="example-container">
             <input matInput [(ngModel)]="desOptionHecloFilter" placeholder="فیلتر شرح گزینه">
         </mat-form-field> 
         <mat-form-field style="overflow-x: hidden;" class="example-container" >
@@ -165,6 +170,14 @@
             <th mat-header-cell mat-sort-header *matHeaderCellDef>ناحیه </th>
             <td mat-cell *matCellDef="let element">
                 <p>{{element.namDepartmentHecli}}</p>
+            </td>
+            <td mat-footer-cell *matFooterCellDef>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="namEvaluationAreaHsrch">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef>ناحیه </th>
+            <td mat-cell *matCellDef="let element">
+                <p>{{element.namEvaluationAreaHsrch}}</p>
             </td>
             <td mat-footer-cell *matFooterCellDef>
             </td>
