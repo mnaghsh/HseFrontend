@@ -11,9 +11,9 @@
             <input matInput [(ngModel)]="namChkHecliFilter" placeholder="فیلتر نام چک لیست">
         </mat-form-field>
 
-        <mat-form-field class="example-container">
+        <!-- <mat-form-field class="example-container">
             <input matInput [(ngModel)]="namDepartmentHecliFilter" placeholder=" فیلتر نام ناحیه">
-        </mat-form-field>
+        </mat-form-field> -->
 
         <mat-form-field class="example-container">
             <input matInput [(ngModel)]="namAssessorHsrchFilter" placeholder=" فیلتر نام ارزیاب">
@@ -166,16 +166,16 @@
             </td>
         </ng-container>
 
-        <ng-container matColumnDef="namDepartmentHecli">
+        <!-- <ng-container matColumnDef="namDepartmentHecli">
             <th mat-header-cell mat-sort-header *matHeaderCellDef>ناحیه </th>
             <td mat-cell *matCellDef="let element">
                 <p>{{element.namDepartmentHecli}}</p>
             </td>
             <td mat-footer-cell *matFooterCellDef>
             </td>
-        </ng-container>
+        </ng-container> -->
         <ng-container matColumnDef="namEvaluationAreaHsrch">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef>ناحیه </th>
+            <th mat-header-cell mat-sort-header *matHeaderCellDef> ناحیه </th>
             <td mat-cell *matCellDef="let element">
                 <p>{{element.namEvaluationAreaHsrch}}</p>
             </td>
