@@ -52,7 +52,7 @@ export class ChecklistAssesmentComponent implements OnInit {
   firstLevel = this.fb.group({
     firstCtrl: ['', Validators.required],
     secondCtrl: ['', Validators.required],
-   thirdCtrl: ['', Validators.required],
+    thirdCtrl: ['', Validators.required],
     forthCtrl: ['']
   });
   secondLevel = this.fb.group({
@@ -62,14 +62,23 @@ export class ChecklistAssesmentComponent implements OnInit {
   ListOfcheckListsAssesment: any;
   namLocationHsrch: any;
   namChkHecli: any;
-  Validation=false;
+  Validation = false;
   requestChecklistObject: any;
-
-
- 
-
-
-
+  department = [
+    { value: 1, viewValue: 'آهن سازی' },
+    { value: 2, viewValue: 'فولاد سازی' },
+    { value: 3, viewValue: 'نورد گرم' },
+    { value: 4, viewValue: 'نورد سرد' },
+    { value: 5, viewValue: 'انرژی سیالات' },
+    { value: 6, viewValue: 'مدیریت شهری' },
+    { value: 7, viewValue: 'تعمیرگاه مرکزی' },
+    { value: 8, viewValue: 'حمل و نقل' },
+    { value: 9, viewValue: 'کنترل مواد' },
+    { value: 10, viewValue: 'تعميرات مرکزي' },
+    { value: 11, viewValue: 'ستادي' },
+    { value: 12, viewValue: 'خدمات عمومی' },
+    { value: 13, viewValue: 'خارج از فولاد' },
+  ];
   constructor(private fb: FormBuilder,
     public checkListQuestionService: ChecklistQuestionService,
     public checkListOptionsService: ChecklistOptionsService,
@@ -169,9 +178,10 @@ export class ChecklistAssesmentComponent implements OnInit {
         "namLocationHsrch": this.namLocation,
         "hecliECheckListId": this.checklistId,
         "assessorIdHsrch": this.commonService.activeUser.id,
-        "namAssessorHsrch": this.commonService.activeUser.firstname+' '+this.commonService.activeUser.lastname,
+        "namAssessorHsrch": this.commonService.activeUser.firstname + ' ' + this.commonService.activeUser.lastname,
         //"requestDescriptionHsrch": this.firstLevel.value.thirdCtrl,
         "areaUnderAssessment": this.firstLevel.value.forthCtrl,
+        "namEvaluationAreaHsrch": this.firstLevel.value.thirdCtrl,
         "requestDateHsrch": new Date(dateOfInspection),
         "createDate": new Date()
       }
@@ -271,15 +281,15 @@ export class ChecklistAssesmentComponent implements OnInit {
 
   gotoStep3() {
 
-   
+
     this.ListOfcheckListsQuestions.forEach(eachQuestion => {
 
       if (eachQuestion['SelectedOptionId'] == undefined) {
         this.commonService.showEventMessage("لطفا همه گزینه ها را تکمیل کنید", 3000, "green")
         this.topScroll.nativeElement.scrollIntoView({ behavior: 'smooth' });
-       this.Validation = false;
+        this.Validation = false;
       }
-      else{
+      else {
         this.Validation = true;
       }
     })
