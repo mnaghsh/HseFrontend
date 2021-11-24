@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { ElementRef, ViewChild } from '@angular/core';
+import { ElementRef, Inject, ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -8,6 +8,7 @@ import { checklistAssesmentService } from 'src/app/services/checklistAssesmentSe
 import { CommonService } from 'src/app/services/common.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import * as moment from 'jalali-moment'
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-checklist-report',
@@ -19,7 +20,7 @@ export class ChecklistReportComponent implements OnInit {
   campaignTwo: FormGroup;
   displayedColumns = ['number', 'namChkHecli', 'requestDescriptionHsrch',
     'desQuestionHeclq', 'desOptionHeclo', 'desExplainQuestionHscha', 'requestDateJalaliHsrch',
-    'namAssessorHsrch', 'namLocationHsrch', 'unitCehckListsHecli', 'namDepartmentHecli','namEvaluationAreaHsrch'];
+    'namAssessorHsrch', 'namLocationHsrch', 'unitCehckListsHecli', 'namDepartmentHecli', 'namEvaluationAreaHsrch'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: MatTableDataSource<any>
@@ -43,17 +44,39 @@ export class ChecklistReportComponent implements OnInit {
   counts: string;
   @ViewChild('startDate') startDate: ElementRef;
   @ViewChild('endDate') endDate: ElementRef;
-
   constructor(public commonService: CommonService,
     public checklistAssesmentService: checklistAssesmentService,
-  ) {
+    @Inject(MAT_DIALOG_DATA) public recievedData
 
+  ) {
+    console.log('recievedData', this.recievedData)
+    if (this.recievedData.itsPopup == true) {
+      const body = {
+
+        namChkHecli: this.recievedData.row.namChkHecli,
+        namDepartmentHecli: "",
+        namAssessorHsrch: this.recievedData.row.namAssessorHsrch,
+        namLocationHsrch: this.recievedData.row.namLocationHsrch,
+      desQuestionHeclq: "",
+        desOptionHeclo: "",
+        namEvaluationAreaHsrch: this.recievedData.row.namEvaluationAreaHsrch,
+        startdateHsrch: moment(this.recievedData.row.requestDateHsrch, 'jYYYY/jM/jD'),
+        enddateHsrch: moment(this.recievedData.row.requestDateHsrch, 'jYYYY/jM/jD')
+
+      }
+      this.serverFilter(body)
+    }
+    else{
+      this.getChecklistQuestions()
+
+    }
   }
 
 
   ngOnInit(): void {
-    this.getChecklistQuestions()
+
   }
+
   public getChecklistQuestions() {
     this.namChkHecliFilter = ""
     this.namDepartmentHecliFilter = ""
@@ -112,30 +135,31 @@ export class ChecklistReportComponent implements OnInit {
     }
   }
 
-  serverFilter() {
+
+  serverFilter(body?: any) {
     debugger
-    let start = moment(this.startDate.nativeElement.value, 'jYYYY/jM/jD');
-    let end = moment(this.endDate.nativeElement.value, 'jYYYY/jM/jD');
-    let startdate = start.locale('en').format('YYYY/M/D');
-    let enddate = end.locale('en').format('YYYY/M/D');
-    console.log('startDate', startdate)
-    console.log('endDate', enddate)
-    //console.log('startDate', moment( this.startDate.nativeElement.value, 'YYYY/MM/DD').locale('en').format('YYYY/MM/DD'))
-    //console.log('endDate', moment(this.endDate.nativeElement.value, 'YYYY/MM/DD').locale('en').format('YYYY/MM/DD'))
-
     this.search = ""
-    const body = {
+    
+    if (body == null) {
+      let start = moment(this.startDate.nativeElement.value, 'jYYYY/jM/jD');
+      let end = moment(this.endDate.nativeElement.value, 'jYYYY/jM/jD');
+      let startdate = start.locale('en').format('YYYY/M/D');
+      let enddate = end.locale('en').format('YYYY/M/D');
+      console.log('startDate', startdate)
+      console.log('endDate', enddate)
+      body = {
 
-      namChkHecli: this.namChkHecliFilter,
-      namDepartmentHecli: this.namDepartmentHecliFilter,
-      namAssessorHsrch: this.namAssessorHsrchFilter,
-      namLocationHsrch: this.namLocationHsrchFilter,
-      desQuestionHeclq: this.desQuestionHeclqFilter,
-      desOptionHeclo: this.desOptionHecloFilter,
-      namEvaluationAreaHsrch: this.namEvaluationAreaHsrch,
-      startdateHsrch: startdate,
-      enddateHsrch: enddate
+        namChkHecli: this.namChkHecliFilter,
+        namDepartmentHecli: this.namDepartmentHecliFilter,
+        namAssessorHsrch: this.namAssessorHsrchFilter,
+        namLocationHsrch: this.namLocationHsrchFilter,
+        desQuestionHeclq: this.desQuestionHeclqFilter,
+        desOptionHeclo: this.desOptionHecloFilter,
+        namEvaluationAreaHsrch: this.namEvaluationAreaHsrch,
+        startdateHsrch: startdate,
+        enddateHsrch: enddate
 
+      }
     }
     this.commonService.loading = true;
     this.checklistAssesmentService.filterListOfChecklistReport(body).subscribe((success) => {

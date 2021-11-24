@@ -25,6 +25,8 @@ import { LocationsComponent } from './utils/loading/locations/locations/location
 import { MessagesComponent } from './utils/messages/messages.component';
 import { SchedulingComponent } from './checkList/scheduling/scheduling.component';
 import { NgPersianDatepickerModule } from 'ng-persian-datepicker';
+import { RequestChecklistReportComponent } from './checkList/request-checklist-report/request-checklist-report.component';
+import { LoadingDialogComponent } from './utils/loadingDialog/loadingDialog.component';
 
 
 
@@ -41,6 +43,7 @@ const myRoots: Routes = [
       { path: 'checklistAssesment', component: ChecklistAssesmentComponent },
       { path: 'locations', component: LocationsComponent },
       { path: 'checklistReport', component: ChecklistReportComponent },
+      { path: 'requestChecklistReport', component: RequestChecklistReportComponent },
       { path: 'users', component: UsersComponent },
       { path: 'messages', component: MessagesComponent },
       { path: 'scheduling', component: SchedulingComponent },
@@ -53,12 +56,14 @@ const myRoots: Routes = [
 @NgModule({
   declarations: [
     LoadingComponent,
+    LoadingDialogComponent,
     AppComponent,
     HomeComponent,
     MenuComponent,
     LoginComponent,
     CreateCheckListComponent,
     ChecklistReportComponent,
+    RequestChecklistReportComponent,
     ChecklistAssesmentComponent,
     ChecklistOptionsComponent,
     ChecklistQuestionsComponent,
@@ -67,7 +72,7 @@ const myRoots: Routes = [
     MessagesComponent,
     SchedulingComponent
   ],
-  imports: [      NgPersianDatepickerModule,
+  imports: [NgPersianDatepickerModule,
 
     BrowserModule, SharedModule,
     MatTabsModule,

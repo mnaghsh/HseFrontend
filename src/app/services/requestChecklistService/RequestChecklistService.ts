@@ -12,9 +12,10 @@ export class RequestChecklistService {
   public selectAllListOfRequestCheckLists():Observable<any>{
     return this.configService.get('HseERequestChecklists');
   }
-  // public selectListOfRequestOfCheckList(HecliECheckListId):Observable<any>{
-  //   return this.configService.get('HseECheckListRequest/GetHseECheckListRequestOfChecklist/'+HecliECheckListId);
-  // }
+
+  public selectAllListOfRequestCheckListsReport():Observable<any>{
+    return this.configService.get('requestChecklistReport');
+  }
   
   public insertListOfRequestCheckLists(body):Observable<any>{
     return this.configService.post('HseERequestChecklists',body);

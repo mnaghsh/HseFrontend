@@ -36,6 +36,7 @@ export class MenuComponent implements OnInit {
       { label: 'تعریف چک لیست', path: "/createCheckList", icon: "fa fa-pencil" },
       { label: 'انجام ارزیابی', path: "/checklistAssesment", icon: "fa fa-print" },
       { label: 'چاپ گزارش', path: "/checklistReport", icon: "fa fa-newspaper-o" },
+      { label: 'چاپ گزارش بر اساس نام ارزیاب و تاریخ', path: "/requestChecklistReport", icon: "fa fa-newspaper-o" },
       { label: 'ارسال پیامک', path: "/messages", icon: "fa fa-envelope-open" },
       { label: 'مدیریت کاربران ', path: "/users", icon: "fa fa-users" },
       { label: 'مدیریت مکان ها ', path: "/locations", icon: "fa fa-map-marker" },
