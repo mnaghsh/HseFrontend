@@ -39,7 +39,8 @@ export class MenuComponent implements OnInit {
       { label: 'چاپ گزارش بر اساس نام ارزیاب و تاریخ', path: "/requestChecklistReport", icon: "fa fa-newspaper-o" },
       { label: 'ارسال پیامک', path: "/messages", icon: "fa fa-envelope-open" },
       { label: 'مدیریت کاربران ', path: "/users", icon: "fa fa-users" },
-      { label: 'مدیریت مکان ها ', path: "/locations", icon: "fa fa-map-marker" },
+      { label: 'مدیریت واحد ها ', path: "/locations", icon: "fa fa-map-marker" },
+      { label: 'مدیریت  نواحی ', path: "/zones", icon: "fa fa-map-marker" },
       { label: 'خروج', path: "/login", icon: "fa fa-sign-out" },
     ];
 

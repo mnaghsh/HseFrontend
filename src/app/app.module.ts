@@ -27,6 +27,8 @@ import { SchedulingComponent } from './checkList/scheduling/scheduling.component
 import { NgPersianDatepickerModule } from 'ng-persian-datepicker';
 import { RequestChecklistReportComponent } from './checkList/request-checklist-report/request-checklist-report.component';
 import { LoadingDialogComponent } from './utils/loadingDialog/loadingDialog.component';
+import { ZonesComponent } from './utils/zones/zones.component';
+;
 
 
 
@@ -42,6 +44,7 @@ const myRoots: Routes = [
       { path: 'questions', component: ChecklistQuestionsComponent },
       { path: 'checklistAssesment', component: ChecklistAssesmentComponent },
       { path: 'locations', component: LocationsComponent },
+      { path: 'zones', component: ZonesComponent },
       { path: 'checklistReport', component: ChecklistReportComponent },
       { path: 'requestChecklistReport', component: RequestChecklistReportComponent },
       { path: 'users', component: UsersComponent },
@@ -70,7 +73,9 @@ const myRoots: Routes = [
     LocationsComponent,
     UsersComponent,
     MessagesComponent,
-    SchedulingComponent
+    SchedulingComponent,
+    ZonesComponent
+    
   ],
   imports: [NgPersianDatepickerModule,
 

@@ -79,6 +79,31 @@ export class CreateCheckListComponent implements OnInit {
   }
 
   public getChecklists() {
+
+
+    var data = "grant_type=client_credentials";
+
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+    
+    xhr.addEventListener("readystatechange", function() {
+      if(this.readyState === 4) {
+        console.log(this.responseText);
+      }
+    });
+    
+    xhr.open("POST", "https://services.msc.ir/ords/oauth/token/");
+    
+    xhr.setRequestHeader("Authorization", "Basic aHJiYTFfa1FaRlRtMTVITXZxeklFUS4uOm1jT3dtQVBZc2haSTlWcHU4N0NpX1EuLg==");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    
+    xhr.send(data);
+
+
+
+
+
+
     this.commonService.loading = true;
     this.checkListService.selectListOfcheckLists().subscribe((success) => {
       this.ListOfcheckLists=success

@@ -6,6 +6,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 })
 export class ConfigService {
 baseUrl = 'https://localhost:44377/api/'
+mscServices = 'https://services.msc.ir/'
 //baseUrl = 'http://93.126.21.21:8082/api/'
 
 
@@ -26,6 +27,13 @@ baseUrl = 'https://localhost:44377/api/'
 
   public put(url: string, body, options?: any) {
     return this.http.put(this.baseUrl + url, body, options);
+  }
+
+  public isSuiteLogin(url: string, body, options?: any) {
+    return this.http.post(this.mscServices + url, body, options);
+  }
+  public getIsSuiteToken(url: string, body, options?: any) {
+    return this.http.post(this.mscServices + url, body, options);
   }
 
 }
