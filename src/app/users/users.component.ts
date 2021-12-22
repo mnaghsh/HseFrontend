@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { CommonService } from '../services/common.service';
 import { UsersService } from '../services/users/users.service';
 
@@ -24,11 +25,13 @@ export class UsersComponent implements OnInit {
   listOfAllUsers: any;
   constructor(
     public commonService: CommonService,
+    private myRoute: Router,
     public dialogRef: MatDialogRef<any>,
     public usersService: UsersService,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: any,
     @Inject(MAT_DIALOG_DATA) public recievedData
   ) {
+    
     this.getAllUsers();
   }
 
@@ -38,6 +41,12 @@ export class UsersComponent implements OnInit {
   }
 
   public getAllUsers() {
+    if (this.commonService.activeUser.accessLevel!="admin")
+    {
+      this.commonService.showEventMessage("شما دسترسی به محتوای این فرم را ندارید.", 3000, "green")
+      this.myRoute.navigate(['menu']);
+      return
+    }
     this.commonService.loading = true;
     this.usersService.selectAllUsers().subscribe((success) => {
       this.listOfAllUsers = success;
@@ -48,6 +57,7 @@ export class UsersComponent implements OnInit {
       this.commonService.loading = false;
     });
   }
+
 
   public addRow() {
 

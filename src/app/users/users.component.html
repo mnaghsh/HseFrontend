@@ -80,7 +80,8 @@
         <mat-form-field *ngIf="edit" class="example-full-width" appearance="fill">
           <input matInput *ngIf="edit" [placeholder]="" [(ngModel)]="element.password" type="text">
         </mat-form-field>
-        <p *ngIf="!edit">{{element.password}}</p>
+        <!-- <p *ngIf="!edit">{{element.password}}</p> -->
+        <p *ngIf="!edit">******</p>
       </td>
       <td mat-footer-cell *matFooterCellDef>
         <mat-form-field style="max-height: 52px;" class="example-full-width" appearance="fill">

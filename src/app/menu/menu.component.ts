@@ -12,6 +12,7 @@ import { CheckListService } from '../services/checkList/check-list.service';
 export class MenuComponent implements OnInit {
   navBarItem: { label: string; path: string; icon: string; }[];
   rightMenu: { label: string; path: string; icon: string; }[];
+  adminMenu: { label: string; path: string; icon: string; }[];
 
 
   constructor(private auth: AuthenticationService,
@@ -31,16 +32,30 @@ export class MenuComponent implements OnInit {
       { label: 'چاپ گزارش', path: "/checklistReport", icon: "fa fa-newspaper-o" },
       { label: 'برنامه زمانبندی', path: "/scheduling", icon: "fa fa-calendar" },
     ];
-    this.rightMenu = [
-      // { label: ' صفحه اصلی', path: "/home", icon: "fa fa-home" },
-      { label: 'تعریف چک لیست', path: "/createCheckList", icon: "fa fa-pencil" },
-      { label: 'انجام ارزیابی', path: "/checklistAssesment", icon: "fa fa-print" },
-      { label: 'چاپ گزارش', path: "/checklistReport", icon: "fa fa-newspaper-o" },
-      { label: 'ارسال پیامک', path: "/messages", icon: "fa fa-envelope-open" },
-      { label: 'مدیریت کاربران ', path: "/users", icon: "fa fa-users" },
-      { label: 'مدیریت مکان ها ', path: "/locations", icon: "fa fa-map-marker" },
-      { label: 'خروج', path: "/login", icon: "fa fa-sign-out" },
-    ];
+    debugger
+    if (this.commonService.activeUser.accessLevel=="admin"){
+      this.rightMenu = [
+        { label: 'تعریف چک لیست', path: "/createCheckList", icon: "fa fa-pencil" },
+        { label: 'انجام ارزیابی', path: "/checklistAssesment", icon: "fa fa-print" },
+        { label: 'چاپ گزارش', path: "/checklistReport", icon: "fa fa-newspaper-o" },
+        { label: 'مدیریت مکان ها ', path: "/locations", icon: "fa fa-map-marker" },
+        { label: 'مدیریت کاربران ', path: "/users", icon: "fa fa-users" },
+        { label: 'خروج', path: "/login", icon: "fa fa-sign-out" },
+      ]
+     
+    }
+    else{
+      this.rightMenu = [
+        { label: 'تعریف چک لیست', path: "/createCheckList", icon: "fa fa-pencil" },
+        { label: 'انجام ارزیابی', path: "/checklistAssesment", icon: "fa fa-print" },
+        { label: 'چاپ گزارش', path: "/checklistReport", icon: "fa fa-newspaper-o" },
+        { label: 'مدیریت مکان ها ', path: "/locations", icon: "fa fa-map-marker" },
+        { label: 'خروج', path: "/login", icon: "fa fa-sign-out" },
+      ]
+        
+    }
+
+
 
   }
 
