@@ -39,6 +39,9 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.connectToServer = true
+
+
+
   }
 
   public login() {

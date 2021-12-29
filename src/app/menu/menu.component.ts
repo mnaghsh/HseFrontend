@@ -33,6 +33,7 @@ export class MenuComponent implements OnInit {
     ];
     this.rightMenu = [
       // { label: ' صفحه اصلی', path: "/home", icon: "fa fa-home" },
+      { label: 'گزارش کارنامه محیط زیست', path: "/workbookReport", icon: "fa fa-diamond" },
       { label: 'تعریف چک لیست', path: "/createCheckList", icon: "fa fa-pencil" },
       { label: 'انجام ارزیابی', path: "/checklistAssesment", icon: "fa fa-print" },
       { label: 'چاپ گزارش', path: "/checklistReport", icon: "fa fa-newspaper-o" },
@@ -40,7 +41,7 @@ export class MenuComponent implements OnInit {
       { label: 'ارسال پیامک', path: "/messages", icon: "fa fa-envelope-open" },
       { label: 'مدیریت کاربران ', path: "/users", icon: "fa fa-users" },
       { label: 'مدیریت واحد ها ', path: "/locations", icon: "fa fa-map-marker" },
-      { label: 'مدیریت  نواحی ', path: "/zones", icon: "fa fa-map-marker" },
+      { label: 'مدیریت  نواحی ', path: "/zones", icon: "fa fa-location-arrow" },
       { label: 'خروج', path: "/login", icon: "fa fa-sign-out" },
     ];
 

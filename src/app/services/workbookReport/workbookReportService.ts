@@ -16,24 +16,24 @@ export class workbookReportService {
   //   return this.configService.get('HseECheckListRequest/GetHseECheckListRequestOfChecklist/'+HecliECheckListId);
   // }
   
-  public selectAllListOfChecklistReport():Observable<any>{
-    return this.configService.get('checklistReport');
+  // public selectAllListOfChecklistReport():Observable<any>{
+  //   return this.configService.get('checklistReport');
+  // }
+
+  public getReport(body):Observable<any>{
+    return this.configService.post('workBookReport/getIndustrialWaste',body);
   }
 
-  public filterListOfChecklistReport(body):Observable<any>{
-    return this.configService.post('checklistReport/FilterReportChecklist',body);
-  }
-
-  public insertListOfChecklistAssesment(body):Observable<any>{
-    return this.configService.post('HseEChecklistAssessments',body);
-  }
+  // public insertListOfChecklistAssesment(body):Observable<any>{
+  //   return this.configService.post('HseEChecklistAssessments',body);
+  // }
   
-  public updateListOfChecklistAssesment(id,body):Observable<any>{
-    return this.configService.put('HseEChecklistAssessments/'+id,body);
-  }
-  public deleteListOfChecklistAssesment(id):Observable<any>{
-    return this.configService.delete('HseEChecklistAssessments/'+id);
-  }
+  // public updateListOfChecklistAssesment(id,body):Observable<any>{
+  //   return this.configService.put('HseEChecklistAssessments/'+id,body);
+  // }
+  // public deleteListOfChecklistAssesment(id):Observable<any>{
+  //   return this.configService.delete('HseEChecklistAssessments/'+id);
+  // }
 
 
 }
