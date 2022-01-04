@@ -11,6 +11,8 @@ import { ChecklistQuestionService } from 'src/app/services/checklistQuestions/ch
 import { ChecklistOptionsService } from 'src/app/services/checklistOptions/checklist-options.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { LocationsService } from 'src/app/services/locations/locations.service';
+import { FormBuilder, Validators } from '@angular/forms';
+import { ZonesComponent } from 'src/app/utils/zones/zones.component';
 
 
 
@@ -25,15 +27,20 @@ export class LocationsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: MatTableDataSource<any>;
-  displayedColumns = ['number', 'namLocation', 'process'];
+  displayedColumns = ['number', 'locationId', 'namLocation', 'zonesZoneId', 'process'];
   ListOfcheckListsOptions: any;
   newRowObj: any;
   unit: { value: number; viewValue: string; }[];
   department: { value: number; viewValue: string; }[];
   checklistId: any;
   checklistName: any;
+  firstLevel = this.fb.group({
+    firstCtrl: ['', Validators.required],
+
+  });
 
   constructor(
+    private fb: FormBuilder,
     public locationsService: LocationsService,
     public commonService: CommonService,
     private dialog: MatDialog,
@@ -46,8 +53,23 @@ export class LocationsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.department = [
+      { value: 1, viewValue: 'آهن سازی' },
+      { value: 2, viewValue: 'فولاد سازی' },
+      { value: 3, viewValue: 'نورد گرم' },
+      { value: 4, viewValue: 'نورد سرد' },
+      { value: 5, viewValue: 'انرژی سیالات' },
+      { value: 6, viewValue: 'مدیریت شهری' },
+      { value: 7, viewValue: 'تعمیرگاه مرکزی' },
+      { value: 8, viewValue: 'حمل و نقل' },
+      { value: 9, viewValue: 'کنترل مواد' },
+      { value: 10, viewValue: 'تعميرات مرکزي' },
+      { value: 11, viewValue: 'ستادي' },
+      { value: 12, viewValue: 'خدمات عمومی' },
+      { value: 13, viewValue: 'خارج از فولاد' },
+    ];
     this.newRowObj = {}
-   
+
   }
 
   public getLocations() {
@@ -61,13 +83,13 @@ export class LocationsComponent implements OnInit {
       this.commonService.loading = false;
     });
   }
-  
+
 
   public addRow() {
-    
+//debugger
     let object = {
       "namLocation": this.newRowObj.namLocation,
-     // "namLocation": this.checklistId,
+     "zonesZoneId": this.newRowObj.zonesZoneId,
       // "createDate": new Date()
     }
 
@@ -90,6 +112,13 @@ export class LocationsComponent implements OnInit {
 
   public updateRow(row) {
     this.edit = !this.edit;
+
+
+    if (row.zonesZoneId == "") {
+      row.zonesZoneId = null;
+    }
+
+
     this.locationsService.updateListOflocations(row['locationId'], row).subscribe((success) => {
       this.commonService.showEventMessage("ويرايش رديف با موفقيت انجام شد.", 3000, "green")
       this.getLocations();
@@ -105,8 +134,9 @@ export class LocationsComponent implements OnInit {
   }
 
   public deleteRow(row) {
-
+   // debugger
     console.log('del', row)
+
     this.locationsService.deleteListOflocations(row['locationId']).subscribe(
       (success) => {
 
@@ -123,16 +153,14 @@ export class LocationsComponent implements OnInit {
     )
   }
 
-  selectRow(row){
+  selectRow(row) {
     console.log(row)
-    if(!this.edit){
+    if (!this.edit) {
       this.dialogRef.close(row)
     }
-    
+
   }
 
- 
- 
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -142,5 +170,40 @@ export class LocationsComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
- 
+
+  selectZones(row?) {
+debugger
+
+    const dialogRef = this.dialog.open(ZonesComponent, {
+      width: "80%",
+      height: "80%",
+      direction: "rtl",
+      data: {
+        // checkListId: row.eCheckListId,
+        //  checkListName: row.desChkHecli,
+      }
+    });
+    dialogRef.afterClosed().subscribe(
+      (data) => {
+        debugger
+        if(row){
+        row.zonesZoneId = data.zoneId;
+        row.namZone = data.namZone;
+      }
+        this.newRowObj.zonesZoneId=data.zoneId;
+        
+        // this.namChkHecli = data.namChkHecli;
+        //this.namLocationHsrch = data.namLocationHsrch;
+        // this.firstLevel.value.firstCtrl=data.desChkHecli
+        //this.firstLevel.controls['firstCtrl'].setValue(data.namZone);
+        // this.firstLevel = this.fb.group({
+        //   firstCtrl: [data.desChkHecli, Validators.required]
+
+        // });
+
+      }
+    )
+
+  }
+
 }

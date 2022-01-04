@@ -1,17 +1,16 @@
 
-import { SelectionModel } from '@angular/cdk/collections';
+import * as moment from 'jalali-moment'
 import { ElementRef, Inject, ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { checklistAssesmentService } from 'src/app/services/checklistAssesmentService/checklistAssesmentService';
 import { CommonService } from 'src/app/services/common.service';
-import { FormGroup, FormControl } from '@angular/forms';
-import * as moment from 'jalali-moment'
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { workbookReportService } from '../services/workbookReport/workbookReportService';
-
+import { ZonesComponent } from '../utils/zones/zones.component';
+import { LocationsOfZonesService } from '../services/locationsOfZones/locationsOfZonesService';
+import { checklistAssesmentService } from '../services/checklistAssesmentService/checklistAssesmentService';
 
 @Component({
   selector: 'app-workbook-report',
@@ -20,174 +19,109 @@ import { workbookReportService } from '../services/workbookReport/workbookReport
 })
 export class WorkbookReportComponent implements OnInit {
 
-  campaignOne: FormGroup;
-  campaignTwo: FormGroup;
   displayedColumns = ['number', 'e_monitor_request_id', 'des_lkp_typ_exit',
     'des_lkp_typ_exam', 'des_request_hemre', 'num_request_hemre', 'dat_request_hemre_jalali',
-    'nam_location_hsloc', 's_location_id', 'nam_param_hemop', 'nam_measur_hemrp', 'flg_abssence', 'nam_real_measur_hemrp'];
+    'nam_location_hsloc', 's_location_id', 'nam_param_hemop', 'nam_measur_hemrp', 'nam_real_measur_hemrp', 'flg_abssence'];
+  displayedColumnsReportindustrialWastePerUnit = ['number', 'ratio', 'nam_measur_hemrp', 'nam_location_hsloc', 'average', 'score'];
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: MatTableDataSource<any>
-  ListOfcheckListAssesments: any;
-  selection = new SelectionModel<any>(true, [])
-  selectedArchiveNews: any;
-  all: any;
-  arrayForFilterDesExplainQuestionHscha: any[];
-  filteredArray: any;
-  firstFilter: any[];
-  secoundFilter: any[];
-  namChkHecliFilter: any;
-  namDepartmentHecliFilter: any;
-  namAssessorHsrchFilter: any;
-  namLocationHsrchFilter: any;
-  desQuestionHeclqFilter: any;
-  desOptionHecloFilter: any;
-  namEvaluationAreaHsrch: any;
-  search: any;
-  percentage: any;
-  counts: string;
+  dataSourceReportindustrialWastePerUnit: MatTableDataSource<any>
+
   @ViewChild('startDate') startDate: ElementRef;
   @ViewChild('endDate') endDate: ElementRef;
+  listOfWorkbookReport: any;
+  filterZoneId: any;
+  listLocationsOfZones: any;
+  fullListOfWorkbookReport: any;
+  counts: any;
+  percentage: any;
+  buildAvgOfUnits: any;
+  averagesOfNam_measur_hemrp: any[];
+
   constructor(public commonService: CommonService,
     public workbokReport: workbookReportService,
+    public locationsOfZones: LocationsOfZonesService,
+    public checklistAssesmentService: checklistAssesmentService,
+    
+    private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public recievedData
 
   ) {
-    console.log('recievedData', this.recievedData)
-    if (this.recievedData.itsPopup == true) {
-      const body = {
-
-        namChkHecli: this.recievedData.row.namChkHecli,
-        namDepartmentHecli: "",
-        namAssessorHsrch: this.recievedData.row.namAssessorHsrch,
-        namLocationHsrch: this.recievedData.row.namLocationHsrch,
-        desQuestionHeclq: "",
-        desOptionHeclo: "",
-        namEvaluationAreaHsrch: this.recievedData.row.namEvaluationAreaHsrch,
-        startdateHsrch: moment(this.recievedData.row.requestDateHsrch, 'jYYYY/jM/jD'),
-        enddateHsrch: moment(this.recievedData.row.requestDateHsrch, 'jYYYY/jM/jD')
-
-      }
-      this.serverFilter(body)
-    }
-    else {
-      this.getChecklistQuestions()
-
-    }
+    // this.getWorkbookReport()
   }
-
-
   ngOnInit(): void {
+    this.fullListOfWorkbookReport = [];
+    this.averagesOfNam_measur_hemrp = [];
   }
 
-  public getChecklistQuestions() {
-    this.namChkHecliFilter = ""
-    this.namDepartmentHecliFilter = ""
-    this.namAssessorHsrchFilter = ""
-    this.namLocationHsrchFilter = ""
-    this.desQuestionHeclqFilter = ""
-    this.desOptionHecloFilter = ""
-    this.namEvaluationAreaHsrch = ""
-    this.commonService.loading = true;
+  public getWorkbookReport(s_location_id) {
+    this.fullListOfWorkbookReport = [];
     let body = {
-      s_location_id: 1,
-      //dat_request_hemre_jalali: "139911",
+      s_location_id: s_location_id,
+      dat_request_hemre_jalali: "140010",
     }
-    debugger
+    this.commonService.loading = true;
     this.workbokReport.getReport(body).subscribe((success) => {
-      this.ListOfcheckListAssesments = success;
-      console.log(' this.ListOfcheckListAssesment', this.ListOfcheckListAssesments)
-      this.viewThePercentageOfOptions(success);
-      this.arrayForFilterDesExplainQuestionHscha = [];
-      this.ListOfcheckListAssesments.forEach(eachAssesment => {
-        this.arrayForFilterDesExplainQuestionHscha.push({ val: eachAssesment['assessmentId'] });
-        //arrayForFilterdesOptionHeclo.push({val:eachAssesment['desOptionHeclo']});
-        // arrayForFilter.push({val:eachAssesment['desQuestionHeclq']});
-        // arrayForFilter.push({val:eachAssesment['namAssessorHsrch']});
-        // arrayForFilter.push({val:eachAssesment['namLocationHsrch']});
-        // arrayForFilter.push({val:eachAssesment['requestDateHsrch']});
-        // arrayForFilter.push({val:eachAssesment['requestDescriptionHsrch']});
+      this.listOfWorkbookReport = success;
 
+      this.percentageOfScore(this.listOfWorkbookReport)
+
+      // console.log('this.listOfWorkbookReportyyyyyyyyy', this.listOfWorkbookReport)
+      this.listOfWorkbookReport.forEach(eachWorkbookReportOfUnit => {
+        this.fullListOfWorkbookReport.push(eachWorkbookReportOfUnit);
       });
-      console.log('ListOfcheckListsQuestions', this.ListOfcheckListAssesments)
-      this.dataSource = new MatTableDataSource(this.ListOfcheckListAssesments);
+      console.log('this.fullListOfWorkbookReport', this.fullListOfWorkbookReport)
+      //debugger
+
+
+
+      const groupBy = (key) => this.fullListOfWorkbookReport.reduce((total, currentValue) => {
+        const newTotal = total;
+        if (
+          total.length &&
+          total[total.length - 1][key] === currentValue[key]
+        )
+          newTotal[total.length - 1] = {
+            ...total[total.length - 1],
+            ...currentValue,
+            //  Value: parseInt(total[total.length - 1].Value) + parseInt(currentValue.Value),
+          };
+        else newTotal[total.length] = currentValue;
+        return newTotal;
+      }, []);
+      //let industrialWasteGroupby = [];
+      let industrialWasteGroupby = ((groupBy('e_monitor_request_id')));
+      console.log('industrialWasteGroupby', industrialWasteGroupby)
+      this.dataSourceReportindustrialWastePerUnit = new MatTableDataSource(this.averagesOfNam_measur_hemrp);
+      //this.averagesOfNam_measur_hemrp=[];
+
+      this.dataSource = new MatTableDataSource(this.fullListOfWorkbookReport);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
       this.commonService.loading = false;
+
     });
+
+
+    //const grouped = _.groupBy(this.fullListOfWorkbookReport, car => car.e_monitor_request_id);
+
+    //var grouped = _.mapValues(_.groupBy(cars, 'make'),
+    //                         clist => clist.map(car => _.omit(car, 'make')));
+
+    //// console.log(grouped);
+
   }
-
-  // applyFilter(event: Event) {
-  //   this.filteredArray = this.dataSource['_data']['_value']
-
-  //   this.filteredArray.forEach(eachReport => {
-  //     if (eachReport.namAssessorHsrch == event
-  //     ) {
-  //       this.firstFilter.push (eachReport) ;
-  //     }
-  //     this.dataSource = new MatTableDataSource(this.firstFilter);
-
-  //     console.log('local',  this.firstFilter)
-  //   });
-
-  // }
-
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-    this.viewThePercentageOfOptions(this.dataSource.filteredData)
-
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
 
-
-  serverFilter(body?: any) {
-    debugger
-    this.search = ""
-
-    if (body == null) {
-      let start = moment(this.startDate.nativeElement.value, 'jYYYY/jM/jD');
-      let end = moment(this.endDate.nativeElement.value, 'jYYYY/jM/jD');
-      let startdate = start.locale('en').format('YYYY/M/D');
-      let enddate = end.locale('en').format('YYYY/M/D');
-      console.log('startDate', startdate)
-      console.log('endDate', enddate)
-      body = {
-
-        namChkHecli: this.namChkHecliFilter,
-        namDepartmentHecli: this.namDepartmentHecliFilter,
-        namAssessorHsrch: this.namAssessorHsrchFilter,
-        namLocationHsrch: this.namLocationHsrchFilter,
-        desQuestionHeclq: this.desQuestionHeclqFilter,
-        desOptionHeclo: this.desOptionHecloFilter,
-        namEvaluationAreaHsrch: this.namEvaluationAreaHsrch,
-        startdateHsrch: startdate,
-        enddateHsrch: enddate
-
-      }
-    }
-    this.commonService.loading = true;
-    this.workbokReport.getReport(body).subscribe((success) => {
-      this.viewThePercentageOfOptions(success)
-      this.dataSource = new MatTableDataSource(success);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      this.commonService.loading = false;
-
-    })
-  }
-
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
-  exportTable() {
-    this.commonService.exportToExcel("mainTable");
-  }
   print(): void {
     let printContents, popupWin;
     printContents = document.getElementById('print-section').innerHTML;
@@ -240,34 +174,98 @@ export class WorkbookReportComponent implements OnInit {
     );
     popupWin.document.close();
   }
-  viewThePercentageOfOptions(data) {
-    let optionsText = [];
-    data.forEach(eachRowOfReport => {
-      if (optionsText != eachRowOfReport['desOptionHeclo']) {
-        optionsText.push(eachRowOfReport['desOptionHeclo'])
+
+
+  selectZones(row?) {
+
+
+    const dialogRef = this.dialog.open(ZonesComponent, {
+      width: "80%",
+      height: "80%",
+      direction: "rtl",
+      data: {
+
       }
-    }); console.log('optionsText', optionsText)
+    });
+    dialogRef.afterClosed().subscribe(
+      (data) => {
+        this.averagesOfNam_measur_hemrp = [];
+        let body = {
+          "zoneId": data.zoneId
+        }
+        //به ازای هر مکان داخل ناحیه درخواست به سرور میرود
+        this.locationsOfZones.FilterListLocationsOfZone(body).subscribe(
+          (success) => {
+            // this.getWorkbookReport()
+            this.listLocationsOfZones = success;
+            this.listLocationsOfZones.forEach(eachLocation => {
+              this.getWorkbookReport(eachLocation.locationId)
+              this.getReportOfIndustrialCleaning(eachLocation.namLocation)
+            });
+          },
+          (error) => {
 
-    var counts = {};
+          }
+        )
 
-    for (var i = 0; i < optionsText.length; i++) {
-      if (!counts.hasOwnProperty(optionsText[i] = optionsText[i])) {
-        counts[optionsText[i]] = 1;
+
+        //this.filterZoneId=data.zoneId
+
       }
-      else {
-        counts[optionsText[i]]++;
-      }
-    }
-
-    console.log('counts', counts);
-    this.counts = JSON.stringify(counts)
-    let sum = Object.keys(counts).reduce((s, k) => s += counts[k], 0);
-
-    this.percentage = Object.keys(counts).map(k => ({ [k]: '%' + (counts[k] / sum * 100).toFixed(2) }));
-    this.percentage = JSON.stringify(this.percentage)
-    console.log('percentage', this.percentage);
+    )
 
   }
+  percentageOfScore(WorkbookReportOfUnit) {
 
+    let totalPercent = 0;
+    let average;
+    let length = WorkbookReportOfUnit.length;
+    if (WorkbookReportOfUnit.length > 0) {
+      WorkbookReportOfUnit.forEach(eachWorkbookReportOfUnit => {
+
+        eachWorkbookReportOfUnit.nam_measur_hemrp = Number(eachWorkbookReportOfUnit.nam_measur_hemrp)
+        totalPercent += eachWorkbookReportOfUnit.nam_measur_hemrp
+        average = (totalPercent / (length - 1))
+
+      });
+      this.averagesOfNam_measur_hemrp.push({ score: ((average) * 20) / 100, ratio: 2, nam_location_hsloc: WorkbookReportOfUnit[0].nam_location_hsloc, nam_measur_hemrp: WorkbookReportOfUnit[0].e_monitor_request_id, average: average })
+
+      //منهای یک چون ردیف اول مقدار اندازه گیری صفر است
+      console.log("averagesOfNam_measur_hemrp", this.averagesOfNam_measur_hemrp)
+    }
+
+  }
+  public getReportOfIndustrialCleaning(namLocation){
+    
+      const body = {
+        namChkHecli: "",
+        namDepartmentHecli: "",
+        namAssessorHsrch: "",
+        namLocationHsrch:namLocation,
+        desQuestionHeclq: "",
+        desOptionHeclo: "",
+        namEvaluationAreaHsrch: "",
+        startdateHsrch: moment("14001001", 'jYYYY/jM/jD'),
+        enddateHsrch: moment("14001030", 'jYYYY/jM/jD')
+      }
+    
+     this.serverFilter(body)
+  }
+  serverFilter(body) {
+    debugger
+    //this.search = ""
+    
+   
+    this.commonService.loading = true;
+    this.checklistAssesmentService.filterListOfChecklistReport(body).subscribe((success) => {
+      console.log('success',success)
+     //this.viewThePercentageOfOptions(success)
+     // this.dataSource = new MatTableDataSource(success);
+     // this.dataSource.paginator = this.paginator;
+     // this.dataSource.sort = this.sort;
+      //this.commonService.loading = false;
+
+    })
+  }
 }
 

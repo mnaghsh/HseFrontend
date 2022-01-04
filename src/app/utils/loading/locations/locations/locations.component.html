@@ -31,7 +31,22 @@
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="namLocation"> 
+    <ng-container matColumnDef="locationId">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef> کد مکان</th>
+      <td style="cursor: pointer;" mat-cell *matCellDef="let element" (click)="selectRow(element)">
+        <mat-form-field *ngIf="edit" class="example-full-width" appearance="fill">
+          <input matInput *ngIf="edit" [placeholder]="" [(ngModel)]="element.locationId" type="text">
+        </mat-form-field>
+        <p *ngIf="!edit">{{element.locationId}}</p>
+      </td>
+      <td mat-footer-cell *matFooterCellDef>
+        <!-- <mat-form-field style="max-height: 52px;" class="example-full-width" appearance="fill">
+          <input matInput placeholder="نام چک لیست" [(ngModel)]="newRowObj.locationId" type="text">
+        </mat-form-field> -->
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="namLocation">
       <th mat-header-cell mat-sort-header *matHeaderCellDef> نام مکان</th>
       <td style="cursor: pointer;" mat-cell *matCellDef="let element" (click)="selectRow(element)">
         <mat-form-field *ngIf="edit" class="example-full-width" appearance="fill">
@@ -43,6 +58,26 @@
         <mat-form-field style="max-height: 52px;" class="example-full-width" appearance="fill">
           <input matInput placeholder="نام چک لیست" [(ngModel)]="newRowObj.namLocation" type="text">
         </mat-form-field>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="zonesZoneId">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef> انتساب ناحیه </th>
+      <td style="cursor: pointer;" mat-cell *matCellDef="let element">
+
+        <mat-form-field *ngIf="edit" appearance="fill">
+          <mat-label>انتساب ناحیه</mat-label>
+          <input [(ngModel)]="element.namZone" (click)="selectZones(element)" matInput required>
+        </mat-form-field>
+
+        <p *ngIf="!edit">{{element.zonesZoneId}}</p>
+      </td>
+      <td mat-footer-cell *matFooterCellDef>
+        <mat-form-field style="max-height: 52px;" class="example-full-width" appearance="fill">
+          <mat-label>انتساب ناحیه</mat-label>
+          <input [(ngModel)]="newRowObj.zonesZoneId" (click)="selectZones()" matInput required>
+        </mat-form-field>
+
       </td>
     </ng-container>
 
