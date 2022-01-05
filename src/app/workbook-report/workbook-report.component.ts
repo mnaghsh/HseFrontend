@@ -23,11 +23,15 @@ export class WorkbookReportComponent implements OnInit {
     'des_lkp_typ_exam', 'des_request_hemre', 'num_request_hemre', 'dat_request_hemre_jalali',
     'nam_location_hsloc', 's_location_id', 'nam_param_hemop', 'nam_measur_hemrp', 'nam_real_measur_hemrp', 'flg_abssence'];
   displayedColumnsReportindustrialWastePerUnit = ['number', 'ratio', 'nam_measur_hemrp', 'nam_location_hsloc', 'average', 'score'];
-
+  displayedColumnsChecklistReport = ['number', 'namChkHecli', 'requestDescriptionHsrch',
+    'desQuestionHeclq', 'desOptionHeclo', 'desExplainQuestionHscha', 'requestDateJalaliHsrch',
+    'namAssessorHsrch', 'namLocationHsrch', 'unitCehckListsHecli', 'namDepartmentHecli', 'namEvaluationAreaHsrch'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: MatTableDataSource<any>
   dataSourceReportindustrialWastePerUnit: MatTableDataSource<any>
+  dataSourceChecklistReport: MatTableDataSource<any>
+
 
   @ViewChild('startDate') startDate: ElementRef;
   @ViewChild('endDate') endDate: ElementRef;
@@ -39,12 +43,15 @@ export class WorkbookReportComponent implements OnInit {
   percentage: any;
   buildAvgOfUnits: any;
   averagesOfNam_measur_hemrp: any[];
+  listOfcheckListReport: any;
+  fullListOfcheckListReport: any;
+  arr: any;
 
   constructor(public commonService: CommonService,
     public workbokReport: workbookReportService,
     public locationsOfZones: LocationsOfZonesService,
     public checklistAssesmentService: checklistAssesmentService,
-    
+
     private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public recievedData
 
@@ -52,8 +59,10 @@ export class WorkbookReportComponent implements OnInit {
     // this.getWorkbookReport()
   }
   ngOnInit(): void {
+    this.fullListOfcheckListReport = [];
     this.fullListOfWorkbookReport = [];
     this.averagesOfNam_measur_hemrp = [];
+    this.arr = [];
   }
 
   public getWorkbookReport(s_location_id) {
@@ -72,30 +81,39 @@ export class WorkbookReportComponent implements OnInit {
       this.listOfWorkbookReport.forEach(eachWorkbookReportOfUnit => {
         this.fullListOfWorkbookReport.push(eachWorkbookReportOfUnit);
       });
+      // if (this.fullListOfWorkbookReport.length > 0) {
+      //   for (let i = 0; i <= this.fullListOfWorkbookReport.length; i++) {
+      //     if (this.fullListOfcheckListReport[i].eRequestId == this.fullListOfcheckListReport[i + 1].eRequestId) {
+      //       this.arr.push({ eRequestId: this.fullListOfcheckListReport[i].eRequestId, desOptionHeclo: this.fullListOfcheckListReport[i].desOptionHeclo })
+
+      //     }
+      //   }
+      // }
+      console.log('arrrrrrrr', this.arr)
       console.log('this.fullListOfWorkbookReport', this.fullListOfWorkbookReport)
       //debugger
 
 
 
-      const groupBy = (key) => this.fullListOfWorkbookReport.reduce((total, currentValue) => {
-        const newTotal = total;
-        if (
-          total.length &&
-          total[total.length - 1][key] === currentValue[key]
-        )
-          newTotal[total.length - 1] = {
-            ...total[total.length - 1],
-            ...currentValue,
-            //  Value: parseInt(total[total.length - 1].Value) + parseInt(currentValue.Value),
-          };
-        else newTotal[total.length] = currentValue;
-        return newTotal;
-      }, []);
-      //let industrialWasteGroupby = [];
-      let industrialWasteGroupby = ((groupBy('e_monitor_request_id')));
-      console.log('industrialWasteGroupby', industrialWasteGroupby)
+      // const groupBy = (key) => this.fullListOfWorkbookReport.reduce((total, currentValue) => {
+      //   const newTotal = total;
+      //   if (
+      //     total.length &&
+      //     total[total.length - 1][key] === currentValue[key]
+      //   )
+      //     newTotal[total.length - 1] = {
+      //       ...total[total.length - 1],
+      //       ...currentValue,
+      //       //  Value: parseInt(total[total.length - 1].Value) + parseInt(currentValue.Value),
+      //     };
+      //   else newTotal[total.length] = currentValue;
+      //   return newTotal;
+      // }, []);
+
+      // let industrialWasteGroupby = ((groupBy('e_monitor_request_id')));
+      // console.log('industrialWasteGroupby', industrialWasteGroupby)
       this.dataSourceReportindustrialWastePerUnit = new MatTableDataSource(this.averagesOfNam_measur_hemrp);
-      //this.averagesOfNam_measur_hemrp=[];
+
 
       this.dataSource = new MatTableDataSource(this.fullListOfWorkbookReport);
       this.dataSource.paginator = this.paginator;
@@ -104,13 +122,6 @@ export class WorkbookReportComponent implements OnInit {
 
     });
 
-
-    //const grouped = _.groupBy(this.fullListOfWorkbookReport, car => car.e_monitor_request_id);
-
-    //var grouped = _.mapValues(_.groupBy(cars, 'make'),
-    //                         clist => clist.map(car => _.omit(car, 'make')));
-
-    //// console.log(grouped);
 
   }
 
@@ -200,7 +211,9 @@ export class WorkbookReportComponent implements OnInit {
             this.listLocationsOfZones = success;
             this.listLocationsOfZones.forEach(eachLocation => {
               this.getWorkbookReport(eachLocation.locationId)
-              this.getReportOfIndustrialCleaning(eachLocation.namLocation)
+              this.getReportOfChecklists(eachLocation.namLocation)
+
+
             });
           },
           (error) => {
@@ -235,37 +248,136 @@ export class WorkbookReportComponent implements OnInit {
     }
 
   }
-  public getReportOfIndustrialCleaning(namLocation){
-    
-      const body = {
-        namChkHecli: "",
-        namDepartmentHecli: "",
-        namAssessorHsrch: "",
-        namLocationHsrch:namLocation,
-        desQuestionHeclq: "",
-        desOptionHeclo: "",
-        namEvaluationAreaHsrch: "",
-        startdateHsrch: moment("14001001", 'jYYYY/jM/jD'),
-        enddateHsrch: moment("14001030", 'jYYYY/jM/jD')
-      }
-    
-     this.serverFilter(body)
+  public getReportOfChecklists(namLocation) {
+
+    const body = {
+      namChkHecli: "",
+      namDepartmentHecli: "",
+      namAssessorHsrch: "",
+      namLocationHsrch: namLocation,
+      desQuestionHeclq: "",
+      desOptionHeclo: "",
+      namEvaluationAreaHsrch: "",
+      startdateHsrch: moment("14001001", 'jYYYY/jM/jD'),
+      enddateHsrch: moment("14001030", 'jYYYY/jM/jD')
+    }
+
+    this.serverFilter(body)
   }
   serverFilter(body) {
-    debugger
-    //this.search = ""
-    
-   
+
+
     this.commonService.loading = true;
     this.checklistAssesmentService.filterListOfChecklistReport(body).subscribe((success) => {
-      console.log('success',success)
-     //this.viewThePercentageOfOptions(success)
-     // this.dataSource = new MatTableDataSource(success);
-     // this.dataSource.paginator = this.paginator;
-     // this.dataSource.sort = this.sort;
+      console.log('success', success)
+      this.listOfcheckListReport = success;
+      this.listOfcheckListReport.forEach(eachCheckListReportOfUnit => {
+        this.fullListOfcheckListReport.push(eachCheckListReportOfUnit);
+        var obj = {};
+        this.listOfcheckListReport.forEach(function (item) {
+          obj[item.desOptionHeclo] ? obj[item.desOptionHeclo]++ : obj[item.desOptionHeclo] = 1;
+        });
+      console.log('zzzzzzzzzz',(obj['نامطلوب']+obj['مطلوب']))
+        eachCheckListReportOfUnit.percent=(obj['مطلوب']/(obj['نامطلوب']+obj['مطلوب'])*100);
+       // this.arr.push({ notOk: obj['نامطلوب'], ok: obj['مطلوب'], eRequestId: eachCheckListReportOfUnit.eRequestId, desOptionHeclo: eachCheckListReportOfUnit.desOptionHeclo })
+
+       // console.log('mohammad', this.arr)
+      });
+      console.log('MhdfullListOfcheckListReport', this.fullListOfcheckListReport)
+      this.dataSourceChecklistReport = new MatTableDataSource(this.fullListOfcheckListReport);
+      //this.PercentageOfOptions(this.listOfcheckListReport)
+      // const groupBy = (key) => this.fullListOfcheckListReport.reduce((total, currentValue) => {
+      //   const newTotal = total;
+      //   if (
+      //     total.length &&
+      //     total[total.length - 1][key] === currentValue[key]
+      //   )
+      //     newTotal[total.length - 1] = {
+      //       ...total[total.length - 1],
+      //       ...currentValue,
+      //       //  Value: parseInt(total[total.length - 1].Value) + parseInt(currentValue.Value),
+      //     };
+      //   else newTotal[total.length] = currentValue;
+      //   return newTotal;
+      // }, []);
+
+      // let industrialWasteGroupby = ((groupBy('eRequestId')));
+      // console.log('mahshid', industrialWasteGroupby)
+      //this.dataSourceReportindustrialWastePerUnit = new MatTableDataSource(this.averagesOfNam_measur_hemrp);
+
+
+
+      //this.viewThePercentageOfOptions(success)
+      // this.dataSource = new MatTableDataSource(success);
+      // this.dataSource.paginator = this.paginator;
+      // this.dataSource.sort = this.sort;
       //this.commonService.loading = false;
 
     })
+  }
+
+
+
+  PercentageOfOptions(data) {
+
+
+    // const groupBy = (key) => this.fullListOfcheckListReport.reduce((total, currentValue) => {
+    //   const newTotal = total;
+    //   if (
+    //     total.length &&
+    //     total[total.length - 1][key] === currentValue[key]
+    //   )
+    //     newTotal[total.length - 1] = {
+    //       ...total[total.length - 1],
+    //       ...currentValue,
+    //       //  Value: parseInt(total[total.length - 1].Value) + parseInt(currentValue.Value),
+    //     };
+    //   else newTotal[total.length] = currentValue;
+    //   return newTotal;
+    // }, []);
+
+    // let industrialWasteGroupby = ((groupBy('eRequestId')));
+    // console.log('mahshid', industrialWasteGroupby)
+    // industrialWasteGroupby.forEach(successAllCheckListWithGroupby => {
+    //   data.forEach(successCheckList => {
+    //     if (successAllCheckListWithGroupby.eRequestId == successCheckList.eRequestId) {
+    //       this.arr.push({ desOptionHeclo: successAllCheckListWithGroupby.desOptionHeclo, eRequestId: successAllCheckListWithGroupby.eRequestId })
+    //       console.log('arr', this.arr)
+
+    //     }
+    //   });
+    // });
+
+
+    // let optionsText = [];
+    // data.forEach(eachRowOfReport => {
+    //   if (optionsText != eachRowOfReport['desOptionHeclo']) {
+    //     optionsText.push(eachRowOfReport['desOptionHeclo'])
+    //   }
+    // }); console.log('optionsText', optionsText)
+
+    // var counts = {};
+
+    // for (var i = 0; i < optionsText.length; i++) {
+    //   if (!counts.hasOwnProperty(optionsText[i] = optionsText[i])) {
+    //     counts[optionsText[i]] = 1;
+    //   }
+    //   else {
+    //     counts[optionsText[i]]++;
+    //   }
+    // }
+
+    // console.log('counts', counts);
+    // this.counts = JSON.stringify(counts)
+    // let sum = Object.keys(counts).reduce((s, k) => s += counts[k], 0);
+
+    // this.percentage = Object.keys(counts).map(k => ({ [k]: '%' + (counts[k] / sum * 100).toFixed(2) }));
+    // this.percentage = JSON.stringify(this.percentage)
+    // console.log('percentage', this.percentage);
+
+    // this.averagesOfNam_measur_hemrp.push({ score: ((average) * 20) / 100, ratio: 2, nam_location_hsloc: WorkbookReportOfUnit[0].nam_location_hsloc, nam_measur_hemrp: WorkbookReportOfUnit[0].e_monitor_request_id, average: average })
+
+
   }
 }
 
