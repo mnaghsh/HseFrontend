@@ -52,17 +52,15 @@ export class ChecklistReportComponent implements OnInit {
     console.log('recievedData', this.recievedData)
     if (this.recievedData.itsPopup == true) {
       const body = {
-
         namChkHecli: this.recievedData.row.namChkHecli,
         namDepartmentHecli: "",
         namAssessorHsrch: this.recievedData.row.namAssessorHsrch,
         namLocationHsrch: this.recievedData.row.namLocationHsrch,
-      desQuestionHeclq: "",
+        desQuestionHeclq: "",
         desOptionHeclo: "",
         namEvaluationAreaHsrch: this.recievedData.row.namEvaluationAreaHsrch,
         startdateHsrch: moment(this.recievedData.row.requestDateHsrch, 'jYYYY/jM/jD'),
         enddateHsrch: moment(this.recievedData.row.requestDateHsrch, 'jYYYY/jM/jD')
-
       }
       this.serverFilter(body)
     }
@@ -235,9 +233,9 @@ export class ChecklistReportComponent implements OnInit {
   viewThePercentageOfOptions(data) {
     let optionsText = [];
     data.forEach(eachRowOfReport => {
-      if (optionsText != eachRowOfReport['desOptionHeclo']) {
+     // if (optionsText != eachRowOfReport['desOptionHeclo']) {
         optionsText.push(eachRowOfReport['desOptionHeclo'])
-      }
+    //  }
     }); console.log('optionsText', optionsText)
 
     var counts = {};

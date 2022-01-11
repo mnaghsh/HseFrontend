@@ -7,74 +7,243 @@
 </div>
 <div>
     <mat-card>
-        <mat-form-field class="example-container">
-            <input matInput [(ngModel)]="filterZoneId" (click)="selectZones()" placeholder="فیلتر نام چک لیست">
+        <mat-form-field>
+            <mat-label>ماه</mat-label>
+            <mat-select [(ngModel)]="selectedDate">
+                <mat-option *ngFor="let f of department" [value]="f.value">{{f.viewValue}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        &nbsp;
+        <mat-form-field>
+            <input matInput [(ngModel)]="this.selectedZoneName" [(ngModel)]="filterZoneId" (click)="selectZones()"
+                placeholder="ناحیه">
         </mat-form-field>
 
-        <!-- <mat-form-field class="example-container">
-      <input matInput [(ngModel)]="namDepartmentHecliFilter" placeholder=" فیلتر نام ناحیه">
-  </mat-form-field>
-
-  <mat-form-field class="example-container">
-      <input matInput [(ngModel)]="namAssessorHsrchFilter" placeholder=" فیلتر نام ارزیاب">
-  </mat-form-field>
-
-  <mat-form-field class="example-container">
-      <input matInput [(ngModel)]="namLocationHsrchFilter" placeholder=" فیلتر نام مکان">
-  </mat-form-field>
-
-  <mat-form-field class="example-container">
-      <input matInput [(ngModel)]="desQuestionHeclqFilter" placeholder="فیلتر شرح سوال">
-  </mat-form-field>
-
-  <mat-form-field class="example-container">
-      <input matInput [(ngModel)]="desOptionHecloFilter" placeholder="فیلتر شرح گزینه">
-  </mat-form-field>
-
-  <mat-form-field class="example-container">
-      <input matInput [(ngModel)]="namEvaluationAreaHsrch" placeholder="ناحیه مکان ارزیابی شده">
-  </mat-form-field>
-
-  <mat-form-field style="overflow-x: hidden;" class="example-container">
-      <input placeholder="از تاریخ" matInput type="text" #startDate />
-      <ng-persian-datepicker [timeEnable]="false" [uiTheme]="'blue'" [dateFormat]="'jYYYY-jMM-jDD'"
-          [input]="startDate">
-      </ng-persian-datepicker>
-  </mat-form-field>
-  
-  <mat-form-field style="overflow-x: hidden;" class="example-container">
-      <input placeholder="تا تاریخ" matInput type="text" #endDate />
-      <ng-persian-datepicker [timeEnable]="false" [uiTheme]="'blue'" [dateFormat]="'jYYYY-jMM-jDD'"
-          [input]="endDate">
-      </ng-persian-datepicker>
-  </mat-form-field>
-  <br>
-  <button mat-raised-button color="accent" (click)="serverFilter()">
-      <i class="fa fa-filter" aria-hidden="true"></i> اعمال فیلتر
-  </button>
-  <button mat-raised-button color="primary" (click)="getChecklistQuestions()">
-      <i class="fa fa-times" aria-hidden="true"></i> لغو فیلتر
-  </button>
-  <button mat-raised-button class="btnExcel" (click)="exportTable()">
-      <i class="fa fa-file-excel-o" aria-hidden="true"></i> انتقال به اکسل
-  </button>
-  <button mat-raised-button color="warn" (click)="print()">
-      <i class="fa fa-print" aria-hidden="true"></i> چاپ
-  </button> -->
     </mat-card>
+    <button mat-raised-button color="warn" (click)="print()">
+        <i class="fa fa-print" aria-hidden="true"></i> چاپ
+    </button>
 </div>
 <app-loadingDialog *ngIf="commonService.loading==true && recievedData.itsPopup==true "></app-loadingDialog>
 <app-loading *ngIf="commonService.loading==true && recievedData.itsPopup!=true "></app-loading>
+<!-- <mat-form-field style="min-width: 100%;" class="example-container">
+    <input matInput (keyup)="applyFilter($event)" placeholder=" جستجو در چک لیست های فیلتر شده">
+</mat-form-field> -->
 <div id="print-section" class="example-container">
-    <mat-form-field style="min-width: 100%;" class="example-container">
-        <input matInput (keyup)="applyFilter($event)" placeholder=" جستجو در چک لیست های فیلتر شده">
-    </mat-form-field>
+    <!----------------------------------------------------------------------------->
+    <table id="ZoneWithoutMeasurement" dir="rtl" matSort
+        class="table table-responsive table-bordered  table-striped  table-hover" mat-table #table
+        [dataSource]="dataSourceZoneWithoutMeasurement">
+
+        <!-- Position Column -->
+
+        <ng-container matColumnDef="type">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef> نوع </th>
+            <td mat-cell *matCellDef="let element">
+                <p>{{element.type}}</p>
+            </td>
+            <td mat-footer-cell *matFooterCellDef>
+                <!-- <p>{{percentage}}</p> -->
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="ratio">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef> ضریب</th>
+            <td mat-cell *matCellDef="let element">
+                <p>{{element.ratio}}</p>
+            </td>
+            <td mat-footer-cell *matFooterCellDef>
+                <!-- <p>{{percentage}}</p> -->
+            </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="percentAvg">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef> درصد</th>
+            <td mat-cell *matCellDef="let element">
+                <p>{{element.percentAvg}}</p>
+            </td>
+            <td mat-footer-cell *matFooterCellDef>
+                <!-- <p>{{percentage}}</p> -->
+            </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="scoreZone">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef> نمره از 20 </th>
+
+            <td mat-cell *matCellDef="let element">
+                <div *ngIf="element.scoreZone" style="background-color: #aacfaa6e;">
+                    <p>{{element.scoreZone}}</p>
+                </div>
+            </td>
+            <td mat-footer-cell *matFooterCellDef>
+                <!-- <p style="color: red;">مجموع گزینه ها</p> -->
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="coefficientCalculationZone">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef> محاسبه ضریب ناحیه </th>
+
+            <td mat-cell *matCellDef="let element">
+                <p>{{element.coefficientCalculationZone}}</p>
+            </td>
+
+            <td mat-footer-cell *matFooterCellDef>
+                <!-- <p style="color: red;">مجموع گزینه ها</p> -->
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsZoneWithoutMeasurement; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsZoneWithoutMeasurement;"></tr>
+        <!-- <tr style="background-color: #794c7454;" mat-footer-row
+        *matFooterRowDef="displayedColumnsCheckListReportPerUnit ; sticky: true"> -->
+        <!-- </tr> -->
+    </table>
+    <!----------------------------------------------------------------------------->
+    <table id="ChecklistReportPerUnit" dir="rtl" matSort
+        class="table table-responsive table-bordered  table-striped  table-hover" mat-table #table
+        [dataSource]="dataSourceAverageMonthlyUnit">
+
+        <!--- Note that these columns can be defined in any order.
+The actual rendered columns are set as a property on the row definition" -->
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="number">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>ردیف </th>
+            <td mat-cell *matCellDef="let row;let index = index"> {{index+1}} </td>
+            <td style="padding: 10px;" mat-footer-cell *matFooterCellDef>
+
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="loc">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef> واحد</th>
+            <td mat-cell *matCellDef="let element">
+                <p>{{element.loc}}</p>
+            </td>
+            <td mat-footer-cell *matFooterCellDef>
+                <!-- <p>{{percentage}}</p> -->
+            </td>
+        </ng-container>
+
+
+
+        <ng-container matColumnDef="value">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef> معدل ماه</th>
+            <td mat-cell *matCellDef="let element">
+                <p>{{element.value}}</p>
+            </td>
+            <td mat-footer-cell *matFooterCellDef>
+                <!-- <p>{{percentage}}</p> -->
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsAverageMonthlyUnit; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsAverageMonthlyUnit;"></tr>
+        <!-- <tr style="background-color: #794c7454;" mat-footer-row
+            *matFooterRowDef="displayedColumnsAverageMonthlyUnit ; sticky: true"> -->
+
+        <!-- </tr> -->
+
+    </table>
+    <!----------------------------------------------------------------------------->
+    <table id="CheckListReportPerUnit" dir="rtl" matSort
+        class="table table-responsive table-bordered  table-striped  table-hover" mat-table #table
+        [dataSource]="dataSourceChecklistReportPerUnit">
+
+        <!--- Note that these columns can be defined in any order.
+ The actual rendered columns are set as a property on the row definition" -->
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="number">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>ردیف </th>
+            <td mat-cell *matCellDef="let row;let index = index"> {{index+1}} </td>
+            <td style="padding: 10px;" mat-footer-cell *matFooterCellDef>
+
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="ratio">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef> ضریب</th>
+            <td mat-cell *matCellDef="let element">
+                <p>{{element.ratio}}</p>
+            </td>
+            <td mat-footer-cell *matFooterCellDef>
+                <!-- <p>{{percentage}}</p> -->
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="nam_measur_hemrp">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef> nam_measur_hemrp</th>
+            <td mat-cell *matCellDef="let element">
+                <p>{{element.nam_measur_hemrp}}</p>
+            </td>
+            <td mat-footer-cell *matFooterCellDef>
+                <!-- <p>{{percentage}}</p> -->
+            </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="nam_location_hsloc">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef> نام واحد</th>
+            <td mat-cell *matCellDef="let element">
+                <p>{{element.nam_location_hsloc}}</p>
+            </td>
+            <td mat-footer-cell *matFooterCellDef>
+                <!-- <p>{{percentage}}</p> -->
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="average">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef> درصد</th>
+
+            <td mat-cell *matCellDef="let element">
+                <div *ngIf="element.average" style="background-color: #aacfaa6e;">
+                    <p>{{element.average}}</p>
+                </div>
+            </td>
+
+            <td mat-footer-cell *matFooterCellDef>
+                <!-- <p style="color: red;">مجموع گزینه ها</p> -->
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="score">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef> نمره از 20 </th>
+
+            <td mat-cell *matCellDef="let element">
+                <div *ngIf="element.score" style="background-color: #aacfaa6e;">
+                    <p>{{element.score}}</p>
+                </div>
+            </td>
+
+            <td mat-footer-cell *matFooterCellDef>
+                <!-- <p style="color: red;">مجموع گزینه ها</p> -->
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="coefficientCalculation">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef>محاسبه ضریب </th>
+
+            <td mat-cell *matCellDef="let element">
+                <p>{{element.coefficientCalculation}}</p>
+            </td>
+
+            <td mat-footer-cell *matFooterCellDef>
+                <!-- <p style="color: red;">مجموع گزینه ها</p> -->
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsCheckListReportPerUnit; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsCheckListReportPerUnit;"></tr>
+        <!-- <tr style="background-color: #794c7454;" mat-footer-row
+            *matFooterRowDef="displayedColumnsCheckListReportPerUnit ; sticky: true"> -->
+        <!-- </tr> -->
+    </table>
+    <!----------------------------------------------------------------------------->
     <table id="ReportindustrialWastePerUnit" dir="rtl" matSort
         class="table table-responsive table-bordered  table-striped  table-hover" mat-table #table
         [dataSource]="dataSourceReportindustrialWastePerUnit">
 
         <!--- Note that these columns can be defined in any order.
- The actual rendered columns are set as a property on the row definition" -->
+The actual rendered columns are set as a property on the row definition" -->
 
         <!-- Position Column -->
         <ng-container matColumnDef="number">
@@ -143,17 +312,30 @@
                 <!-- <p style="color: red;">مجموع گزینه ها</p> -->
             </td>
         </ng-container>
+        <ng-container matColumnDef="coefficientCalculation">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef> محاسبه ضریب </th>
+
+            <td mat-cell *matCellDef="let element">
+                <p>{{element.coefficientCalculation}}</p>
+            </td>
+
+            <td mat-footer-cell *matFooterCellDef>
+                <!-- <p style="color: red;">مجموع گزینه ها</p> -->
+            </td>
+        </ng-container>
+
 
 
 
         <tr mat-header-row *matHeaderRowDef="displayedColumnsReportindustrialWastePerUnit; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumnsReportindustrialWastePerUnit;"></tr>
-        <tr style="background-color: #794c7454;" mat-footer-row
-            *matFooterRowDef="displayedColumnsReportindustrialWastePerUnit ; sticky: true">
+        <!-- <tr style="background-color: #794c7454;" mat-footer-row
+            *matFooterRowDef="displayedColumnsReportindustrialWastePerUnit ; sticky: true"> -->
 
-            <!-- </tr> -->
+        <!-- </tr> -->
 
     </table>
+    <!----------------------------------------------------------------------------->
     <table id="IndustrialWaste" dir="rtl" matSort
         class="table table-responsive table-bordered  table-striped  table-hover" mat-table #table
         [dataSource]="dataSource">
@@ -295,14 +477,15 @@
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        <tr style="background-color: #794c7454;" mat-footer-row *matFooterRowDef="displayedColumns ; sticky: true">
-            <!-- <mat-paginator [pageSizeOptions]="[20,50, 100,1000]"></mat-paginator> -->
-            <!-- </tr> -->
+        <!-- <tr style="background-color: #794c7454;" mat-footer-row *matFooterRowDef="displayedColumns ; sticky: true"> -->
+        <!-- <mat-paginator [pageSizeOptions]="[20,50, 100,1000]"></mat-paginator> -->
+        <!-- </tr> -->
 
     </table>
-
-    <table id="checklistReport" dir="rtl" matSort class="table table-responsive table-bordered  table-striped  table-hover"
-        mat-table #table [dataSource]="dataSourceChecklistReport">
+    <!----------------------------------------------------------------------------->
+    <table id="checklistReport" dir="rtl" matSort
+        class="table table-responsive table-bordered  table-striped  table-hover" mat-table #table
+        [dataSource]="dataSourceChecklistReport">
 
         <!--- Note that these columns can be defined in any order.
        The actual rendered columns are set as a property on the row definition" -->
@@ -418,12 +601,26 @@
             </td>
         </ng-container>
 
+        <ng-container matColumnDef="percent">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef>درصد </th>
+            <td mat-cell *matCellDef="let element">
+                <p>{{element.percent}}</p>
+            </td>
+            <td mat-footer-cell *matFooterCellDef>
+            </td>
+        </ng-container>
+
+
+
+
         <tr mat-header-row *matHeaderRowDef="displayedColumnsChecklistReport; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumnsChecklistReport;"></tr>
-        <tr style="background-color: #794c7454;" mat-footer-row *matFooterRowDef="displayedColumnsChecklistReport ; sticky: true">
+        <!-- <tr style="background-color: #794c7454;" mat-footer-row
+            *matFooterRowDef="displayedColumnsChecklistReport ; sticky: true"> -->
 
-            <!-- </tr> -->
+        <!-- </tr> -->
 
     </table>
+    <!----------------------------------------------------------------------------->
 
 </div>
