@@ -21,16 +21,18 @@ export class WorkbookReportComponent implements OnInit {
 
   displayedColumns = ['number', 'e_monitor_request_id', 'des_lkp_typ_exit',
     'des_lkp_typ_exam', 'des_request_hemre', 'num_request_hemre', 'dat_request_hemre_jalali',
-    'nam_location_hsloc', 's_location_id', 'nam_param_hemop',  'nam_real_measur_hemrp', 'flg_abssence'];
+    'nam_location_hsloc', 's_location_id', 'nam_param_hemop', 'nam_measur_hemrp', 'nam_real_measur_hemrp', 'flg_abssence'];
   displayedColumnsReportindustrialWastePerUnit = ['number', 'ratio', 'nam_location_hsloc', 'average', 'score'
     , 'coefficientCalculation'];
-  displayedColumnsCheckListReportPerUnit = ['number', 'ratio',  'nam_location_hsloc', 'average', 'score'
+  displayedColumnsCheckListReportPerUnit = ['number', 'ratio', 'nam_location_hsloc', 'average', 'score'
     , 'coefficientCalculation'];
   displayedColumnsAverageMonthlyUnit = ['number', 'loc', 'value'];
   displayedColumnsChecklistReport = ['number', 'namChkHecli', 'requestDescriptionHsrch',
     'desQuestionHeclq', 'desOptionHeclo', 'desExplainQuestionHscha', 'requestDateJalaliHsrch',
     'namAssessorHsrch', 'namLocationHsrch', 'unitCehckListsHecli', 'namDepartmentHecli', 'namEvaluationAreaHsrch'];
-    displayedColumnsZoneWithoutMeasurement = ['type', 'ratio', 'percentAvg', 'scoreZone', 'coefficientCalculationZone'];
+  displayedColumnsZoneWithoutMeasurement = ['type', 'ratio', 'percentAvg', 'scoreZone', 'coefficientCalculationZone'];
+  displayedColumnsConfilicts = ['number', 'entityNumber', 'dat_Date', 'lastRound'];
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: MatTableDataSource<any>
@@ -73,6 +75,8 @@ export class WorkbookReportComponent implements OnInit {
   zoneWithoutMeasurementIndustrialWaste: any;
   zoneWithoutMeasurementIndustrialCleaning: any[];
   dataSourceZoneWithoutMeasurement: MatTableDataSource<unknown>;
+  listOfConfilicts: any;
+  dataSourceConfilicts: MatTableDataSource<unknown>;
 
   constructor(public commonService: CommonService,
     public workbokReport: workbookReportService,
@@ -93,9 +97,19 @@ export class WorkbookReportComponent implements OnInit {
     this.averagesOfCheckListReport = [];
     this.averageMonthlyUnit = [];
     this.zoneWithoutMeasurement = [];
+    this.listOfConfilicts = [];
+
 
   }
   selectZones(row?) {
+    
+    this.fullListOfcheckListReport = [];
+    this.fullListOfWorkbookReport = [];
+    this.averagesOfNam_measur_hemrp = [];
+    this.averagesOfCheckListReport = [];
+    this.averageMonthlyUnit = [];
+    this.zoneWithoutMeasurement = [];
+    this.listOfConfilicts = [];
     const dialogRef = this.dialog.open(ZonesComponent, {
       width: "80%",
       height: "80%",
@@ -106,7 +120,9 @@ export class WorkbookReportComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(
       (data) => {
+
         this.selectedZoneName = data.namZone;
+        this.getConfilicts();
         this.averagesOfNam_measur_hemrp = [];
         let body = {
           "zoneId": data.zoneId
@@ -127,6 +143,7 @@ export class WorkbookReportComponent implements OnInit {
       }
     )
   }
+
   getWorkbookReport(s_location_id) {
     this.fullListOfWorkbookReport = [];
     if (!this.selectedDate) {
@@ -142,11 +159,10 @@ export class WorkbookReportComponent implements OnInit {
     this.workbokReport.getReport(body).subscribe((success) => {
       this.listOfWorkbookReport = success;
 
-      this.percentageOfScore(this.listOfWorkbookReport)
       this.listOfWorkbookReport.forEach(eachWorkbookReportOfUnit => {
         this.fullListOfWorkbookReport.push(eachWorkbookReportOfUnit);
       });
-
+      this.percentageOfScore(this.listOfWorkbookReport)
       this.dataSourceReportindustrialWastePerUnit = new MatTableDataSource(this.averagesOfNam_measur_hemrp);
       this.dataSourceChecklistReportPerUnit = new MatTableDataSource(this.averagesOfCheckListReport);
       ; this.averagesOfNam_measur_hemrp.forEach(rowOfFirstTable => {
@@ -173,8 +189,8 @@ export class WorkbookReportComponent implements OnInit {
 
   }
   percentageOfScore(WorkbookReportOfUnit) {
-    let totalPercent = 0;
 
+    let totalPercent = 0;
     let average;
     let length = WorkbookReportOfUnit.length;
     if (WorkbookReportOfUnit.length > 0) {
@@ -207,6 +223,15 @@ export class WorkbookReportComponent implements OnInit {
       //مرج کردن آرایه های نمرات واحد های ناحیه
       var arr1 = this.zoneWithoutMeasurementIndustrialWaste;
       var arr2 = this.zoneWithoutMeasurementIndustrialCleaning;
+      if (arr1 == undefined) {
+        arr1 = []
+        this.commonService.showEventMessage("اطلاعات ضایعات صنعتی برای ماه و ناحیه انتخابی در پایگاه های داده ای موجود نیست")
+      }
+      if (arr2 == undefined) {
+        arr2 = []
+        this.commonService.showEventMessage("اطلاعات نظافت صنعتی برای ماه و ناحیه انتخابی در پایگاه های داده ای موجود نیست")
+
+      }
       this.zoneWithoutMeasurement = [...arr1, ...arr2];
       console.log(' this.zoneWithoutMeasurement', this.zoneWithoutMeasurement)
       this.dataSourceZoneWithoutMeasurement = new MatTableDataSource(this.zoneWithoutMeasurement);
@@ -343,6 +368,27 @@ export class WorkbookReportComponent implements OnInit {
 
     }
   }
+  getConfilicts() {
+    let body = {
+      "dat_Date": "2020-10-18"
+    }
+    this.workbokReport.getConfilicts(body).subscribe((success) => {
+
+      success.forEach(eachConfilict => {
+        if (eachConfilict['contradiction1'] == "باز است" && (eachConfilict['contradiction2'] == "باز است"
+          || eachConfilict['contradiction2'] == null)
+        ) {
+          this.listOfConfilicts.push(eachConfilict)
+        }
+      });
+      this.dataSourceConfilicts = new MatTableDataSource(this.listOfConfilicts);
+
+      console.log('confilicts', this.listOfConfilicts)
+    })
+
+  }
+
+
   print(): void {
     let printContents, popupWin;
     printContents = document.getElementById('print-section').innerHTML;

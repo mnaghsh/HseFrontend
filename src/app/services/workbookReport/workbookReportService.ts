@@ -23,6 +23,9 @@ export class workbookReportService {
   public getReport(body):Observable<any>{
     return this.configService.post('workBookReport/getIndustrialWaste',body);
   }
+  public getConfilicts(body):Observable<any>{
+    return this.configService.post('workBookReport/GetConfilictsFromFarzin',body);
+   }
 
   // public insertListOfChecklistAssesment(body):Observable<any>{
   //   return this.configService.post('HseEChecklistAssessments',body);

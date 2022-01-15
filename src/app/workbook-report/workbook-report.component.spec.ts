@@ -1,25 +1,18 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WorkbookReportComponent } from './workbook-report.component';
+      // const groupBy = (key) => this.fullListOfWorkbookReport.reduce((total, currentValue) => {
+      //   const newTotal = total;
+      //   if (
+      //     total.length &&
+      //     total[total.length - 1][key] === currentValue[key]
+      //   )
+      //     newTotal[total.length - 1] = {
+      //       ...total[total.length - 1],
+      //       ...currentValue,
+      //       //  Value: parseInt(total[total.length - 1].Value) + parseInt(currentValue.Value),
+      //     };
+      //   else newTotal[total.length] = currentValue;
+      //   return newTotal;
+      // }, []);
 
-describe('WorkbookReportComponent', () => {
-  let component: WorkbookReportComponent;
-  let fixture: ComponentFixture<WorkbookReportComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ WorkbookReportComponent ]
-    })
-    .compileComponents();
-  });
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(WorkbookReportComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+      // let industrialWasteGroupby = ((groupBy('e_monitor_request_id')));
+      // console.log('industrialWasteGroupby', industrialWasteGroupby)
