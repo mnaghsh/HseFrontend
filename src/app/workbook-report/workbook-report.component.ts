@@ -11,6 +11,8 @@ import { workbookReportService } from '../services/workbookReport/workbookReport
 import { ZonesComponent } from '../utils/zones/zones.component';
 import { LocationsOfZonesService } from '../services/locationsOfZones/locationsOfZonesService';
 import { checklistAssesmentService } from '../services/checklistAssesmentService/checklistAssesmentService';
+import { JalaliPipe } from 'src/pipes/jalali.pipe';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-workbook-report',
@@ -31,7 +33,7 @@ export class WorkbookReportComponent implements OnInit {
     'desQuestionHeclq', 'desOptionHeclo', 'desExplainQuestionHscha', 'requestDateJalaliHsrch',
     'namAssessorHsrch', 'namLocationHsrch', 'unitCehckListsHecli', 'namDepartmentHecli', 'namEvaluationAreaHsrch'];
   displayedColumnsZoneWithoutMeasurement = ['type', 'ratio', 'percentAvg', 'scoreZone', 'coefficientCalculationZone'];
-  displayedColumnsConfilicts = ['number', 'entityNumber', 'dat_Date', 'lastRound'];
+  displayedColumnsConfilicts = ['number', 'entityNumber', 'dat_Date', 'lastRound', 'contradiction1', 'contradiction2', 'ustr_KomiteName'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -77,9 +79,14 @@ export class WorkbookReportComponent implements OnInit {
   dataSourceZoneWithoutMeasurement: MatTableDataSource<unknown>;
   listOfConfilicts: any;
   dataSourceConfilicts: MatTableDataSource<unknown>;
+  selectedZoneCharacteristic: any;
+  countAllOfConfilicts: any;
+  AllOfConfilictsOfThisZone: any;
+  zoneWithoutMeasurementConfilicts: any;
 
   constructor(public commonService: CommonService,
     public workbokReport: workbookReportService,
+    public jalaliPipe: JalaliPipe,
     public locationsOfZones: LocationsOfZonesService,
     public checklistAssesmentService: checklistAssesmentService,
     private dialog: MatDialog,
@@ -98,11 +105,13 @@ export class WorkbookReportComponent implements OnInit {
     this.averageMonthlyUnit = [];
     this.zoneWithoutMeasurement = [];
     this.listOfConfilicts = [];
+    this.AllOfConfilictsOfThisZone = [];
+    this.zoneWithoutMeasurementConfilicts = [];
 
 
   }
   selectZones(row?) {
-    
+
     this.fullListOfcheckListReport = [];
     this.fullListOfWorkbookReport = [];
     this.averagesOfNam_measur_hemrp = [];
@@ -122,6 +131,7 @@ export class WorkbookReportComponent implements OnInit {
       (data) => {
 
         this.selectedZoneName = data.namZone;
+        this.selectedZoneCharacteristic = data.zoneCharacteristic;
         this.getConfilicts();
         this.averagesOfNam_measur_hemrp = [];
         let body = {
@@ -223,6 +233,7 @@ export class WorkbookReportComponent implements OnInit {
       //مرج کردن آرایه های نمرات واحد های ناحیه
       var arr1 = this.zoneWithoutMeasurementIndustrialWaste;
       var arr2 = this.zoneWithoutMeasurementIndustrialCleaning;
+
       if (arr1 == undefined) {
         arr1 = []
         this.commonService.showEventMessage("اطلاعات ضایعات صنعتی برای ماه و ناحیه انتخابی در پایگاه های داده ای موجود نیست")
@@ -232,7 +243,13 @@ export class WorkbookReportComponent implements OnInit {
         this.commonService.showEventMessage("اطلاعات نظافت صنعتی برای ماه و ناحیه انتخابی در پایگاه های داده ای موجود نیست")
 
       }
-      this.zoneWithoutMeasurement = [...arr1, ...arr2];
+      if (this.zoneWithoutMeasurementConfilicts == undefined) {
+        arr2 = []
+        this.commonService.showEventMessage("اطلاعات نظافت صنعتی برای ماه و ناحیه انتخابی در پایگاه های داده ای موجود نیست")
+
+      }
+      this.zoneWithoutMeasurement = [...arr1, ...arr2, ...this.zoneWithoutMeasurementConfilicts];
+
       console.log(' this.zoneWithoutMeasurement', this.zoneWithoutMeasurement)
       this.dataSourceZoneWithoutMeasurement = new MatTableDataSource(this.zoneWithoutMeasurement);
 
@@ -369,21 +386,44 @@ export class WorkbookReportComponent implements OnInit {
     }
   }
   getConfilicts() {
-    let body = {
-      "dat_Date": "2020-10-18"
-    }
-    this.workbokReport.getConfilicts(body).subscribe((success) => {
+    const now = new Date();
+    now.setFullYear(now.getFullYear() - 1);
+    let date = (now.toISOString().slice(0, 10));
+debugger
+  //  let thisMonthMinesOneYear = moment(date).locale('en').format('YYYY-MM') + "-01"
 
+    let body = {
+      "dat_Date": date
+    }
+    this.commonService.loading = true;
+    this.workbokReport.getConfilicts(body).subscribe((success) => {
       success.forEach(eachConfilict => {
+        if (eachConfilict['ustr_KomiteCode'] == this.selectedZoneCharacteristic) {
+          this.AllOfConfilictsOfThisZone.push(eachConfilict)
+        }
+        eachConfilict.dat_Date = moment(eachConfilict.dat_Date).locale('fa').format('YYYY/MM/DD');
+
         if (eachConfilict['contradiction1'] == "باز است" && (eachConfilict['contradiction2'] == "باز است"
-          || eachConfilict['contradiction2'] == null)
+          || eachConfilict['contradiction2'] == null) &&
+          eachConfilict['ustr_KomiteCode'] == this.selectedZoneCharacteristic
         ) {
           this.listOfConfilicts.push(eachConfilict)
         }
       });
-      this.dataSourceConfilicts = new MatTableDataSource(this.listOfConfilicts);
+      this.countAllOfConfilicts = this.AllOfConfilictsOfThisZone.length;
+      let ratio = 4;
+      this.zoneWithoutMeasurementConfilicts = [];
+      this.zoneWithoutMeasurementConfilicts.push({
+        coefficientCalculationZone: ((((this.countAllOfConfilicts - this.listOfConfilicts.length) / this.countAllOfConfilicts) * 100 * 20) / 100) * ratio,
+        scoreZone: ((((this.countAllOfConfilicts - this.listOfConfilicts.length) / this.countAllOfConfilicts) * 100 * 20) / 100),
+        ratio: ratio, type: "اقدامات اصلاحی", percentAvg: ((this.countAllOfConfilicts - this.listOfConfilicts.length) / this.countAllOfConfilicts) * 100
+      })
 
-      console.log('confilicts', this.listOfConfilicts)
+
+      this.dataSourceConfilicts = new MatTableDataSource(this.listOfConfilicts);
+      this.commonService.loading = false;
+
+      console.log('countAllOfConfilicts', this.countAllOfConfilicts)
     })
 
   }

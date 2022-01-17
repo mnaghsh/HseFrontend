@@ -29,6 +29,7 @@ import { RequestChecklistReportComponent } from './checkList/request-checklist-r
 import { LoadingDialogComponent } from './utils/loadingDialog/loadingDialog.component';
 import { ZonesComponent } from './utils/zones/zones.component';
 import { WorkbookReportComponent } from './workbook-report/workbook-report.component';
+import { JalaliPipe } from 'src/pipes/jalali.pipe';
 ;
 
 
@@ -60,6 +61,7 @@ const myRoots: Routes = [
 
 @NgModule({
   declarations: [
+    
     LoadingComponent,
     LoadingDialogComponent,
     AppComponent,
@@ -80,9 +82,11 @@ const myRoots: Routes = [
     WorkbookReportComponent
     
   ],
-  imports: [NgPersianDatepickerModule,
-
-    BrowserModule, SharedModule,
+  imports: [
+  
+    NgPersianDatepickerModule,
+    BrowserModule,
+    SharedModule,
     MatTabsModule,
     MatListModule,
     MatSidenavModule,
@@ -98,6 +102,7 @@ const myRoots: Routes = [
 
 
   providers: [
+    JalaliPipe,
     { provide: MAT_DIALOG_DATA, useValue: {} },
     { provide: MatDialogRef, useValue: {} }
   ],

@@ -32,61 +32,9 @@
         <i class="fa fa-print" aria-hidden="true"></i> چاپ
     </button>
     <div id="print-section">
+
         <!----------------------------------------------------------------------------->
-        <table id="listOfConfilicts" dir="rtl" matSort
-            class="table table-responsive table-bordered  table-striped  table-hover" mat-table #table
-            [dataSource]="dataSourceConfilicts">
-
-            <!-- Position Column -->
-
-            <ng-container matColumnDef="number">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>ردیف </th>
-                <td mat-cell *matCellDef="let row;let index = index"> {{index+1}} </td>
-                <td style="padding: 10px;" mat-footer-cell *matFooterCellDef>
-                    <!-- <p style="color: red;">درصدها</p> -->
-                </td>
-            </ng-container>
-
-            <ng-container matColumnDef="entityNumber">
-                <th mat-header-cell mat-sort-header *matHeaderCellDef> شماره داخلی</th>
-                <td mat-cell *matCellDef="let element">
-                    <p>{{element.entityNumber}}</p>
-                </td>
-                <td mat-footer-cell *matFooterCellDef>
-                    <!-- <p>{{percentage}}</p> -->
-                </td>
-            </ng-container>
-
-
-            <ng-container matColumnDef="dat_Date">
-                <th mat-header-cell mat-sort-header *matHeaderCellDef> تاریخ ایجاد مدرک</th>
-                <td mat-cell *matCellDef="let element">
-                    <p>{{element.dat_Date}}</p>
-                </td>
-                <td mat-footer-cell *matFooterCellDef>
-                    <!-- <p>{{percentage}}</p> -->
-                </td>
-            </ng-container>
-
-
-            <ng-container matColumnDef="lastRound">
-                <th mat-header-cell mat-sort-header *matHeaderCellDef> آخرین گردش</th>
-
-                <td mat-cell *matCellDef="let element">
-                    <p>{{element.firstName+" "+ element.lastName}}</p>
-                </td>
-                <td mat-footer-cell *matFooterCellDef>
-                    <!-- <p style="color: red;">مجموع گزینه ها</p> -->
-                </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumnsConfilicts; sticky: true"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumnsConfilicts;"></tr>
-            <!-- <tr style="background-color: #794c7454;" mat-footer-row
-        *matFooterRowDef="displayedColumnsCheckListReportPerUnit ; sticky: true"> -->
-            <!-- </tr> -->
-        </table>
-        <!----------------------------------------------------------------------------->
+        <h3 class="titleOfWorkBook">کارنامه ناحیه</h3>
         <table id="ZoneWithoutMeasurement" dir="rtl" matSort
             class="table table-responsive table-bordered  table-striped  table-hover" mat-table #table
             [dataSource]="dataSourceZoneWithoutMeasurement">
@@ -155,6 +103,99 @@
             <!-- </tr> -->
         </table>
         <!----------------------------------------------------------------------------->
+
+        <h3 class="titleOfWorkBook">
+            مغایرت های باز در سیستم جامع اقدامات اصلاحی
+        </h3>
+        <table id="listOfConfilicts" dir="rtl" matSort
+            class="table table-responsive table-bordered  table-striped  table-hover" mat-table #table
+            [dataSource]="dataSourceConfilicts">
+
+            <!-- Position Column -->
+
+            <ng-container matColumnDef="number">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>ردیف </th>
+                <td mat-cell *matCellDef="let row;let index = index"> {{index+1}} </td>
+                <td style="padding: 10px;" mat-footer-cell *matFooterCellDef>
+                    <!-- <p style="color: red;">درصدها</p> -->
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="entityNumber">
+                <th mat-header-cell mat-sort-header *matHeaderCellDef> شماره داخلی</th>
+                <td mat-cell *matCellDef="let element">
+                    <p>{{element.entityNumber}}</p>
+                </td>
+                <td mat-footer-cell *matFooterCellDef>
+                    <!-- <p>{{percentage}}</p> -->
+                </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="dat_Date">
+                <th mat-header-cell mat-sort-header *matHeaderCellDef> تاریخ ایجاد مدرک</th>
+                <td mat-cell *matCellDef="let element">
+                    <div>{{element.dat_Date}}</div>
+                </td>
+                <td mat-footer-cell *matFooterCellDef>
+                    <!-- <p>{{percentage}}</p> -->
+                </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="lastRound">
+                <th mat-header-cell mat-sort-header *matHeaderCellDef> آخرین گردش</th>
+
+                <td mat-cell *matCellDef="let element">
+                    <p>{{element.firstName+" "+ element.lastName}}</p>
+                </td>
+                <td mat-footer-cell *matFooterCellDef>
+                    <!-- <p style="color: red;">مجموع گزینه ها</p> -->
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="contradiction1">
+                <th mat-header-cell mat-sort-header *matHeaderCellDef> وضعیت عدم انطباق اول</th>
+
+                <td mat-cell *matCellDef="let element">
+                    <p>{{element.contradiction1}}</p>
+                </td>
+                <td mat-footer-cell *matFooterCellDef>
+                    <!-- <p style="color: red;">مجموع گزینه ها</p> -->
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="contradiction2">
+                <th mat-header-cell mat-sort-header *matHeaderCellDef> وضعیت عدم انطباق دوم</th>
+
+                <td mat-cell *matCellDef="let element">
+                    <p>{{element.contradiction2}}</p>
+                </td>
+                <td mat-footer-cell *matFooterCellDef>
+                    <!-- <p style="color: red;">مجموع گزینه ها</p> -->
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="ustr_KomiteName">
+                <th mat-header-cell mat-sort-header *matHeaderCellDef>ناحیه</th>
+
+                <td mat-cell *matCellDef="let element">
+                    <p>{{element.ustr_KomiteName}}</p>
+                </td>
+                <td mat-footer-cell *matFooterCellDef>
+                    <!-- <p style="color: red;">مجموع گزینه ها</p> -->
+                </td>
+            </ng-container>
+
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsConfilicts; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsConfilicts;"></tr>
+            <!-- <tr style="background-color: #794c7454;" mat-footer-row
+      *matFooterRowDef="displayedColumnsCheckListReportPerUnit ; sticky: true"> -->
+            <!-- </tr> -->
+        </table>
+        <!----------------------------------------------------------------------------->
+        <h3 class="titleOfWorkBook">معدل ماه واحد ها</h3>
         <table id="ChecklistReportPerUnit" dir="rtl" matSort
             class="table table-responsive table-bordered  table-striped  table-hover" mat-table #table
             [dataSource]="dataSourceAverageMonthlyUnit">
@@ -202,6 +243,7 @@ The actual rendered columns are set as a property on the row definition" -->
 
         </table>
         <!----------------------------------------------------------------------------->
+        <h3 class="titleOfWorkBook">نمرات نظافت صنعتی واحد ها</h3>
         <table id="CheckListReportPerUnit" dir="rtl" matSort
             class="table table-responsive table-bordered  table-striped  table-hover" mat-table #table
             [dataSource]="dataSourceChecklistReportPerUnit">
@@ -294,6 +336,7 @@ The actual rendered columns are set as a property on the row definition" -->
             <!-- </tr> -->
         </table>
         <!----------------------------------------------------------------------------->
+        <h3 class="titleOfWorkBook">نمرات ضایعات صنعتی واحد ها</h3>
         <table id="ReportindustrialWastePerUnit" dir="rtl" matSort
             class="table table-responsive table-bordered  table-striped  table-hover" mat-table #table
             [dataSource]="dataSourceReportindustrialWastePerUnit">
@@ -392,6 +435,7 @@ The actual rendered columns are set as a property on the row definition" -->
 
         </table>
         <!----------------------------------------------------------------------------->
+        <h3 class="titleOfWorkBook">نتایج ضایعات صنعتی واحد ها</h3>
         <table id="IndustrialWaste" dir="rtl" matSort
             class="table table-responsive table-bordered  table-striped  table-hover" mat-table #table
             [dataSource]="dataSource">
@@ -539,6 +583,7 @@ The actual rendered columns are set as a property on the row definition" -->
 
         </table>
         <!----------------------------------------------------------------------------->
+        <h3 class="titleOfWorkBook">نتایج نظافت صنعتی واحد ها</h3>
         <table id="checklistReport" dir="rtl" matSort
             class="table table-responsive table-bordered  table-striped  table-hover" mat-table #table
             [dataSource]="dataSourceChecklistReport">
