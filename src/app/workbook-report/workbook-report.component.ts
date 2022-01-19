@@ -13,6 +13,7 @@ import { LocationsOfZonesService } from '../services/locationsOfZones/locationsO
 import { checklistAssesmentService } from '../services/checklistAssesmentService/checklistAssesmentService';
 import { JalaliPipe } from 'src/pipes/jalali.pipe';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { LocationsComponent } from '../utils/loading/locations/locations/locations.component';
 
 @Component({
   selector: 'app-workbook-report',
@@ -83,6 +84,8 @@ export class WorkbookReportComponent implements OnInit {
   countAllOfConfilicts: any;
   AllOfConfilictsOfThisZone: any;
   zoneWithoutMeasurementConfilicts: any;
+  weakPoint = "";
+
 
   constructor(public commonService: CommonService,
     public workbokReport: workbookReportService,
@@ -107,11 +110,11 @@ export class WorkbookReportComponent implements OnInit {
     this.listOfConfilicts = [];
     this.AllOfConfilictsOfThisZone = [];
     this.zoneWithoutMeasurementConfilicts = [];
-
+    this.weakPoint = "";
 
   }
   selectZones(row?) {
-
+    this.weakPoint = "";
     this.fullListOfcheckListReport = [];
     this.fullListOfWorkbookReport = [];
     this.averagesOfNam_measur_hemrp = [];
@@ -119,7 +122,7 @@ export class WorkbookReportComponent implements OnInit {
     this.averageMonthlyUnit = [];
     this.zoneWithoutMeasurement = [];
     this.listOfConfilicts = [];
-    const dialogRef = this.dialog.open(ZonesComponent, {
+    const dialogRef = this.dialog.open(LocationsComponent, {
       width: "80%",
       height: "80%",
       direction: "rtl",
@@ -130,26 +133,33 @@ export class WorkbookReportComponent implements OnInit {
     dialogRef.afterClosed().subscribe(
       (data) => {
 
-        this.selectedZoneName = data.namZone;
-        this.selectedZoneCharacteristic = data.zoneCharacteristic;
+        // this.selectedZoneName = data.namZone;
+        // this.selectedZoneCharacteristic = data.zoneCharacteristic;
+        this.selectedZoneName = data.namLocation;
+        //this.selectedZoneCharacteristic = data.zoneCharacteristic;
         this.getConfilicts();
         this.averagesOfNam_measur_hemrp = [];
-        let body = {
-          "zoneId": data.zoneId
-        }
-        //به ازای هر مکان داخل ناحیه درخواست به سرور میرود
-        this.locationsOfZones.FilterListLocationsOfZone(body).subscribe(
-          (success) => {
-            this.listLocationsOfZones = success;
-            this.listLocationsOfZones.forEach(eachLocation => {
-              this.getWorkbookReport(eachLocation.locationId)
-              this.getReportOfChecklists(eachLocation.namLocation)
+        this.getWorkbookReport(data.locationId)
 
-            });
-          },
-          (error) => {
-          }
-        )
+        // let body = {
+        //   "zoneId": data.locationId
+        // }
+        //به ازای هر مکان داخل ناحیه درخواست به سرور میرود
+        // this.locationsOfZones.FilterListLocationsOfZone(body).subscribe(
+        //   (success) => {
+        //     debugger
+        //     this.listLocationsOfZones = success;
+        //     this.getWorkbookReport(success.locationId)
+        //     this.getReportOfChecklists(success.namLocation)
+        //     this.listLocationsOfZones.forEach(eachLocation => {
+        //       // this.getWorkbookReport(eachLocation.locationId)
+        //       // this.getReportOfChecklists(eachLocation.namLocation)
+
+        //     });
+        //   },
+        //   (error) => {
+        //   }
+        // )
       }
     )
   }
@@ -168,27 +178,36 @@ export class WorkbookReportComponent implements OnInit {
     this.commonService.loading = true;
     this.workbokReport.getReport(body).subscribe((success) => {
       this.listOfWorkbookReport = success;
+      this.percentageOfScore(this.listOfWorkbookReport)
+      let nam_location_hslocs;
+      this.listOfWorkbookReport.forEach(eachIndustrialWaste => {
 
+        if (nam_location_hslocs != eachIndustrialWaste.nam_location_hsloc && eachIndustrialWaste.nam_location_hsloc != null) {
+          this.getReportOfChecklists(eachIndustrialWaste.nam_location_hsloc)
+        }
+      });
       this.listOfWorkbookReport.forEach(eachWorkbookReportOfUnit => {
         this.fullListOfWorkbookReport.push(eachWorkbookReportOfUnit);
       });
-      this.percentageOfScore(this.listOfWorkbookReport)
-      this.dataSourceReportindustrialWastePerUnit = new MatTableDataSource(this.averagesOfNam_measur_hemrp);
-      this.dataSourceChecklistReportPerUnit = new MatTableDataSource(this.averagesOfCheckListReport);
-      ; this.averagesOfNam_measur_hemrp.forEach(rowOfFirstTable => {
-        this.averagesOfCheckListReport.forEach(rowOf2ndTable => {
-          if (rowOfFirstTable.nam_location_hsloc == rowOf2ndTable.nam_location_hsloc) {
-            this.averageMonthlyUnit.push({ loc: rowOf2ndTable.nam_location_hsloc, value: (rowOfFirstTable.coefficientCalculation + rowOf2ndTable.coefficientCalculation) / 4 })
-          }
-        });
-      });
-      this.averageMonthlyUnit = this.averageMonthlyUnit.filter((value, index, self) =>
-        index === self.findIndex((t) => (
-          t.loc === value.loc && t.value === value.value
-        ))
-      )
 
-      this.dataSourceAverageMonthlyUnit = new MatTableDataSource(this.averageMonthlyUnit);
+      //this.getReportOfChecklists(data.namLocation)
+      this.dataSourceReportindustrialWastePerUnit = new MatTableDataSource(this.averagesOfNam_measur_hemrp);
+      // this.dataSourceChecklistReportPerUnit = new MatTableDataSource(this.averagesOfCheckListReport);
+    //  debugger
+    //   ; this.averagesOfNam_measur_hemrp.forEach(rowOfFirstTable => {
+    //     this.averagesOfCheckListReport.forEach(rowOf2ndTable => {
+    //       if (rowOfFirstTable.nam_location_hsloc == rowOf2ndTable.nam_location_hsloc) {
+    //         this.averageMonthlyUnit.push({ loc: rowOf2ndTable.nam_location_hsloc, value: (rowOfFirstTable.coefficientCalculation + rowOf2ndTable.coefficientCalculation) / 4 })
+    //       }
+    //     });
+    //   });
+    //   this.averageMonthlyUnit = this.averageMonthlyUnit.filter((value, index, self) =>
+    //     index === self.findIndex((t) => (
+    //       t.loc === value.loc && t.value === value.value
+    //     ))
+    //   )
+
+    //   this.dataSourceAverageMonthlyUnit = new MatTableDataSource(this.averageMonthlyUnit);
       this.dataSource = new MatTableDataSource(this.fullListOfWorkbookReport);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -199,25 +218,65 @@ export class WorkbookReportComponent implements OnInit {
 
   }
   percentageOfScore(WorkbookReportOfUnit) {
+    const grouped = this.groupBy(WorkbookReportOfUnit, item => item.e_monitor_request_id);
+    let groupedIndustrialWaste;
 
+    console.log('grouped22', grouped);
+    let ratio = 2;
     let totalPercent = 0;
     let average;
-    let length = WorkbookReportOfUnit.length;
-    if (WorkbookReportOfUnit.length > 0) {
-      WorkbookReportOfUnit.forEach(eachWorkbookReportOfUnit => {
-        eachWorkbookReportOfUnit.nam_measur_hemrp = Number(eachWorkbookReportOfUnit.nam_measur_hemrp)
-        totalPercent += eachWorkbookReportOfUnit.nam_measur_hemrp
-        //منهای یک چون ردیف اول مقدار اندازه گیری صفر است
+    let length ;
+    let e_monitor_request_id;
+
+    WorkbookReportOfUnit.forEach(item => {
+      if (item.des_lkp_typ_exam) {
+        // grouped.get(item.e_monitor_request_id);
+        let groupedIndustrialWaste = grouped.get(item.e_monitor_request_id)
+        groupedIndustrialWaste.forEach(items => {
+          totalPercent += Number(items.nam_measur_hemrp)
+          length= groupedIndustrialWaste.length;
+        });
         average = (totalPercent / (length - 1))
-      });
-      let ratio = 2;
-      this.averagesOfNam_measur_hemrp.push({
-        score: ((average) * 20) / 100,
-        ratio: ratio, nam_location_hsloc: WorkbookReportOfUnit[0].nam_location_hsloc,
-        nam_measur_hemrp: WorkbookReportOfUnit[0].e_monitor_request_id,
-        average: average,
-        coefficientCalculation: ratio * Number(((average) * 20) / 100)
-      })
+        this.averagesOfNam_measur_hemrp.push({
+          score: ((average) * 20) / 100,
+          ratio: ratio, nam_location_hsloc: item.nam_location_hsloc,
+          nam_measur_hemrp: item.e_monitor_request_id,
+          average: average,
+          coefficientCalculation: ratio * Number(((average) * 20) / 100)
+        })
+        totalPercent=0
+
+      }
+      // if (e_monitor_request_id == item.e_monitor_request_id) {
+      //   totalPercent += item.nam_measur_hemrp
+      //   average = (totalPercent / (length - 1))
+
+      //   // e_monitor_request_id=item.e_monitor_request_id;
+
+      // }
+      // else {
+      //   totalPercent = 0
+      //   e_monitor_request_id = item.e_monitor_request_id;
+      // }
+    });
+
+
+    if (WorkbookReportOfUnit.length > 0) {
+      // WorkbookReportOfUnit.forEach(eachWorkbookReportOfUnit => {
+      //   eachWorkbookReportOfUnit.nam_measur_hemrp = Number(eachWorkbookReportOfUnit.nam_measur_hemrp)
+      //   totalPercent += eachWorkbookReportOfUnit.nam_measur_hemrp
+      //   //منهای یک چون ردیف اول مقدار اندازه گیری صفر است
+      //   average = (totalPercent / (length - 1))
+      // });
+
+
+      // this.averagesOfNam_measur_hemrp.push({
+      //   score: ((average) * 20) / 100,
+      //   ratio: ratio, nam_location_hsloc: WorkbookReportOfUnit[0].nam_location_hsloc,
+      //   nam_measur_hemrp: WorkbookReportOfUnit[0].e_monitor_request_id,
+      //   average: average,
+      //   coefficientCalculation: ratio * Number(((average) * 20) / 100)
+      // })
 
       console.log("averagesOfNam_measur_hemrp", this.averagesOfNam_measur_hemrp)
       let summ = 0
@@ -231,27 +290,48 @@ export class WorkbookReportComponent implements OnInit {
         })
       });
       //مرج کردن آرایه های نمرات واحد های ناحیه
-      var arr1 = this.zoneWithoutMeasurementIndustrialWaste;
-      var arr2 = this.zoneWithoutMeasurementIndustrialCleaning;
+     
+      // var arr1 = this.zoneWithoutMeasurementIndustrialWaste;
+      // var arr2 = this.zoneWithoutMeasurementIndustrialCleaning;
 
-      if (arr1 == undefined) {
-        arr1 = []
-        this.commonService.showEventMessage("اطلاعات ضایعات صنعتی برای ماه و ناحیه انتخابی در پایگاه های داده ای موجود نیست")
-      }
-      if (arr2 == undefined) {
-        arr2 = []
-        this.commonService.showEventMessage("اطلاعات نظافت صنعتی برای ماه و ناحیه انتخابی در پایگاه های داده ای موجود نیست")
+      // if (arr1 == undefined) {
+      //   arr1 = []
+      //   this.commonService.showEventMessage("اطلاعات ضایعات صنعتی برای ماه و ناحیه انتخابی در پایگاه های داده ای موجود نیست")
+      // }
+      // if (arr2 == undefined) {
+      //   arr2 = []
+      //   this.commonService.showEventMessage("اطلاعات نظافت صنعتی برای ماه و ناحیه انتخابی در پایگاه های داده ای موجود نیست")
 
-      }
-      if (this.zoneWithoutMeasurementConfilicts == undefined) {
-        arr2 = []
-        this.commonService.showEventMessage("اطلاعات نظافت صنعتی برای ماه و ناحیه انتخابی در پایگاه های داده ای موجود نیست")
+      // }
+      // if (this.zoneWithoutMeasurementConfilicts == undefined) {
+      //   arr2 = []
+      //   this.commonService.showEventMessage("اطلاعات نظافت صنعتی برای ماه و ناحیه انتخابی در پایگاه های داده ای موجود نیست")
 
-      }
-      this.zoneWithoutMeasurement = [...arr1, ...arr2, ...this.zoneWithoutMeasurementConfilicts];
+      // }
+      // this.zoneWithoutMeasurement = [...arr1, ...arr2, ...this.zoneWithoutMeasurementConfilicts];
+      // let sumOfRatio = 0
+      // let SumOfCoefficientCalculationZone = 0
+      // this.zoneWithoutMeasurement.forEach(eachParamOfUnit => {
+      //   sumOfRatio = eachParamOfUnit.ratio + sumOfRatio;
+      //   SumOfCoefficientCalculationZone += eachParamOfUnit.coefficientCalculationZone
+      // });
 
-      console.log(' this.zoneWithoutMeasurement', this.zoneWithoutMeasurement)
-      this.dataSourceZoneWithoutMeasurement = new MatTableDataSource(this.zoneWithoutMeasurement);
+      // this.zoneWithoutMeasurement.push({
+      //   coefficientCalculationZone: SumOfCoefficientCalculationZone,
+      //   scoreZone: "",
+      //   ratio: sumOfRatio, type: "جمع کل", percentAvg: ""
+      // },
+      //   {
+      //     coefficientCalculationZone: SumOfCoefficientCalculationZone / sumOfRatio,
+      //     scoreZone: "",
+      //     ratio: "", type: "معدل ماه", percentAvg: ""
+      //   }
+      // )
+
+      // console.log('sumOfRatio', sumOfRatio)
+      // console.log('SumOfCoefficientCalculationZone', SumOfCoefficientCalculationZone)
+      // console.log(' this.zoneWithoutMeasurement', this.zoneWithoutMeasurement)
+      // this.dataSourceZoneWithoutMeasurement = new MatTableDataSource(this.zoneWithoutMeasurement);
 
 
     }
@@ -330,12 +410,20 @@ export class WorkbookReportComponent implements OnInit {
       this.PercentageOfOptions(this.listOfcheckListReport)
       this.listOfcheckListReport.forEach(eachCheckListReportOfUnit => {
         this.fullListOfcheckListReport.push(eachCheckListReportOfUnit);
+        if (eachCheckListReportOfUnit.desExplainQuestionHscha) {
+          this.weakPoint += " - " + eachCheckListReportOfUnit.desExplainQuestionHscha
+        }
       });
       console.log('MhdfullListOfcheckListReport', this.fullListOfcheckListReport)
       this.dataSourceChecklistReport = new MatTableDataSource(this.fullListOfcheckListReport);
+
+
+
+
     })
   }
   PercentageOfOptions(data) {
+   // debugger
     if (data.length > 0) {
       let optionsText = [];
       let ratio = 2
@@ -370,6 +458,8 @@ export class WorkbookReportComponent implements OnInit {
           ratio: ratio,
           coefficientCalculation: ratio * Number((((counts['مطلوب'] / optionsText.length) * 100) * 20) / 100)
         })
+        this.dataSourceChecklistReportPerUnit = new MatTableDataSource(this.averagesOfCheckListReport);
+        this.calcAvgOfUnitsWithWasteAndClean()
       }
       //پیدا کردن میانگین در صدها برای در آوردن نمره ناحیه
       let summ = 0
@@ -382,19 +472,20 @@ export class WorkbookReportComponent implements OnInit {
           ratio: ratio, type: "نظافت صنعتی", percentAvg: (summ / this.averagesOfCheckListReport.length)
         })
       });
-
+      this.mergeWateAndCleaning()
     }
   }
   getConfilicts() {
     const now = new Date();
     now.setFullYear(now.getFullYear() - 1);
     let date = (now.toISOString().slice(0, 10));
-debugger
-  //  let thisMonthMinesOneYear = moment(date).locale('en').format('YYYY-MM') + "-01"
+
+    //  let thisMonthMinesOneYear = moment(date).locale('en').format('YYYY-MM') + "-01"
 
     let body = {
       "dat_Date": date
     }
+    this.selectedZoneCharacteristic="SMC"
     this.commonService.loading = true;
     this.workbokReport.getConfilicts(body).subscribe((success) => {
       success.forEach(eachConfilict => {
@@ -488,5 +579,82 @@ debugger
       this.dataSource.paginator.firstPage();
     }
   }
+  groupBy(list, keyGetter) {
+    const map = new Map();
+    list.forEach((item) => {
+      const key = keyGetter(item);
+      const collection = map.get(key);
+      if (!collection) {
+        map.set(key, [item]);
+      } else {
+        collection.push(item);
+      }
+    });
+    return map;
+  }
+  mergeWateAndCleaning(){
+    
+    var arr1 = this.zoneWithoutMeasurementIndustrialWaste;
+    var arr2 = this.zoneWithoutMeasurementIndustrialCleaning;
+
+    if (arr1 == undefined) {
+      arr1 = []
+      this.commonService.showEventMessage("اطلاعات ضایعات صنعتی برای ماه و ناحیه انتخابی در پایگاه های داده ای موجود نیست")
+    }
+    if (arr2 == undefined) {
+      arr2 = []
+      this.commonService.showEventMessage("اطلاعات نظافت صنعتی برای ماه و ناحیه انتخابی در پایگاه های داده ای موجود نیست")
+
+    }
+    if (this.zoneWithoutMeasurementConfilicts == undefined) {
+      arr2 = []
+      this.commonService.showEventMessage("اطلاعات نظافت صنعتی برای ماه و ناحیه انتخابی در پایگاه های داده ای موجود نیست")
+
+    }
+    this.zoneWithoutMeasurement = [...arr1, ...arr2, ...this.zoneWithoutMeasurementConfilicts];
+    let sumOfRatio = 0
+    let SumOfCoefficientCalculationZone = 0
+    this.zoneWithoutMeasurement.forEach(eachParamOfUnit => {
+      sumOfRatio = eachParamOfUnit.ratio + sumOfRatio;
+      SumOfCoefficientCalculationZone += eachParamOfUnit.coefficientCalculationZone
+    });
+
+    this.zoneWithoutMeasurement.push({
+      coefficientCalculationZone: SumOfCoefficientCalculationZone,
+      scoreZone: "",
+      ratio: sumOfRatio, type: "جمع کل", percentAvg: ""
+    },
+      {
+        coefficientCalculationZone: SumOfCoefficientCalculationZone / sumOfRatio,
+        scoreZone: "",
+        ratio: "", type: "معدل ماه", percentAvg: ""
+      }
+    )
+
+    console.log('sumOfRatio', sumOfRatio)
+    console.log('SumOfCoefficientCalculationZone', SumOfCoefficientCalculationZone)
+    console.log(' this.zoneWithoutMeasurement', this.zoneWithoutMeasurement)
+    this.dataSourceZoneWithoutMeasurement = new MatTableDataSource(this.zoneWithoutMeasurement);
+
+
+  }
+calcAvgOfUnitsWithWasteAndClean(){
+  debugger
+  ; this.averagesOfNam_measur_hemrp.forEach(rowOfFirstTable => {
+    this.averagesOfCheckListReport.forEach(rowOf2ndTable => {
+      if (rowOfFirstTable.nam_location_hsloc == rowOf2ndTable.nam_location_hsloc) {
+        this.averageMonthlyUnit.push({ loc: rowOf2ndTable.nam_location_hsloc, value: (rowOfFirstTable.coefficientCalculation + rowOf2ndTable.coefficientCalculation) / 4 })
+      }
+    });
+  });
+  this.averageMonthlyUnit = this.averageMonthlyUnit.filter((value, index, self) =>
+    index === self.findIndex((t) => (
+      t.loc === value.loc && t.value === value.value
+    ))
+  )
+
+  this.dataSourceAverageMonthlyUnit = new MatTableDataSource(this.averageMonthlyUnit);
+}
+
 }
 
