@@ -25,6 +25,9 @@ export class WorkbookReportComponent implements OnInit {
   displayedColumns = ['number', 'e_monitor_request_id', 'des_lkp_typ_exit',
     'des_lkp_typ_exam', 'des_request_hemre', 'num_request_hemre', 'dat_request_hemre_jalali',
     'nam_location_hsloc', 's_location_id', 'nam_param_hemop', 'nam_measur_hemrp', 'nam_real_measur_hemrp', 'flg_abssence'];
+  displayedColumnsMeasurement = ['number', 'e_monitor_request_id', 'des_lkp_typ_exit',
+    'des_lkp_typ_exam', 'des_request_hemre', 'num_request_hemre', 'dat_request_hemre_jalali',
+    'nam_location_hsloc', 's_location_id', 'nam_param_hemop', 'nam_measur_hemrp', 'nam_real_measur_hemrp', 'flg_abssence'];
   displayedColumnsReportindustrialWastePerUnit = ['number', 'ratio', 'nam_location_hsloc', 'average', 'score'
     , 'coefficientCalculation'];
   displayedColumnsCheckListReportPerUnit = ['number', 'ratio', 'nam_location_hsloc', 'average', 'score'
@@ -85,6 +88,9 @@ export class WorkbookReportComponent implements OnInit {
   AllOfConfilictsOfThisZone: any;
   zoneWithoutMeasurementConfilicts: any;
   weakPoint = "";
+  fullListOfMeasurement: any[];
+  listOfMeasurement: any;
+  dataSourceReportMeasurement: MatTableDataSource<unknown>;
 
 
   constructor(public commonService: CommonService,
@@ -140,6 +146,7 @@ export class WorkbookReportComponent implements OnInit {
         this.getConfilicts();
         this.averagesOfNam_measur_hemrp = [];
         this.getWorkbookReport(data.locationId)
+        this.getMeasurement(data.locationId)
 
         // let body = {
         //   "zoneId": data.locationId
@@ -174,6 +181,8 @@ export class WorkbookReportComponent implements OnInit {
     let body = {
       s_location_id: s_location_id,
       dat_request_hemre_jalali: this.m.format('YYYY') + this.selectedDate,
+      LKP_TYP_EXIT: 6,
+      lkp_typ_exam: 13
     }
     this.commonService.loading = true;
     this.workbokReport.getReport(body).subscribe((success) => {
@@ -193,21 +202,21 @@ export class WorkbookReportComponent implements OnInit {
       //this.getReportOfChecklists(data.namLocation)
       this.dataSourceReportindustrialWastePerUnit = new MatTableDataSource(this.averagesOfNam_measur_hemrp);
       // this.dataSourceChecklistReportPerUnit = new MatTableDataSource(this.averagesOfCheckListReport);
-    //  debugger
-    //   ; this.averagesOfNam_measur_hemrp.forEach(rowOfFirstTable => {
-    //     this.averagesOfCheckListReport.forEach(rowOf2ndTable => {
-    //       if (rowOfFirstTable.nam_location_hsloc == rowOf2ndTable.nam_location_hsloc) {
-    //         this.averageMonthlyUnit.push({ loc: rowOf2ndTable.nam_location_hsloc, value: (rowOfFirstTable.coefficientCalculation + rowOf2ndTable.coefficientCalculation) / 4 })
-    //       }
-    //     });
-    //   });
-    //   this.averageMonthlyUnit = this.averageMonthlyUnit.filter((value, index, self) =>
-    //     index === self.findIndex((t) => (
-    //       t.loc === value.loc && t.value === value.value
-    //     ))
-    //   )
+      //  debugger
+      //   ; this.averagesOfNam_measur_hemrp.forEach(rowOfFirstTable => {
+      //     this.averagesOfCheckListReport.forEach(rowOf2ndTable => {
+      //       if (rowOfFirstTable.nam_location_hsloc == rowOf2ndTable.nam_location_hsloc) {
+      //         this.averageMonthlyUnit.push({ loc: rowOf2ndTable.nam_location_hsloc, value: (rowOfFirstTable.coefficientCalculation + rowOf2ndTable.coefficientCalculation) / 4 })
+      //       }
+      //     });
+      //   });
+      //   this.averageMonthlyUnit = this.averageMonthlyUnit.filter((value, index, self) =>
+      //     index === self.findIndex((t) => (
+      //       t.loc === value.loc && t.value === value.value
+      //     ))
+      //   )
 
-    //   this.dataSourceAverageMonthlyUnit = new MatTableDataSource(this.averageMonthlyUnit);
+      //   this.dataSourceAverageMonthlyUnit = new MatTableDataSource(this.averageMonthlyUnit);
       this.dataSource = new MatTableDataSource(this.fullListOfWorkbookReport);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -225,7 +234,7 @@ export class WorkbookReportComponent implements OnInit {
     let ratio = 2;
     let totalPercent = 0;
     let average;
-    let length ;
+    let length;
     let e_monitor_request_id;
 
     WorkbookReportOfUnit.forEach(item => {
@@ -234,7 +243,7 @@ export class WorkbookReportComponent implements OnInit {
         let groupedIndustrialWaste = grouped.get(item.e_monitor_request_id)
         groupedIndustrialWaste.forEach(items => {
           totalPercent += Number(items.nam_measur_hemrp)
-          length= groupedIndustrialWaste.length;
+          length = groupedIndustrialWaste.length;
         });
         average = (totalPercent / (length - 1))
         this.averagesOfNam_measur_hemrp.push({
@@ -244,7 +253,7 @@ export class WorkbookReportComponent implements OnInit {
           average: average,
           coefficientCalculation: ratio * Number(((average) * 20) / 100)
         })
-        totalPercent=0
+        totalPercent = 0
 
       }
       // if (e_monitor_request_id == item.e_monitor_request_id) {
@@ -290,7 +299,7 @@ export class WorkbookReportComponent implements OnInit {
         })
       });
       //مرج کردن آرایه های نمرات واحد های ناحیه
-     
+
       // var arr1 = this.zoneWithoutMeasurementIndustrialWaste;
       // var arr2 = this.zoneWithoutMeasurementIndustrialCleaning;
 
@@ -423,7 +432,7 @@ export class WorkbookReportComponent implements OnInit {
     })
   }
   PercentageOfOptions(data) {
-   // debugger
+    // debugger
     if (data.length > 0) {
       let optionsText = [];
       let ratio = 2
@@ -485,7 +494,7 @@ export class WorkbookReportComponent implements OnInit {
     let body = {
       "dat_Date": date
     }
-    this.selectedZoneCharacteristic="SMC"
+    this.selectedZoneCharacteristic = "SMC"
     this.commonService.loading = true;
     this.workbokReport.getConfilicts(body).subscribe((success) => {
       success.forEach(eachConfilict => {
@@ -592,8 +601,8 @@ export class WorkbookReportComponent implements OnInit {
     });
     return map;
   }
-  mergeWateAndCleaning(){
-    
+  mergeWateAndCleaning() {
+
     var arr1 = this.zoneWithoutMeasurementIndustrialWaste;
     var arr2 = this.zoneWithoutMeasurementIndustrialCleaning;
 
@@ -638,23 +647,50 @@ export class WorkbookReportComponent implements OnInit {
 
 
   }
-calcAvgOfUnitsWithWasteAndClean(){
-  debugger
-  ; this.averagesOfNam_measur_hemrp.forEach(rowOfFirstTable => {
-    this.averagesOfCheckListReport.forEach(rowOf2ndTable => {
-      if (rowOfFirstTable.nam_location_hsloc == rowOf2ndTable.nam_location_hsloc) {
-        this.averageMonthlyUnit.push({ loc: rowOf2ndTable.nam_location_hsloc, value: (rowOfFirstTable.coefficientCalculation + rowOf2ndTable.coefficientCalculation) / 4 })
-      }
+  calcAvgOfUnitsWithWasteAndClean() {
+    debugger
+    ; this.averagesOfNam_measur_hemrp.forEach(rowOfFirstTable => {
+      this.averagesOfCheckListReport.forEach(rowOf2ndTable => {
+        if (rowOfFirstTable.nam_location_hsloc == rowOf2ndTable.nam_location_hsloc) {
+          this.averageMonthlyUnit.push({ loc: rowOf2ndTable.nam_location_hsloc, value: (rowOfFirstTable.coefficientCalculation + rowOf2ndTable.coefficientCalculation) / 4 })
+        }
+      });
     });
-  });
-  this.averageMonthlyUnit = this.averageMonthlyUnit.filter((value, index, self) =>
-    index === self.findIndex((t) => (
-      t.loc === value.loc && t.value === value.value
-    ))
-  )
+    this.averageMonthlyUnit = this.averageMonthlyUnit.filter((value, index, self) =>
+      index === self.findIndex((t) => (
+        t.loc === value.loc && t.value === value.value
+      ))
+    )
 
-  this.dataSourceAverageMonthlyUnit = new MatTableDataSource(this.averageMonthlyUnit);
-}
+    this.dataSourceAverageMonthlyUnit = new MatTableDataSource(this.averageMonthlyUnit);
+  }
+
+  getMeasurement(s_location_id) {
+    this.fullListOfMeasurement = [];
+    let body = {
+      s_location_id: s_location_id,
+      dat_request_hemre_jalali: this.m.format('YYYY') + this.selectedDate,
+      LKP_TYP_EXIT: 1,
+      lkp_typ_exam: 9 
+      // LKP_TYP_EXIT: 4,
+      // lkp_typ_exam: 7
+    }
+    this.commonService.loading = true;
+    this.workbokReport.getReport(body).subscribe((success) => {
+      this.listOfMeasurement = success;
+      this.percentageOfScore(this.listOfMeasurement)
+      this.listOfMeasurement.forEach(items => {
+        this.fullListOfMeasurement.push(items);
+      });
+      this.dataSourceReportMeasurement = new MatTableDataSource(this.listOfMeasurement);
+      // this.dataSource.paginator = this.paginator;
+      // this.dataSource.sort = this.sort;
+      this.commonService.loading = false;
+
+    });
+
+
+  }
 
 }
 
