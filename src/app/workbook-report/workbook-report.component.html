@@ -840,7 +840,8 @@ The actual rendered columns are set as a property on the row definition" -->
                         <ng-container matColumnDef="desOptionHeclo">
                             <th mat-header-cell mat-sort-header *matHeaderCellDef> پاسخ </th>
                             <td mat-cell *matCellDef="let element">
-                                <p>{{element.desOptionHeclo}}</p>
+                                <p *ngIf="element.desOptionHeclo=='مطلوب'">{{element.desOptionHeclo}}</p>
+                                <p style="background-color: #dc3545;" *ngIf="element.desOptionHeclo=='نامطلوب'">{{element.desOptionHeclo}}</p>
                             </td>
                             <td mat-footer-cell *matFooterCellDef>
                             </td>
