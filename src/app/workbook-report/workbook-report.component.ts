@@ -93,6 +93,7 @@ export class WorkbookReportComponent implements OnInit {
   dataSourceReportMeasurement: MatTableDataSource<unknown>;
   locationId: any;
   zoneWithMeasurement: any;
+  zoneLocationCharacteristic: any;
 
 
   constructor(public commonService: CommonService,
@@ -115,7 +116,7 @@ export class WorkbookReportComponent implements OnInit {
     this.averagesOfCheckListReport = [];
     this.averageMonthlyUnit = [];
     this.zoneWithoutMeasurement = [];
-    this.zoneWithMeasurement=[];
+    this.zoneWithMeasurement = [];
     this.listOfConfilicts = [];
     this.AllOfConfilictsOfThisZone = [];
     this.zoneWithoutMeasurementConfilicts = [];
@@ -141,6 +142,7 @@ export class WorkbookReportComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(
       (data) => {
+        this.zoneLocationCharacteristic = data.zoneCharacteristic
 
         // this.selectedZoneName = data.namZone;
         // this.selectedZoneCharacteristic = data.zoneCharacteristic;
@@ -149,9 +151,8 @@ export class WorkbookReportComponent implements OnInit {
         this.getConfilicts();
         this.averagesOfNam_measur_hemrp = [];
         this.getWorkbookReport(data.locationId)
-         this.getMeasurement(data.locationId)
+        this.getMeasurement(data.locationId)
         this.locationId = data.locationId
-
         // let body = {
         //   "zoneId": data.locationId
         // }
@@ -497,7 +498,8 @@ export class WorkbookReportComponent implements OnInit {
     let body = {
       "dat_Date": date
     }
-    this.selectedZoneCharacteristic = "SMC"
+    debugger
+    this.selectedZoneCharacteristic = this.zoneLocationCharacteristic
     this.commonService.loading = true;
     this.workbokReport.getConfilicts(body).subscribe((success) => {
       success.forEach(eachConfilict => {
@@ -515,14 +517,14 @@ export class WorkbookReportComponent implements OnInit {
       });
       this.countAllOfConfilicts = this.AllOfConfilictsOfThisZone.length;
       let ratio
-      debugger
+      //ugger
       //if(this.zoneWithMeasurement.length>0){
-       //  ratio = 7;
+      //  ratio = 7;
       //}
-     // else{
-         ratio = 4;
+      // else{
+      ratio = 4;
       //}
-     
+
       this.zoneWithoutMeasurementConfilicts = [];
       this.zoneWithoutMeasurementConfilicts.push({
         coefficientCalculationZone: ((((this.countAllOfConfilicts - this.listOfConfilicts.length) / this.countAllOfConfilicts) * 100 * 20) / 100) * ratio,
@@ -629,14 +631,14 @@ export class WorkbookReportComponent implements OnInit {
       this.commonService.showEventMessage("اطلاعات نظافت صنعتی برای ماه و ناحیه انتخابی در پایگاه های داده ای موجود نیست")
 
     }
-    
-    if (!this.zoneWithMeasurement||this.zoneWithMeasurement.length==0) {
-      this.zoneWithoutMeasurementConfilicts[0].ratio=4
+
+    if (!this.zoneWithMeasurement || this.zoneWithMeasurement.length == 0) {
+      this.zoneWithoutMeasurementConfilicts[0].ratio = 4
       this.zoneWithoutMeasurement = [...arr1, ...arr2, ...this.zoneWithoutMeasurementConfilicts];
     }
     else {
-      debugger
-      this.zoneWithoutMeasurementConfilicts[0].ratio=7;
+      //ugger
+      this.zoneWithoutMeasurementConfilicts[0].ratio = 7;
       //((this.zoneWithoutMeasurementConfilicts[0].coefficientCalculationZone)/4)*7
       this.zoneWithoutMeasurement = [...arr1, ...arr2, ...this.zoneWithoutMeasurementConfilicts, ...this.zoneWithMeasurement];
 
@@ -669,7 +671,7 @@ export class WorkbookReportComponent implements OnInit {
 
   }
   calcAvgOfUnitsWithWasteAndClean() {
-    debugger
+  //  debugger
     ; this.averagesOfNam_measur_hemrp.forEach(rowOfFirstTable => {
       this.averagesOfCheckListReport.forEach(rowOf2ndTable => {
         if (rowOfFirstTable.nam_location_hsloc == rowOf2ndTable.nam_location_hsloc) {
@@ -718,9 +720,9 @@ export class WorkbookReportComponent implements OnInit {
         element['flg_abssence'] = ""
       }
     });
-   // data[0]['flg_abssence'] = "*";
+    // data[0]['flg_abssence'] = "*";
 
-    debugger
+   // debugger
     if (data.length > 0) {
       let optionsText = [];
       let ratio = 3
@@ -747,9 +749,10 @@ export class WorkbookReportComponent implements OnInit {
       console.log('open', this.percentage);
       //this.mergeWateAndCleaning()
       if (data[0]) {
+        this.zoneWithMeasurement=[];
         this.zoneWithMeasurement.push({
           coefficientCalculationZone: ratio * Number(((counts[""] / optionsText.length) * 100 * 20) / 100),
-          scoreZone: ((counts[""] / optionsText.length) * 100)*20/100,
+          scoreZone: ((counts[""] / optionsText.length) * 100) * 20 / 100,
           ratio: ratio, type: "اندازه گیری", percentAvg: (counts[""] / optionsText.length) * 100,
         })
         this.mergeWateAndCleaning()
