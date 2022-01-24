@@ -8,6 +8,7 @@ export class ConfigService {
 baseUrl = 'https://localhost:44377/api/'
 mscServices = 'https://services.msc.ir/'
 //baseUrl = 'http://93.126.21.21:8082/api/'
+//baseUrl="http://localhost/serverWorkbook/api/"
 
 
   constructor(public http: HttpClient) {
