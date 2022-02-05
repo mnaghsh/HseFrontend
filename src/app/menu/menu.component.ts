@@ -12,6 +12,7 @@ import { CheckListService } from '../services/checkList/check-list.service';
 export class MenuComponent implements OnInit {
   navBarItem: { label: string; path: string; icon: string; }[];
   rightMenu: { label: string; path: string; icon: string; }[];
+  foodInspection: { label: string; path: string; icon: string; }[];
 
 
   constructor(private auth: AuthenticationService,
@@ -38,11 +39,18 @@ export class MenuComponent implements OnInit {
       { label: 'انجام ارزیابی', path: "/checklistAssesment", icon: "fa fa-print" },
       { label: 'چاپ گزارش', path: "/checklistReport", icon: "fa fa-newspaper-o" },
       { label: 'چاپ گزارش بر اساس نام ارزیاب و تاریخ', path: "/requestChecklistReport", icon: "fa fa-newspaper-o" },
-      { label: 'ارسال پیامک', path: "/messages", icon: "fa fa-envelope-open" },
+     // { label: 'ارسال پیامک', path: "/messages", icon: "fa fa-envelope-open" },
       { label: 'مدیریت کاربران ', path: "/users", icon: "fa fa-users" },
       { label: 'مدیریت واحد ها ', path: "/locations", icon: "fa fa-map-marker" },
-      { label: 'مدیریت  نواحی ', path: "/zones", icon: "fa fa-location-arrow" },
+    //  { label: 'مدیریت  نواحی ', path: "/zones", icon: "fa fa-location-arrow" },
       { label: 'خروج', path: "/login", icon: "fa fa-sign-out" },
+    ];
+
+    this.foodInspection = [
+      { label: ' بازرسی مواد غذایی', path: "/foodInspection", icon: "fa fa-heartbeat" },
+      { label: ' مدیریت  مواد غذایی', path: "/typesOfFood", icon: "fa fa-cart-arrow-down" },
+      { label: ' مدیریت  شرکت های تولید کننده', path: "/foodManufactures", icon: "fa fa-university" },
+     
     ];
 
   }

@@ -30,6 +30,9 @@ import { LoadingDialogComponent } from './utils/loadingDialog/loadingDialog.comp
 import { ZonesComponent } from './utils/zones/zones.component';
 import { WorkbookReportComponent } from './workbook-report/workbook-report.component';
 import { JalaliPipe } from 'src/pipes/jalali.pipe';
+import { TypesOfFoodComponent } from './food-inspection/types-of-food/types-of-food.component';
+import { foodManufacturesComponent } from './food-inspection/food-manufactures/food-manufactures.component';
+import { FoodInspectionComponent } from './food-inspection/food-inspection/food-inspection.component';
 ;
 
 
@@ -53,6 +56,10 @@ const myRoots: Routes = [
       { path: 'messages', component: MessagesComponent },
       { path: 'scheduling', component: SchedulingComponent },
       { path: 'workbookReport', component: WorkbookReportComponent },
+      { path: 'typesOfFood', component: TypesOfFoodComponent },
+      { path: 'foodManufactures', component: foodManufacturesComponent },
+      { path: 'foodInspection', component: FoodInspectionComponent },
+
     ]
   }
 
@@ -61,7 +68,7 @@ const myRoots: Routes = [
 
 @NgModule({
   declarations: [
-    
+
     LoadingComponent,
     LoadingDialogComponent,
     AppComponent,
@@ -79,11 +86,14 @@ const myRoots: Routes = [
     MessagesComponent,
     SchedulingComponent,
     ZonesComponent,
-    WorkbookReportComponent
-    
+    WorkbookReportComponent,
+    TypesOfFoodComponent,
+    foodManufacturesComponent,
+    FoodInspectionComponent
+
   ],
   imports: [
-  
+
     NgPersianDatepickerModule,
     BrowserModule,
     SharedModule,

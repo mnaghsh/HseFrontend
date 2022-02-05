@@ -39,8 +39,8 @@
                     <h3 class="titleOfWorkBook">کارنامه ناحیه</h3>
                 </mat-card-header>
                 <mat-card-content>
-                    <table id="ZoneWithoutMeasurement" dir="rtl" matSort class="table    table-striped  table-hover"
-                        mat-table #table [dataSource]="dataSourceZoneWithoutMeasurement">
+                    <table style="background-color: aliceblue;" id="ZoneWithoutMeasurement" dir="rtl" matSort class="table   table-striped  table-hover" mat-table
+                        #table [dataSource]="dataSourceZoneWithoutMeasurement">
 
                         <!-- Position Column -->
 
@@ -115,7 +115,7 @@
             <!----------------------------------------------------------------------------->
             <mat-card>
                 <mat-card-header class="weakPoint">
-                    <h3 class="titleOfWorkBook">نقاط ضعف</h3>
+                    <h3 class="titleOfWorkBook">نقاط قابل بهبود</h3>
                 </mat-card-header>
                 <mat-card-content>
                     <h3>{{weakPoint}}</h3>
@@ -129,7 +129,7 @@
                     </h3>
                 </mat-card-header>
                 <mat-card-content>
-                    <table id="listOfConfilicts" dir="rtl" matSort class="table    table-striped  table-hover" mat-table
+                    <table style="background-color: ivory;" id="listOfConfilicts" dir="rtl" matSort class="table    table-striped  table-hover" mat-table
                         #table [dataSource]="dataSourceConfilicts">
 
                         <!-- Position Column -->
@@ -207,6 +207,17 @@
                                 <!-- <p style="color: red;">مجموع گزینه ها</p> -->
                             </td>
                         </ng-container>
+                        <ng-container matColumnDef="str_MoghayeratDescA">
+                            <th mat-header-cell mat-sort-header *matHeaderCellDef>شرح مغایرت</th>
+
+                            <td mat-cell *matCellDef="let element">
+                                <p>{{element.str_MoghayeratDescA}}</p>
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef>
+                                <!-- <p style="color: red;">مجموع گزینه ها</p> -->
+                            </td>
+                        </ng-container>
+
 
 
                         <tr mat-header-row *matHeaderRowDef="displayedColumnsConfilicts; sticky: true"></tr>
@@ -841,7 +852,8 @@ The actual rendered columns are set as a property on the row definition" -->
                             <th mat-header-cell mat-sort-header *matHeaderCellDef> پاسخ </th>
                             <td mat-cell *matCellDef="let element">
                                 <p *ngIf="element.desOptionHeclo=='مطلوب'">{{element.desOptionHeclo}}</p>
-                                <p style="background-color: #dc3545;" *ngIf="element.desOptionHeclo=='نامطلوب'">{{element.desOptionHeclo}}</p>
+                                <p style="background-color: #dc3545;" *ngIf="element.desOptionHeclo=='نامطلوب'">
+                                    {{element.desOptionHeclo}}</p>
                             </td>
                             <td mat-footer-cell *matFooterCellDef>
                             </td>
