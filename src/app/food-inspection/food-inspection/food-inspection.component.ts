@@ -1,13 +1,15 @@
 
 
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { CommonService } from 'src/app/services/common.service';
 import { FoodInspectionService } from 'src/app/services/foodInspection/foodInspection.service';
-
+import { TypesOfFoodComponent } from '../types-of-food/types-of-food.component';
+import * as moment from 'jalali-moment';
+import { foodManufacturesComponent } from '../food-manufactures/food-manufactures.component';
 
 @Component({
   selector: 'app-food-inspection',
@@ -19,18 +21,27 @@ export class FoodInspectionComponent implements OnInit {
   enable: boolean = true;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('dateOfInspection') dateOfInspection: ElementRef;
+  @ViewChild('dateOfProduction') dateOfProduction: ElementRef;
+  @ViewChild('dateOfExpiration') dateOfExpiration: ElementRef;
+
   dataSource: MatTableDataSource<any>;
-  displayedColumns = ['number', 'datDischargeHsfin', 'hstofTypeOfFoodId', 'hsmanFoodManufactureId', 'numValueHsfin',
-     'namUnitOfValueHsfin', 'namRefrigerationConditionsHsfin', 'datOfManufactureHsfin', 'datOfExpirationHsfin',
-    'numTemperatureHsfin', 'numEnvironmentTemperatureHsfin', 'namInspectionResultHsfin',
+  displayedColumns = ['number', 'datDischargeHsfin', 'namTypeOfFood', 'namFoodManufacture', 'numValueHsfin',
+    'namUnitOfValueHsfin', 'namRefrigerationConditionsHsfin', 'datOfManufactureHsfin', 'datOfExpirationHsfin',
+    'numTemperatureHsfin',  'namInspectionResultHsfin',
     'namDischargePlaceHsfin', 'desDescriptionHsfin',
     'process'];
-  ListOfTypeOfFoods: any;
+  ListOfFoodInspection: any;
+
   newRowObj: any;
-  unit: { value: number; viewValue: string; }[];
-  department: { value: number; viewValue: string; }[];
-  checklistId: any;
-  checklistName: any;
+  namTypeOfFoodHstof: any;
+  typeOfFoodId: any;
+  foodManufactureId: any;
+  namFood: any;
+  namManufacture: any;
+  RefrigerationConditions: { value: number; viewValue: string; }[];
+  inspectionResult: { value: number; viewValue: string; }[];
+  dischargePlace: { value: number; viewValue: string; }[];
   constructor(
     public commonService: CommonService,
     public foodInspectionService: FoodInspectionService,
@@ -39,37 +50,59 @@ export class FoodInspectionComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public recievedData
 
   ) {
-    this.getTypeOfFoods();
+    this.getFoodInspection();
+    this.fillDropDowns()
   }
   ngOnInit(): void {
     this.newRowObj = {}
 
   }
-  getTypeOfFoods() {
+  getFoodInspection() {
     this.commonService.loading = true;
     this.foodInspectionService.selectAllListOfHseFoodInspections().subscribe((success) => {
-      this.ListOfTypeOfFoods = success;
-      console.log('ListOfTypeOfFoods', this.ListOfTypeOfFoods)
-      this.dataSource = new MatTableDataSource(this.ListOfTypeOfFoods);
+      this.ListOfFoodInspection = success;
+      this.convertToShamsi()
+      console.log('ListOfFoodInspection', this.ListOfFoodInspection)
+      this.dataSource = new MatTableDataSource(this.ListOfFoodInspection);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
       this.commonService.loading = false;
     });
   }
 
-
   public addRow() {
-    debugger
+    //debugger
+    let dateIn = moment(this.dateOfInspection.nativeElement.value, 'jYYYY/jM/jD HH:mm:ss');
+    let dateOfInspection = dateIn.locale('en').format('YYYY/M/D HH:mm:ss');
+    let datePo = moment(this.dateOfProduction.nativeElement.value, 'jYYYY/jM/jD HH:mm:ss');
+    let dateOfProduction = datePo.locale('en').format('YYYY/M/D HH:mm:ss');
+    let dateEx = moment(this.dateOfExpiration.nativeElement.value, 'jYYYY/jM/jD HH:mm:ss');
+    let dateOfExpiration = dateEx.locale('en').format('YYYY/M/D HH:mm:ss');
+
+
     let object = {
-      "datDischargeHsfin": this.newRowObj.datDischargeHsfin,
-      "hstofTypeOfFoodId": this.newRowObj.hstofTypeOfFoodId,
-      // "namLocation": this.checklistId,
-      // "createDate": new Date()
+      "datDischargeHsfin": new Date(dateOfInspection),
+      "hstofTypeOfFoodId": this.typeOfFoodId,
+      "namTypeOfFood": this.namFood,
+      "namFoodManufacture": this.namManufacture,
+      "hsmanFoodManufactureId": this.foodManufactureId,
+      "numValueHsfin": this.newRowObj.numValueHsfin,
+      "namUnitOfValueHsfin": this.newRowObj.namUnitOfValueHsfin,
+      "datOfManufactureHsfin": new Date(dateOfProduction),
+      "datOfExpirationHsfin": new Date(dateOfExpiration),
+      "numTemperatureHsfin": this.newRowObj.numTemperatureHsfin,
+     // "numEnvironmentTemperatureHsfin": this.newRowObj.numEnvironmentTemperatureHsfin,
+      "namInspectionResultHsfin": this.newRowObj.namInspectionResultHsfin,
+      "namDischargePlaceHsfin": this.newRowObj.namDischargePlaceHsfin,
+      "desDescriptionHsfin": this.newRowObj.desDescriptionHsfin,
+      "createInfo": this.commonService.activeUser.firstname + this.commonService.activeUser.lastname,
+      "createDate": new Date(),
+      "namRefrigerationConditionsHsfin": this.newRowObj.namRefrigerationConditionsHsfin
     }
 
     this.foodInspectionService.insertListOfHseFoodInspections(object).subscribe((success) => {
       this.commonService.showEventMessage("ايجاد رديف با موفقيت انجام شد.", 3000, "green")
-      this.getTypeOfFoods();
+      this.getFoodInspection();
       console.log('updateListOfcheckLists', success)
       this.newRowObj = {};
     },
@@ -88,7 +121,7 @@ export class FoodInspectionComponent implements OnInit {
     this.edit = !this.edit;
     this.foodInspectionService.updateListOfHseFoodInspections(row['foodInspectionId'], row).subscribe((success) => {
       this.commonService.showEventMessage("ويرايش رديف با موفقيت انجام شد.", 3000, "green")
-      this.getTypeOfFoods();
+      this.getFoodInspection();
       console.log('updateListOfcheckListsQuestions', success)
         ;
 
@@ -106,7 +139,7 @@ export class FoodInspectionComponent implements OnInit {
     this.foodInspectionService.deleteListOfHseFoodInspections(row['foodInspectionId']).subscribe(
       (success) => {
 
-        this.getTypeOfFoods();
+        this.getFoodInspection();
         //this.edit = !this.edit;
         this.commonService.showEventMessage("حذف رديف با موفقيت انجام شد.", 3000, "red")
         console.log('sucess', success)
@@ -138,6 +171,82 @@ export class FoodInspectionComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
+
+  selectTypeOfFoods() {
+
+    const dialogRef = this.dialog.open(TypesOfFoodComponent, {
+      width: "80%",
+      height: "80%",
+      direction: "rtl",
+      data: {
+        // checkListId: row.eCheckListId,
+        //  checkListName: row.desChkHecli,
+      }
+    });
+    dialogRef.afterClosed().subscribe(
+      (data) => {
+        //debugger;
+        this.namFood = data.namTypeOfFoodHstof;
+        this.typeOfFoodId = data.typeOfFoodId;
+        //  this.checklistId = data.eCheckListId;
+      }
+    )
+  }
+
+  selectFoodManufactures() {
+    const dialogRef = this.dialog.open(foodManufacturesComponent, {
+      width: "80%",
+      height: "80%",
+      direction: "rtl",
+      data: {
+        // checkListId: row.eCheckListId,
+        //  checkListName: row.desChkHecli,
+      }
+    });
+    dialogRef.afterClosed().subscribe(
+      (data) => {
+        // debugger;
+        this.namManufacture = data.namFoodManufactureHsman;
+        this.foodManufactureId = data.foodManufactureId;
+        //  this.checklistId = data.eCheckListId;
+      }
+    )
+  }
+
+
+  convertToShamsi() {
+    this.ListOfFoodInspection.forEach(item => {
+      if (item.datDischargeHsfin)
+        debugger
+      item.datDischargeHsfin = moment(item.datDischargeHsfin).locale('fa').format('YYYY/MM/DD');
+      if (item.datOfManufactureHsfin)
+        item.datOfManufactureHsfin = moment(item.datOfManufactureHsfin).locale('fa').format('YYYY/MM/DD');
+      if (item.datOfExpirationHsfin)
+        item.datOfExpirationHsfin = moment(item.datOfExpirationHsfin).locale('fa').format('YYYY/MM/DD');
+
+    });
+  }
+  fillDropDowns() {
+
+    this.RefrigerationConditions = [
+      { value: 1, viewValue: 'منجمد ' },
+      { value: 2, viewValue: 'دمای یخچال' },
+      { value: 3, viewValue: 'دمای محیط' },
+    ];
+    this.inspectionResult = [
+      { value: 1, viewValue: 'بازدید و فک پلمپ  ' },
+      { value: 2, viewValue: 'بازدید و فک پلمپ مشروط' },
+      { value: 3, viewValue: 'عدم تایید' },
+    ];
+    this.dischargePlace = [
+      { value: 1, viewValue: 'مرکز طبخ 1  ' },
+      { value: 2, viewValue: 'مرکز طبخ 2' },
+      { value: 3, viewValue: 'مرکز طبخ 3' },
+    ];
+    
+    
+
+     }
 
 }
 

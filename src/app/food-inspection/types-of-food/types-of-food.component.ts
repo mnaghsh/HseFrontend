@@ -1,5 +1,5 @@
 
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, Optional, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -30,8 +30,7 @@ export class TypesOfFoodComponent implements OnInit {
     public typeOfFoodsService: HseTypeOfFoodsService,
     private dialog: MatDialog,
     public dialogRef: MatDialogRef<any>,
-    @Inject(MAT_DIALOG_DATA) public recievedData
-
+    @Optional() @Inject(MAT_DIALOG_DATA) public recievedData: any,
   ) {
     this.getTypeOfFoods();
   }
@@ -51,12 +50,12 @@ export class TypesOfFoodComponent implements OnInit {
     });
   }
 
-  
+
   public addRow() {
     debugger
     let object = {
       "namTypeOfFoodHstof": this.newRowObj.namTypeOfFoodHstof,
-     // "namLocation": this.checklistId,
+      // "namLocation": this.checklistId,
       // "createDate": new Date()
     }
 
@@ -112,16 +111,15 @@ export class TypesOfFoodComponent implements OnInit {
     )
   }
 
-  selectRow(row){
+  selectRow(row) {
     console.log(row)
-    if(!this.edit){
+    if (!this.edit) {
       this.dialogRef.close(row)
     }
-    
   }
 
- 
- 
+
+
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
