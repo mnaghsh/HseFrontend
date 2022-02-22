@@ -7,20 +7,19 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { CommonService } from 'src/app/services/common.service';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { workbookReportService } from '../services/workbookReport/workbookReportService';
-import { ZonesComponent } from '../utils/zones/zones.component';
-import { LocationsOfZonesService } from '../services/locationsOfZones/locationsOfZonesService';
-import { checklistAssesmentService } from '../services/checklistAssesmentService/checklistAssesmentService';
 import { JalaliPipe } from 'src/pipes/jalali.pipe';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
-import { LocationsComponent } from '../utils/loading/locations/locations/locations.component';
+import { workbookReportService } from 'src/app/services/workbookReport/workbookReportService';
+import { LocationsOfZonesService } from 'src/app/services/locationsOfZones/locationsOfZonesService';
+import { checklistAssesmentService } from 'src/app/services/checklistAssesmentService/checklistAssesmentService';
+import { LocationsComponent } from 'src/app/utils/loading/locations/locations/locations.component';
 
 @Component({
-  selector: 'app-workbook-report',
-  templateUrl: './workbook-report.component.html',
-  styleUrls: ['./workbook-report.component.css']
+  selector: 'app-transportation-workbook',
+  templateUrl: './transportation-workbookReport.component.html',
+  styleUrls: ['./transportation-workbookReport.component.css']
 })
-export class WorkbookReportComponent implements OnInit {
+export class transportationWorkbookReportComponent implements OnInit {
 
   displayedColumns = ['number', 'e_monitor_request_id', 'des_lkp_typ_exit',
     'des_lkp_typ_exam', 'des_request_hemre', 'num_request_hemre', 'dat_request_hemre_jalali',
@@ -37,8 +36,8 @@ export class WorkbookReportComponent implements OnInit {
     'desQuestionHeclq', 'desOptionHeclo', 'desExplainQuestionHscha', 'requestDateJalaliHsrch',
     'namAssessorHsrch', 'namLocationHsrch', 'unitCehckListsHecli', 'namDepartmentHecli', 'namEvaluationAreaHsrch'];
   displayedColumnsZoneWithoutMeasurement = ['type', 'ratio', 'percentAvg', 'scoreZone', 'coefficientCalculationZone'];
-  displayedColumnsConfilicts = ['number', 'entityNumber', 'dat_Date', 'lastRound', 'contradiction1', 'contradiction2', 'ustr_KomiteName','str_MoghayeratDescA'];
-
+  displayedColumnsConfilicts = ['number', 'entityNumber', 'dat_Date', 'lastRound', 'contradiction1', 'contradiction2', 'ustr_KomiteName', 'str_MoghayeratDescA'];
+  displayedColumnsWasteReport = ['number', 'dat_request_hemre_jalali', 'nam_measur_hemrp', 's_location_id', 'nam_location_hsloc'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: MatTableDataSource<any>
@@ -78,6 +77,7 @@ export class WorkbookReportComponent implements OnInit {
   averageMonthlyUnit: any;
   dataSourceAverageMonthlyUnit: MatTableDataSource<unknown>;
   zoneWithoutMeasurement: any;
+  wasteReportAverage: any;
   zoneWithoutMeasurementIndustrialWaste: any;
   zoneWithoutMeasurementIndustrialCleaning: any[];
   dataSourceZoneWithoutMeasurement: MatTableDataSource<unknown>;
@@ -97,6 +97,9 @@ export class WorkbookReportComponent implements OnInit {
   listOfGasMeasurement: any;
   listOfDustMeasurement: any;
   listOfWaterMeasurement: any;
+  fullListOfWasteReport: any;
+  listOfWasteReport: any;
+  dataSourceWasteReport: MatTableDataSource<unknown>;
 
 
   constructor(public commonService: CommonService,
@@ -109,66 +112,33 @@ export class WorkbookReportComponent implements OnInit {
 
   ) {
 
+
   }
   ngOnInit(): void {
-    //if(this.selectedZoneName!="حمل و نقل و پشتيباني"){
     this.m = moment();
     this.m.locale('fa');
     this.cleaningForm();
- // }
+    this.selectZones();
+
   }
   selectZones(row?) {
-    this.fullListOfcheckListReport=[]
-    const dialogRef = this.dialog.open(LocationsComponent, {
-      width: "80%",
-      height: "80%",
-      direction: "rtl",
-      data: {
 
-      }
-    });
-    dialogRef.afterClosed().subscribe(
-      (data) => {
-        //debugger
-        this.commonService.selctedDateForWorkBook=this.selectedDate;
-       this.commonService.selectedZoneObj=data;
-        this.cleaningForm();
-        this.zoneLocationCharacteristic = data.zoneCharacteristic
-////debugger
-        // this.selectedZoneName = data.namZone;
-        // this.selectedZoneCharacteristic = data.zoneCharacteristic;
-        this.selectedZoneName = data.namLocation;
-        //this.selectedZoneCharacteristic = data.zoneCharacteristic;
-      
-        this.getConfilicts();
-             
-        this.getWorkbookReport(data.locationId)
-        this.getMeasurement(data.locationId)
-        this.locationId = data.locationId
-        // let body = {
-        //   "zoneId": data.locationId
-        // }
-        //به ازای هر مکان داخل ناحیه درخواست به سرور میرود
-        // this.locationsOfZones.FilterListLocationsOfZone(body).subscribe(
-        //   (success) => {
-        //     ////debugger
-        //     this.listLocationsOfZones = success;
-        //     this.getWorkbookReport(success.locationId)
-        //     this.getReportOfChecklists(success.namLocation)
-        //     this.listLocationsOfZones.forEach(eachLocation => {
-        //       // this.getWorkbookReport(eachLocation.locationId)
-        //       // this.getReportOfChecklists(eachLocation.namLocation)
+    this.fullListOfcheckListReport = []
+    this.cleaningForm();
+    this.zoneLocationCharacteristic = this.commonService.selectedZoneObj.zoneCharacteristic
+    this.selectedZoneName = this.commonService.selectedZoneObj.namLocation;
+    this.getConfilicts();
+    this.getWorkbookReport(this.commonService.selectedZoneObj.locationId)
+    this.WasteReport()
+    this.getMeasurement(this.commonService.selectedZoneObj.locationId)
 
-        //     });
-        //   },
-        //   (error) => {
-        //   }
-        // )
-      }
-    )
+    this.locationId = this.commonService.selectedZoneObj.locationId
+
   }
   getWorkbookReport(s_location_id) {
+
     this.fullListOfWorkbookReport = [];
+    this.selectedDate = this.commonService.selctedDateForWorkBook
     if (!this.selectedDate) {
       this.commonService.showEventMessage("ماه را انتخاب کنید")
       this.commonService.loading = false;
@@ -182,42 +152,24 @@ export class WorkbookReportComponent implements OnInit {
     }
     this.commonService.loading = true;
     this.workbokReport.getReport(body).subscribe((success) => {
-      //debugger
       this.listOfWorkbookReport = success;
       this.percentageOfScore(this.listOfWorkbookReport)
       let nam_location_hslocs;
       this.listOfWorkbookReport.forEach(eachIndustrialWaste => {
 
-        if (nam_location_hslocs != eachIndustrialWaste.nam_location_hsloc && eachIndustrialWaste.nam_location_hsloc != null) {
-          this.getReportOfChecklists(eachIndustrialWaste.nam_location_hsloc)
-        }
+        // if (nam_location_hslocs != eachIndustrialWaste.nam_location_hsloc && eachIndustrialWaste.nam_location_hsloc != null) {
+        //   this.getReportOfChecklists(eachIndustrialWaste.nam_location_hsloc)
+        // }
       });
       this.listOfWorkbookReport.forEach(eachWorkbookReportOfUnit => {
         this.fullListOfWorkbookReport.push(eachWorkbookReportOfUnit);
       });
 
-      //this.getReportOfChecklists(data.namLocation)
       this.dataSourceReportindustrialWastePerUnit = new MatTableDataSource(this.averagesOfNam_measur_hemrp);
-      // this.dataSourceChecklistReportPerUnit = new MatTableDataSource(this.averagesOfCheckListReport);
-      //  ////debugger
-      //   ; this.averagesOfNam_measur_hemrp.forEach(rowOfFirstTable => {
-      //     this.averagesOfCheckListReport.forEach(rowOf2ndTable => {
-      //       if (rowOfFirstTable.nam_location_hsloc == rowOf2ndTable.nam_location_hsloc) {
-      //         this.averageMonthlyUnit.push({ loc: rowOf2ndTable.nam_location_hsloc, value: (rowOfFirstTable.coefficientCalculation + rowOf2ndTable.coefficientCalculation) / 4 })
-      //       }
-      //     });
-      //   });
-      //   this.averageMonthlyUnit = this.averageMonthlyUnit.filter((value, index, self) =>
-      //     index === self.findIndex((t) => (
-      //       t.loc === value.loc && t.value === value.value
-      //     ))
-      //   )
-
-      //   this.dataSourceAverageMonthlyUnit = new MatTableDataSource(this.averageMonthlyUnit);
       this.dataSource = new MatTableDataSource(this.fullListOfWorkbookReport);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-      //this.commonService.loading = false;
+
 
     });
 
@@ -227,7 +179,7 @@ export class WorkbookReportComponent implements OnInit {
     const grouped = this.groupBy(WorkbookReportOfUnit, item => item.e_monitor_request_id);
     let groupedIndustrialWaste;
 
-    console.log('grouped22', grouped);
+    //console.log('grouped22', grouped);
     let ratio = 2;
     let totalPercent = 0;
     let average;
@@ -253,38 +205,12 @@ export class WorkbookReportComponent implements OnInit {
         totalPercent = 0
 
       }
-      // if (e_monitor_request_id == item.e_monitor_request_id) {
-      //   totalPercent += item.nam_measur_hemrp
-      //   average = (totalPercent / (length - 1))
 
-      //   // e_monitor_request_id=item.e_monitor_request_id;
-
-      // }
-      // else {
-      //   totalPercent = 0
-      //   e_monitor_request_id = item.e_monitor_request_id;
-      // }
     });
 
 
     if (WorkbookReportOfUnit.length > 0) {
-      // WorkbookReportOfUnit.forEach(eachWorkbookReportOfUnit => {
-      //   eachWorkbookReportOfUnit.nam_measur_hemrp = Number(eachWorkbookReportOfUnit.nam_measur_hemrp)
-      //   totalPercent += eachWorkbookReportOfUnit.nam_measur_hemrp
-      //   //منهای یک چون ردیف اول مقدار اندازه گیری صفر است
-      //   average = (totalPercent / (length - 1))
-      // });
 
-
-      // this.averagesOfNam_measur_hemrp.push({
-      //   score: ((average) * 20) / 100,
-      //   ratio: ratio, nam_location_hsloc: WorkbookReportOfUnit[0].nam_location_hsloc,
-      //   nam_measur_hemrp: WorkbookReportOfUnit[0].e_monitor_request_id,
-      //   average: average,
-      //   coefficientCalculation: ratio * Number(((average) * 20) / 100)
-      // })
-
-      console.log("averagesOfNam_measur_hemrp", this.averagesOfNam_measur_hemrp)
       let summ = 0
       this.averagesOfNam_measur_hemrp.forEach(eachAvegargesOfUnit => {
         summ = eachAvegargesOfUnit.average + summ
@@ -295,193 +221,148 @@ export class WorkbookReportComponent implements OnInit {
           ratio: ratio, type: "ضایعات صنعتی", percentAvg: (summ / this.averagesOfNam_measur_hemrp.length)
         })
       });
-      
-      //مرج کردن آرایه های نمرات واحد های ناحیه
-
-      // var arr1 = this.zoneWithoutMeasurementIndustrialWaste;
-      // var arr2 = this.zoneWithoutMeasurementIndustrialCleaning;
-
-      // if (arr1 == undefined) {
-      //   arr1 = []
-      //   this.commonService.showEventMessage("اطلاعات ضایعات صنعتی برای ماه و ناحیه انتخابی در پایگاه های داده ای موجود نیست")
-      // }
-      // if (arr2 == undefined) {
-      //   arr2 = []
-      //   this.commonService.showEventMessage("اطلاعات نظافت صنعتی برای ماه و ناحیه انتخابی در پایگاه های داده ای موجود نیست")
-
-      // }
-      // if (this.zoneWithoutMeasurementConfilicts == undefined) {
-      //   arr2 = []
-      //   this.commonService.showEventMessage("اطلاعات نظافت صنعتی برای ماه و ناحیه انتخابی در پایگاه های داده ای موجود نیست")
-
-      // }
-      // this.zoneWithoutMeasurement = [...arr1, ...arr2, ...this.zoneWithoutMeasurementConfilicts];
-      // let sumOfRatio = 0
-      // let SumOfCoefficientCalculationZone = 0
-      // this.zoneWithoutMeasurement.forEach(eachParamOfUnit => {
-      //   sumOfRatio = eachParamOfUnit.ratio + sumOfRatio;
-      //   SumOfCoefficientCalculationZone += eachParamOfUnit.coefficientCalculationZone
-      // });
-
-      // this.zoneWithoutMeasurement.push({
-      //   coefficientCalculationZone: SumOfCoefficientCalculationZone,
-      //   scoreZone: "",
-      //   ratio: sumOfRatio, type: "جمع کل", percentAvg: ""
-      // },
-      //   {
-      //     coefficientCalculationZone: SumOfCoefficientCalculationZone / sumOfRatio,
-      //     scoreZone: "",
-      //     ratio: "", type: "معدل ماه", percentAvg: ""
-      //   }
-      // )
-
-      // console.log('sumOfRatio', sumOfRatio)
-      // console.log('SumOfCoefficientCalculationZone', SumOfCoefficientCalculationZone)
-      // console.log(' this.zoneWithoutMeasurement', this.zoneWithoutMeasurement)
-      // this.dataSourceZoneWithoutMeasurement = new MatTableDataSource(this.zoneWithoutMeasurement);
-
 
     }
-
+    console.log(' this.zoneWithoutMeasurementIndustrialWaste2323', this.zoneWithoutMeasurementIndustrialWaste)
   }
-  getReportOfChecklists(namLocation) {
+  // getReportOfChecklists(namLocation) {
 
-    switch (this.selectedDate) {
-      case "01":
-      case "02":
-      case "03":
-      case "04":
-      case "05":
-      case "06":
-        {
-          const body = {
-            namChkHecli: "",
-            namDepartmentHecli: "",
-            namAssessorHsrch: "",
-            namLocationHsrch: namLocation,
-            desQuestionHeclq: "",
-            desOptionHeclo: "",
-            namEvaluationAreaHsrch: "",
-            startdateHsrch: moment(this.m.format('YYYY') + this.selectedDate + "01", 'jYYYY/jM/jD'),
-            enddateHsrch: moment(this.m.format('YYYY') + this.selectedDate + "31", 'jYYYY/jM/jD')
-          }
-          this.serverFilter(body)
-          break
-        }
-      case "07":
-      case "08":
-      case "09":
-      case "10":
-      case "11":
-        {
-          const body = {
-            namChkHecli: "",
-            namDepartmentHecli: "",
-            namAssessorHsrch: "",
-            namLocationHsrch: namLocation,
-            desQuestionHeclq: "",
-            desOptionHeclo: "",
-            namEvaluationAreaHsrch: "",
-            startdateHsrch: moment(this.m.format('YYYY') + this.selectedDate + "01", 'jYYYY/jM/jD'),
-            enddateHsrch: moment(this.m.format('YYYY') + this.selectedDate + "30", 'jYYYY/jM/jD')
-          }
-          this.serverFilter(body)
-          break;
-        }
-      case "12": {
-        const body = {
-          namChkHecli: "",
-          namDepartmentHecli: "",
-          namAssessorHsrch: "",
-          namLocationHsrch: namLocation,
-          desQuestionHeclq: "",
-          desOptionHeclo: "",
-          namEvaluationAreaHsrch: "",
-          startdateHsrch: moment(this.m.format('YYYY') + this.selectedDate + "01", 'jYYYY/jM/jD'),
-          enddateHsrch: moment(this.m.format('YYYY') + this.selectedDate + "29", 'jYYYY/jM/jD')
-        }
-        this.serverFilter(body)
-        break;
-      }
-        break;
+  //   switch (this.selectedDate) {
+  //     case "01":
+  //     case "02":
+  //     case "03":
+  //     case "04":
+  //     case "05":
+  //     case "06":
+  //       {
+  //         const body = {
+  //           namChkHecli: "",
+  //           namDepartmentHecli: "",
+  //           namAssessorHsrch: "",
+  //           namLocationHsrch: namLocation,
+  //           desQuestionHeclq: "",
+  //           desOptionHeclo: "",
+  //           namEvaluationAreaHsrch: "",
+  //           startdateHsrch: moment(this.m.format('YYYY') + this.selectedDate + "01", 'jYYYY/jM/jD'),
+  //           enddateHsrch: moment(this.m.format('YYYY') + this.selectedDate + "31", 'jYYYY/jM/jD')
+  //         }
+  //         this.serverFilter(body)
+  //         break
+  //       }
+  //     case "07":
+  //     case "08":
+  //     case "09":
+  //     case "10":
+  //     case "11":
+  //       {
+  //         const body = {
+  //           namChkHecli: "",
+  //           namDepartmentHecli: "",
+  //           namAssessorHsrch: "",
+  //           namLocationHsrch: namLocation,
+  //           desQuestionHeclq: "",
+  //           desOptionHeclo: "",
+  //           namEvaluationAreaHsrch: "",
+  //           startdateHsrch: moment(this.m.format('YYYY') + this.selectedDate + "01", 'jYYYY/jM/jD'),
+  //           enddateHsrch: moment(this.m.format('YYYY') + this.selectedDate + "30", 'jYYYY/jM/jD')
+  //         }
+  //         this.serverFilter(body)
+  //         break;
+  //       }
+  //     case "12": {
+  //       const body = {
+  //         namChkHecli: "",
+  //         namDepartmentHecli: "",
+  //         namAssessorHsrch: "",
+  //         namLocationHsrch: namLocation,
+  //         desQuestionHeclq: "",
+  //         desOptionHeclo: "",
+  //         namEvaluationAreaHsrch: "",
+  //         startdateHsrch: moment(this.m.format('YYYY') + this.selectedDate + "01", 'jYYYY/jM/jD'),
+  //         enddateHsrch: moment(this.m.format('YYYY') + this.selectedDate + "29", 'jYYYY/jM/jD')
+  //       }
+  //       this.serverFilter(body)
+  //       break;
+  //     }
+  //       break;
 
-    }
-
-
-  }
-  serverFilter(body) {
-    this.commonService.loading = true;
-    this.checklistAssesmentService.filterListOfChecklistReport(body).subscribe((success) => {
-      console.log('success', success)
-      this.listOfcheckListReport = success;
-      this.PercentageOfOptions(this.listOfcheckListReport)
-      this.listOfcheckListReport.forEach(eachCheckListReportOfUnit => {
-        this.fullListOfcheckListReport.push(eachCheckListReportOfUnit);
-        if (eachCheckListReportOfUnit.desExplainQuestionHscha) {
-          this.weakPoint += " - " + eachCheckListReportOfUnit.desExplainQuestionHscha
-        }
-      });
-      console.log('MhdfullListOfcheckListReport', this.fullListOfcheckListReport)
-      this.dataSourceChecklistReport = new MatTableDataSource(this.fullListOfcheckListReport);
+  //   }
 
 
+  // }
+  // serverFilter(body) {
+  //   this.commonService.loading = true;
+  //   this.checklistAssesmentService.filterListOfChecklistReport(body).subscribe((success) => {
+  //     //console.log('success', success)
+  //     this.listOfcheckListReport = success;
+  //     this.PercentageOfOptions(this.listOfcheckListReport)
+  //     this.listOfcheckListReport.forEach(eachCheckListReportOfUnit => {
+  //       this.fullListOfcheckListReport.push(eachCheckListReportOfUnit);
+  //       if (eachCheckListReportOfUnit.desExplainQuestionHscha) {
+  //         this.weakPoint += " - " + eachCheckListReportOfUnit.desExplainQuestionHscha
+  //       }
+  //     });
+  //     //console.log('MhdfullListOfcheckListReport', this.fullListOfcheckListReport)
+  //     this.dataSourceChecklistReport = new MatTableDataSource(this.fullListOfcheckListReport);
 
 
-    })
-  }
-  PercentageOfOptions(data) {
-    // ////debugger
-    if (data.length > 0) {
-      let optionsText = [];
-      let ratio = 2
 
-      data.forEach(eachRowOfReport => {
-        optionsText.push(eachRowOfReport['desOptionHeclo'])
 
-      }); console.log('optionsText', optionsText)
+  //   })
+  // }
+  // PercentageOfOptions(data) {
+  //   // debugger
+  //   if (data.length > 0) {
+  //     let optionsText = [];
+  //     let ratio = 2
 
-      var counts = {};
+  //     data.forEach(eachRowOfReport => {
+  //       optionsText.push(eachRowOfReport['desOptionHeclo'])
 
-      for (var i = 0; i < optionsText.length; i++) {
-        if (!counts.hasOwnProperty(optionsText[i] = optionsText[i])) {
-          counts[optionsText[i]] = 1;
-        }
-        else {
-          counts[optionsText[i]]++;
-        }
-      }
-      console.log('counts', counts);
-      this.counts = JSON.stringify(counts)
-      let sum = Object.keys(counts).reduce((s, k) => s += counts[k], 0);
-      this.percentage = Object.keys(counts).map(k => ({ [k]: + (counts[k] / sum * 100).toFixed(2) }));
-      console.log('nini', this.percentage);
-      if (data[0]) {
+  //     }); //console.log('optionsText', optionsText)
 
-        this.averagesOfCheckListReport.push({
-          average: (counts['مطلوب'] / optionsText.length) * 100,
-          nam_location_hsloc: data[0]['namLocationHsrch'],
-          nam_measur_hemrp: 0,
-          score: (((counts['مطلوب'] / optionsText.length) * 100) * 20) / 100,
-          ratio: ratio,
-          coefficientCalculation: ratio * Number((((counts['مطلوب'] / optionsText.length) * 100) * 20) / 100)
-        })
-        this.dataSourceChecklistReportPerUnit = new MatTableDataSource(this.averagesOfCheckListReport);
-        this.calcAvgOfUnitsWithWasteAndClean()
-      }
-      //پیدا کردن میانگین در صدها برای در آوردن نمره ناحیه
-      let summ = 0
-      this.averagesOfCheckListReport.forEach(eachAvegargesOfUnit => {
-        summ = eachAvegargesOfUnit.average + summ
-        this.zoneWithoutMeasurementIndustrialCleaning = [];
-        this.zoneWithoutMeasurementIndustrialCleaning.push({
-          coefficientCalculationZone: (((summ / this.averagesOfCheckListReport.length) * 20) / 100) * ratio,
-          scoreZone: (((summ / this.averagesOfCheckListReport.length) * 20) / 100),
-          ratio: ratio, type: "نظافت صنعتی", percentAvg: (summ / this.averagesOfCheckListReport.length)
-        })
-      });
-      this.mergeWateAndCleaning()
-    }
-  }
+  //     var counts = {};
+
+  //     for (var i = 0; i < optionsText.length; i++) {
+  //       if (!counts.hasOwnProperty(optionsText[i] = optionsText[i])) {
+  //         counts[optionsText[i]] = 1;
+  //       }
+  //       else {
+  //         counts[optionsText[i]]++;
+  //       }
+  //     }
+  //     //console.log('counts', counts);
+  //     this.counts = JSON.stringify(counts)
+  //     let sum = Object.keys(counts).reduce((s, k) => s += counts[k], 0);
+  //     this.percentage = Object.keys(counts).map(k => ({ [k]: + (counts[k] / sum * 100).toFixed(2) }));
+  //     //console.log('nini', this.percentage);
+  //     if (data[0]) {
+
+  //       this.averagesOfCheckListReport.push({
+  //         average: (counts['مطلوب'] / optionsText.length) * 100,
+  //         nam_location_hsloc: data[0]['namLocationHsrch'],
+  //         nam_measur_hemrp: 0,
+  //         score: (((counts['مطلوب'] / optionsText.length) * 100) * 20) / 100,
+  //         ratio: ratio,
+  //         coefficientCalculation: ratio * Number((((counts['مطلوب'] / optionsText.length) * 100) * 20) / 100)
+  //       })
+  //       this.dataSourceChecklistReportPerUnit = new MatTableDataSource(this.averagesOfCheckListReport);
+  //       this.calcAvgOfUnitsWithWasteAndClean()
+  //     }
+  //     //پیدا کردن میانگین در صدها برای در آوردن نمره ناحیه
+  //     let summ = 0
+  //     this.averagesOfCheckListReport.forEach(eachAvegargesOfUnit => {
+  //       summ = eachAvegargesOfUnit.average + summ
+  //       this.zoneWithoutMeasurementIndustrialCleaning = [];
+  //       this.zoneWithoutMeasurementIndustrialCleaning.push({
+  //         coefficientCalculationZone: (((summ / this.averagesOfCheckListReport.length) * 20) / 100) * ratio,
+  //         scoreZone: (((summ / this.averagesOfCheckListReport.length) * 20) / 100),
+  //         ratio: ratio, type: "نظافت صنعتی", percentAvg: (summ / this.averagesOfCheckListReport.length)
+  //       })
+  //     });
+  //     this.mergeWateAndCleaning()
+  //   }
+  // }
   getConfilicts() {
     this.selectedDate
     const now = new Date();
@@ -493,7 +374,7 @@ export class WorkbookReportComponent implements OnInit {
     let body = {
       "dat_Date": date
     }
-    //////debugger
+    //debugger
     this.selectedZoneCharacteristic = this.zoneLocationCharacteristic
     this.commonService.loading = true;
     this.workbokReport.getConfilicts(body).subscribe((success) => {
@@ -516,10 +397,10 @@ export class WorkbookReportComponent implements OnInit {
       if (this.zoneWithMeasurement.length > 0) {
         ratio = 7;
       }
-       else{
-      ratio = 4;
+      else {
+        ratio = 4;
       }
-////debugger
+      debugger
       this.zoneWithoutMeasurementConfilicts = [];
       this.zoneWithoutMeasurementConfilicts.push({
         coefficientCalculationZone: ((((this.countAllOfConfilicts - this.listOfConfilicts.length) / this.countAllOfConfilicts) * 100 * 20) / 100) * ratio,
@@ -529,10 +410,10 @@ export class WorkbookReportComponent implements OnInit {
 
 
       this.dataSourceConfilicts = new MatTableDataSource(this.listOfConfilicts);
-     // this.commonService.loading = false;
-
-      console.log('countAllOfConfilicts', this.countAllOfConfilicts)
-      console.log('listOfConfilicts', this.listOfConfilicts)
+      // this.commonService.loading = false;
+      this.mergeWateAndCleaning();
+      //console.log('countAllOfConfilicts', this.countAllOfConfilicts)
+      //console.log('listOfConfilicts', this.listOfConfilicts)
     })
 
   }
@@ -613,31 +494,18 @@ export class WorkbookReportComponent implements OnInit {
     var arr1 = this.zoneWithoutMeasurementIndustrialWaste;
     var arr2 = this.zoneWithoutMeasurementIndustrialCleaning;
 
-    if (arr1 == undefined) {
-      arr1 = []
-      this.commonService.showEventMessage("اطلاعات ضایعات صنعتی برای ماه و ناحیه انتخابی در پایگاه های داده ای موجود نیست")
-    }
-    if (arr2 == undefined) {
-      arr2 = []
-      this.commonService.showEventMessage("اطلاعات نظافت صنعتی برای ماه و ناحیه انتخابی در پایگاه های داده ای موجود نیست")
 
-    }
-    if (this.zoneWithoutMeasurementConfilicts == undefined) {
-      arr2 = []
-      this.commonService.showEventMessage("اطلاعات نظافت صنعتی برای ماه و ناحیه انتخابی در پایگاه های داده ای موجود نیست")
-
-    }
 
     if (!this.zoneWithMeasurement || this.zoneWithMeasurement.length == 0) {
       this.zoneWithoutMeasurementConfilicts[0].ratio = 4
-      this.zoneWithoutMeasurement = [...arr1, ...arr2, ...this.zoneWithoutMeasurementConfilicts];
+      this.zoneWithoutMeasurement = [...arr1, ...arr2, ...this.wasteReportAverage, ...this.zoneWithoutMeasurementConfilicts];
     }
     else {
-      ////debugger;
-  
+      // debugger;
+
       this.zoneWithoutMeasurementConfilicts[0].ratio = 7;
-      this.zoneWithoutMeasurementConfilicts[0].coefficientCalculationZone=( ((this.zoneWithoutMeasurementConfilicts[0].coefficientCalculationZone)/4)*7)
-      this.zoneWithoutMeasurement = [...arr1, ...arr2, ...this.zoneWithoutMeasurementConfilicts, ...this.zoneWithMeasurement];
+      this.zoneWithoutMeasurementConfilicts[0].coefficientCalculationZone = (((this.zoneWithoutMeasurementConfilicts[0].coefficientCalculationZone) / 4) * 7)
+      this.zoneWithoutMeasurement = [...arr1, ...arr2, ...this.wasteReportAverage, ...this.zoneWithoutMeasurementConfilicts, ...this.zoneWithMeasurement];
 
     }
 
@@ -660,16 +528,14 @@ export class WorkbookReportComponent implements OnInit {
       }
     )
 
-    console.log('sumOfRatio', sumOfRatio)
-    console.log('SumOfCoefficientCalculationZone', SumOfCoefficientCalculationZone)
-    console.log(' this.zoneWithoutMeasurement', this.zoneWithoutMeasurement)
+    //console.log('sumOfRatio', sumOfRatio)
+    //console.log('SumOfCoefficientCalculationZone', SumOfCoefficientCalculationZone)
+    //console.log(' this.zoneWithoutMeasurement', this.zoneWithoutMeasurement)
     this.dataSourceZoneWithoutMeasurement = new MatTableDataSource(this.zoneWithoutMeasurement);
 
 
   }
   calcAvgOfUnitsWithWasteAndClean() {
-    //  ////debugger
-   
 
     ; this.averagesOfNam_measur_hemrp.forEach(rowOfFirstTable => {
       this.averagesOfCheckListReport.forEach(rowOf2ndTable => {
@@ -687,7 +553,7 @@ export class WorkbookReportComponent implements OnInit {
     this.dataSourceAverageMonthlyUnit = new MatTableDataSource(this.averageMonthlyUnit);
   }
   getMeasurement(s_location_id) {
-    this.commonService.loading=true;
+    this.commonService.loading = true;
     this.fullListOfMeasurement = [];
     let bodyGas = {
       s_location_id: s_location_id,
@@ -719,7 +585,6 @@ export class WorkbookReportComponent implements OnInit {
       });
       this.workbokReport.getReport(bodyDust).subscribe((success) => {
         this.listOfDustMeasurement = success;
-        //this.PercentageOfMeasurement(this.listOfDustMeasurement)
         this.listOfDustMeasurement.forEach(items => {
           this.fullListOfMeasurement.push(items);
         });
@@ -732,16 +597,11 @@ export class WorkbookReportComponent implements OnInit {
           });
           this.PercentageOfMeasurement(this.fullListOfMeasurement)
           this.dataSourceReportMeasurement = new MatTableDataSource(this.fullListOfMeasurement);
-          this.commonService.loading=false;
+          this.commonService.loading = false;
         });
 
 
       });
-
-
-      // this.dataSource.paginator = this.paginator;
-      // this.dataSource.sort = this.sort;
-     // this.commonService.loading = false;
 
     });
 
@@ -753,9 +613,7 @@ export class WorkbookReportComponent implements OnInit {
         element['flg_abssence'] = ""
       }
     });
-    // data[0]['flg_abssence'] = "*";
 
-    // ////debugger
     if (data.length > 0) {
       let optionsText = [];
       let ratio = 3
@@ -763,7 +621,7 @@ export class WorkbookReportComponent implements OnInit {
       data.forEach(eachRowOfReport => {
         optionsText.push(eachRowOfReport['flg_abssence'])
 
-      }); console.log('optionsText', optionsText)
+      }); //console.log('optionsText', optionsText)
 
       var counts = {};
 
@@ -775,11 +633,11 @@ export class WorkbookReportComponent implements OnInit {
           counts[optionsText[i]]++;
         }
       }
-      console.log('counts', counts);
+      //console.log('counts', counts);
       this.counts = JSON.stringify(counts)
       let sum = Object.keys(counts).reduce((s, k) => s += counts[k], 0);
       this.percentage = Object.keys(counts).map(k => ({ [k]: + (counts[k] / sum * 100).toFixed(2) }));
-      console.log('open', this.percentage);
+      //console.log('open', this.percentage);
       //this.mergeWateAndCleaning()
       if (data[0]) {
         this.zoneWithMeasurement = [];
@@ -789,43 +647,21 @@ export class WorkbookReportComponent implements OnInit {
           ratio: ratio, type: "اندازه گیری", percentAvg: (counts[""] / optionsText.length) * 100,
         })
         this.mergeWateAndCleaning()
-        //       this.averagesOfCheckListReport.push({
-        //         average: (counts['مطلوب'] / optionsText.length) * 100,
-        //         nam_location_hsloc: data[0]['namLocationHsrch'],
-        //         nam_measur_hemrp: 0,
-        //         score: (((counts['مطلوب'] / optionsText.length) * 100) * 20) / 100,
-        //         ratio: ratio,
-        //         coefficientCalculation: ratio * Number((((counts['مطلوب'] / optionsText.length) * 100) * 20) / 100)
-        //       })
-        //       this.dataSourceChecklistReportPerUnit = new MatTableDataSource(this.averagesOfCheckListReport);
-        //       this.calcAvgOfUnitsWithWasteAndClean()
-        //     }
-        //     //پیدا کردن میانگین در صدها برای در آوردن نمره ناحیه
-        //     let summ = 0
-        //     this.averagesOfCheckListReport.forEach(eachAvegargesOfUnit => {
-        //       summ = eachAvegargesOfUnit.average + summ
-        //       this.zoneWithoutMeasurementIndustrialCleaning = [];
-        //       this.zoneWithoutMeasurementIndustrialCleaning.push({
-        //         coefficientCalculationZone: (((summ / this.averagesOfCheckListReport.length) * 20) / 100) * ratio,
-        //         scoreZone: (((summ / this.averagesOfCheckListReport.length) * 20) / 100),
-        //         ratio: ratio, type: "نظافت صنعتی", percentAvg: (summ / this.averagesOfCheckListReport.length)
-        //       })
-        //     });
-        //
-      }     //
+
+      }
     }
   }
-  cleaningForm(){
-    
-this.dataSource=undefined
-this.dataSourceAverageMonthlyUnit=undefined;
-this.dataSourceChecklistReportPerUnit=undefined;
-this.dataSourceReportMeasurement=undefined;
-this.dataSourceChecklistReport=undefined
-this.dataSourceZoneWithoutMeasurement=undefined
+  cleaningForm() {
 
-    this.zoneWithoutMeasurementIndustrialCleaning=[]
-   
+    this.dataSource = undefined
+    this.dataSourceAverageMonthlyUnit = undefined;
+    this.dataSourceChecklistReportPerUnit = undefined;
+    this.dataSourceReportMeasurement = undefined;
+    this.dataSourceChecklistReport = undefined
+    this.dataSourceZoneWithoutMeasurement = undefined
+    this.wasteReportAverage = [];
+    this.zoneWithoutMeasurementIndustrialCleaning = []
+    this.fullListOfWasteReport = [];
     this.fullListOfWorkbookReport = [];
     this.averagesOfNam_measur_hemrp = [];
     this.averagesOfCheckListReport = [];
@@ -843,6 +679,68 @@ this.dataSourceZoneWithoutMeasurement=undefined
     this.zoneWithoutMeasurement = [];
     this.zoneWithMeasurement = [];
     this.listOfConfilicts = [];
+  }
+  //گزارش پسماند
+  WasteReport() {
+    // debugger
+    this.commonService.loading = true;
+    this.fullListOfWorkbookReport = [];
+    this.selectedDate = this.commonService.selctedDateForWorkBook
+    if (!this.selectedDate) {
+      this.commonService.showEventMessage("ماه را انتخاب کنید")
+      this.commonService.loading = false;
+      return
+    }
+    let body = {
+      s_location_id: 1,
+      dat_request_hemre_jalali: this.m.format('YYYY') + this.selectedDate,
+      LKP_TYP_EXIT: 6,
+      lkp_typ_exam: 13
+    }
+    let sumOfNam_measur_hemrp: number = 0
+    let avrageOfNam_measur_hemrp: number = 0
+    this.commonService.loading = true;
+    this.workbokReport.getReport(body).subscribe((success) => {
+      this.listOfWasteReport = success;
+      this.percentageOfScore(this.listOfWasteReport)
+      success.forEach(eachWorkbookReportOfUnit => {
+        if (eachWorkbookReportOfUnit.nam_param_hemop == "حمل به موقع ضایعات") {
+          this.fullListOfWasteReport.push(eachWorkbookReportOfUnit);
+          sumOfNam_measur_hemrp += Number(eachWorkbookReportOfUnit.nam_measur_hemrp)
+        }
+      });
+      avrageOfNam_measur_hemrp = (sumOfNam_measur_hemrp) / (this.fullListOfWasteReport.length);
+      console.log('sumOfNam_measur_hemrp', sumOfNam_measur_hemrp);
+      console.log('avrageOfNam_measur_hemrp', avrageOfNam_measur_hemrp);
+      console.log('this.listOfWasteReport.length', this.fullListOfWasteReport.length);
+      //برای پیدا کردن نام مکان ها
+      this.fullListOfWasteReport.forEach(eachWasteReport => {
+        this.listOfWasteReport.forEach(item => {
+          if (item.s_location_id == eachWasteReport.s_location_id) {
+            if (item.nam_location_hsloc != null) {
+              eachWasteReport.nam_location_hsloc = item.nam_location_hsloc
+
+              //console.log('fullListOfWasteReport2', this.fullListOfWasteReport);
+            }
+          }
+        });
+      });
+
+      this.wasteReportAverage.push({
+        coefficientCalculationZone: (((avrageOfNam_measur_hemrp) * 20) / 100) * 2,
+        scoreZone: (((avrageOfNam_measur_hemrp) * 20) / 100),
+        ratio: 2, type: "حمل ضایعات", percentAvg: avrageOfNam_measur_hemrp,
+       
+      }
+      )
+
+      this.mergeWateAndCleaning()
+      this.dataSourceWasteReport = new MatTableDataSource(this.fullListOfWasteReport);
+      this.commonService.loading = false;
+
+    });
+
+
   }
 
 }

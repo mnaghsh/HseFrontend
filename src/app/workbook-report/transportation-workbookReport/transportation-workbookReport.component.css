@@ -1,0 +1,15 @@
+.example-container  {
+    padding: 1%;
+    
+    }
+    .titleOfWorkBook{
+        padding-right: 10%;font-weight: 900;
+    }
+    mat-card-header{
+        background-color: #794c7454;
+        height: 30px;
+    }
+    .weakPoint{
+        background-color: #dc3545;
+    }
+    

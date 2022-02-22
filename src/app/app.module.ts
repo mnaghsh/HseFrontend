@@ -33,6 +33,7 @@ import { JalaliPipe } from 'src/pipes/jalali.pipe';
 import { TypesOfFoodComponent } from './food-inspection/types-of-food/types-of-food.component';
 import { foodManufacturesComponent } from './food-inspection/food-manufactures/food-manufactures.component';
 import { FoodInspectionComponent } from './food-inspection/food-inspection/food-inspection.component';
+import { transportationWorkbookReportComponent } from './workbook-report/transportation-workbookReport/transportation-workbookReport.component';
 ;
 
 
@@ -89,7 +90,8 @@ const myRoots: Routes = [
     WorkbookReportComponent,
     TypesOfFoodComponent,
     foodManufacturesComponent,
-    FoodInspectionComponent
+    FoodInspectionComponent,
+    transportationWorkbookReportComponent
 
   ],
   imports: [
@@ -109,6 +111,9 @@ const myRoots: Routes = [
 
     BrowserAnimationsModule,
   ],
+  // entryComponents: [
+  // ],
+
 
 
   providers: [

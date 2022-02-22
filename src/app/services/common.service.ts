@@ -35,6 +35,8 @@ export class CommonService {
   ListOfcheckLists: any;
   repeatGetChecklist: boolean;
   fullName="محمد نقش"
+  selectedZoneObj: any;
+  selctedDateForWorkBook: any;
   constructor(private snackBar: MatSnackBar,) { }
   showEventMessage(message, duration = 3000, type?) {
 
