@@ -37,7 +37,7 @@ export class WorkbookReportComponent implements OnInit {
     'desQuestionHeclq', 'desOptionHeclo', 'desExplainQuestionHscha', 'requestDateJalaliHsrch',
     'namAssessorHsrch', 'namLocationHsrch', 'unitCehckListsHecli', 'namDepartmentHecli', 'namEvaluationAreaHsrch'];
   displayedColumnsZoneWithoutMeasurement = ['type', 'ratio', 'percentAvg', 'scoreZone', 'coefficientCalculationZone'];
-  displayedColumnsConfilicts = ['number', 'entityNumber', 'dat_Date', 'lastRound', 'contradiction1', 'contradiction2', 'ustr_KomiteName','str_MoghayeratDescA'];
+  displayedColumnsConfilicts = ['number', 'entityNumber', 'dat_Date', 'lastRound', 'contradiction1', 'contradiction2', 'ustr_KomiteName', 'str_MoghayeratDescA'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -115,10 +115,10 @@ export class WorkbookReportComponent implements OnInit {
     this.m = moment();
     this.m.locale('fa');
     this.cleaningForm();
- // }
+    // }
   }
   selectZones(row?) {
-    this.fullListOfcheckListReport=[]
+    this.fullListOfcheckListReport = []
     const dialogRef = this.dialog.open(LocationsComponent, {
       width: "80%",
       height: "80%",
@@ -130,18 +130,17 @@ export class WorkbookReportComponent implements OnInit {
     dialogRef.afterClosed().subscribe(
       (data) => {
         //debugger
-        this.commonService.selctedDateForWorkBook=this.selectedDate;
-       this.commonService.selectedZoneObj=data;
+        this.commonService.selctedDateForWorkBook = this.selectedDate;
+        this.commonService.selectedZoneObj = data;
         this.cleaningForm();
         this.zoneLocationCharacteristic = data.zoneCharacteristic
-////debugger
+        ////debugger
         // this.selectedZoneName = data.namZone;
         // this.selectedZoneCharacteristic = data.zoneCharacteristic;
         this.selectedZoneName = data.namLocation;
         //this.selectedZoneCharacteristic = data.zoneCharacteristic;
-      
+
         this.getConfilicts();
-             
         this.getWorkbookReport(data.locationId)
         this.getMeasurement(data.locationId)
         this.locationId = data.locationId
@@ -183,6 +182,7 @@ export class WorkbookReportComponent implements OnInit {
     this.commonService.loading = true;
     this.workbokReport.getReport(body).subscribe((success) => {
       //debugger
+
       this.listOfWorkbookReport = success;
       this.percentageOfScore(this.listOfWorkbookReport)
       let nam_location_hslocs;
@@ -225,8 +225,6 @@ export class WorkbookReportComponent implements OnInit {
   }
   percentageOfScore(WorkbookReportOfUnit) {
     const grouped = this.groupBy(WorkbookReportOfUnit, item => item.e_monitor_request_id);
-    let groupedIndustrialWaste;
-
     console.log('grouped22', grouped);
     let ratio = 2;
     let totalPercent = 0;
@@ -295,7 +293,7 @@ export class WorkbookReportComponent implements OnInit {
           ratio: ratio, type: "ضایعات صنعتی", percentAvg: (summ / this.averagesOfNam_measur_hemrp.length)
         })
       });
-      
+
       //مرج کردن آرایه های نمرات واحد های ناحیه
 
       // var arr1 = this.zoneWithoutMeasurementIndustrialWaste;
@@ -516,10 +514,10 @@ export class WorkbookReportComponent implements OnInit {
       if (this.zoneWithMeasurement.length > 0) {
         ratio = 7;
       }
-       else{
-      ratio = 4;
+      else {
+        ratio = 4;
       }
-////debugger
+      ////debugger
       this.zoneWithoutMeasurementConfilicts = [];
       this.zoneWithoutMeasurementConfilicts.push({
         coefficientCalculationZone: ((((this.countAllOfConfilicts - this.listOfConfilicts.length) / this.countAllOfConfilicts) * 100 * 20) / 100) * ratio,
@@ -529,7 +527,7 @@ export class WorkbookReportComponent implements OnInit {
 
 
       this.dataSourceConfilicts = new MatTableDataSource(this.listOfConfilicts);
-     // this.commonService.loading = false;
+      // this.commonService.loading = false;
 
       console.log('countAllOfConfilicts', this.countAllOfConfilicts)
       console.log('listOfConfilicts', this.listOfConfilicts)
@@ -634,9 +632,9 @@ export class WorkbookReportComponent implements OnInit {
     }
     else {
       ////debugger;
-  
+
       this.zoneWithoutMeasurementConfilicts[0].ratio = 7;
-      this.zoneWithoutMeasurementConfilicts[0].coefficientCalculationZone=( ((this.zoneWithoutMeasurementConfilicts[0].coefficientCalculationZone)/4)*7)
+      this.zoneWithoutMeasurementConfilicts[0].coefficientCalculationZone = (((this.zoneWithoutMeasurementConfilicts[0].coefficientCalculationZone) / 4) * 7)
       this.zoneWithoutMeasurement = [...arr1, ...arr2, ...this.zoneWithoutMeasurementConfilicts, ...this.zoneWithMeasurement];
 
     }
@@ -669,7 +667,7 @@ export class WorkbookReportComponent implements OnInit {
   }
   calcAvgOfUnitsWithWasteAndClean() {
     //  ////debugger
-   
+
 
     ; this.averagesOfNam_measur_hemrp.forEach(rowOfFirstTable => {
       this.averagesOfCheckListReport.forEach(rowOf2ndTable => {
@@ -687,7 +685,7 @@ export class WorkbookReportComponent implements OnInit {
     this.dataSourceAverageMonthlyUnit = new MatTableDataSource(this.averageMonthlyUnit);
   }
   getMeasurement(s_location_id) {
-    this.commonService.loading=true;
+    this.commonService.loading = true;
     this.fullListOfMeasurement = [];
     let bodyGas = {
       s_location_id: s_location_id,
@@ -731,8 +729,11 @@ export class WorkbookReportComponent implements OnInit {
             this.fullListOfMeasurement.push(items);
           });
           this.PercentageOfMeasurement(this.fullListOfMeasurement)
+          if (this.selectedZoneName == "انرژی و سیالات") {
+            this.getNrtReport()
+          }
           this.dataSourceReportMeasurement = new MatTableDataSource(this.fullListOfMeasurement);
-          this.commonService.loading=false;
+          this.commonService.loading = false;
         });
 
 
@@ -741,7 +742,7 @@ export class WorkbookReportComponent implements OnInit {
 
       // this.dataSource.paginator = this.paginator;
       // this.dataSource.sort = this.sort;
-     // this.commonService.loading = false;
+      // this.commonService.loading = false;
 
     });
 
@@ -753,9 +754,6 @@ export class WorkbookReportComponent implements OnInit {
         element['flg_abssence'] = ""
       }
     });
-    // data[0]['flg_abssence'] = "*";
-
-    // ////debugger
     if (data.length > 0) {
       let optionsText = [];
       let ratio = 3
@@ -815,17 +813,17 @@ export class WorkbookReportComponent implements OnInit {
       }     //
     }
   }
-  cleaningForm(){
-    
-this.dataSource=undefined
-this.dataSourceAverageMonthlyUnit=undefined;
-this.dataSourceChecklistReportPerUnit=undefined;
-this.dataSourceReportMeasurement=undefined;
-this.dataSourceChecklistReport=undefined
-this.dataSourceZoneWithoutMeasurement=undefined
+  cleaningForm() {
 
-    this.zoneWithoutMeasurementIndustrialCleaning=[]
-   
+    this.dataSource = undefined
+    this.dataSourceAverageMonthlyUnit = undefined;
+    this.dataSourceChecklistReportPerUnit = undefined;
+    this.dataSourceReportMeasurement = undefined;
+    this.dataSourceChecklistReport = undefined
+    this.dataSourceZoneWithoutMeasurement = undefined
+
+    this.zoneWithoutMeasurementIndustrialCleaning = []
+
     this.fullListOfWorkbookReport = [];
     this.averagesOfNam_measur_hemrp = [];
     this.averagesOfCheckListReport = [];
@@ -844,6 +842,23 @@ this.dataSourceZoneWithoutMeasurement=undefined
     this.zoneWithMeasurement = [];
     this.listOfConfilicts = [];
   }
+  getNrtReport() {
+
+    let body = {
+      dat: this.m.format('YYYY') + this.selectedDate,
+    }
+    this.commonService.loading = true;
+    this.workbokReport.getNrt(body).subscribe((success) => {
+      this.commonService.loading = false;
+      console.log("nrt", success)
+    })
+      , (error) => {
+        this.commonService.loading = false;
+        this.commonService.showEventMessage("وب سرویس آزمایشگاه های غیر روتین پاسخگو نیست")
+      };
+
+  }
+
 
 }
 
