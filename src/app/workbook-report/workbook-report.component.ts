@@ -851,6 +851,7 @@ export class WorkbookReportComponent implements OnInit {
     this.workbokReport.getNrt(body).subscribe((success) => {
       this.commonService.loading = false;
       console.log("nrt", success)
+      this.PercentageOfNrt(success)
     })
       , (error) => {
         this.commonService.loading = false;
@@ -859,6 +860,58 @@ export class WorkbookReportComponent implements OnInit {
 
   }
 
+  PercentageOfNrt(data) {
+    // ////debugger
+    if (data.length > 0) {
+      let optionsText = [];
+     // let ratio = 2
+
+      data.forEach(eachRowOfReport => {
+        optionsText.push(eachRowOfReport['in_range'])
+
+      }); console.log('optionsText', optionsText)
+
+      var counts = {};
+
+      for (var i = 0; i < optionsText.length; i++) {
+        if (!counts.hasOwnProperty(optionsText[i] = optionsText[i])) {
+          counts[optionsText[i]] = 1;
+        }
+        else {
+          counts[optionsText[i]]++;
+        }
+      }
+      console.log('countsNrt', counts);
+      //this.counts = JSON.stringify(counts)
+      let nrtResult=(counts['1']/(counts['1']+counts['0']))
+      console.log('nrtResult', nrtResult);
+      // if (data[0]) {
+
+      //   this.averagesOfCheckListReport.push({
+      //     average: (counts[1] / optionsText.length) * 100,
+      //     nam_location_hsloc: data[0]['namLocationHsrch'],
+      //     nam_measur_hemrp: 0,
+      //     score: (((counts['مطلوب'] / optionsText.length) * 100) * 20) / 100,
+      //     ratio: ratio,
+      //     coefficientCalculation: ratio * Number((((counts['مطلوب'] / optionsText.length) * 100) * 20) / 100)
+      //   })
+      //   this.dataSourceChecklistReportPerUnit = new MatTableDataSource(this.averagesOfCheckListReport);
+      //   this.calcAvgOfUnitsWithWasteAndClean()
+      // }
+      // //پیدا کردن میانگین در صدها برای در آوردن نمره ناحیه
+      // // let summ = 0
+      // this.percentage.forEach(eachAvegargesOfUnit => {
+      //   summ = eachAvegargesOfUnit.average + summ
+      //   this.zoneWithoutMeasurementIndustrialCleaning = [];
+      //   this.zoneWithoutMeasurementIndustrialCleaning.push({
+      //     coefficientCalculationZone: (((summ / this.averagesOfCheckListReport.length) * 20) / 100) * ratio,
+      //     scoreZone: (((summ / this.averagesOfCheckListReport.length) * 20) / 100),
+      //     ratio: ratio, type: "نظافت صنعتی", percentAvg: (summ / this.averagesOfCheckListReport.length)
+      //   })
+      // });
+      // this.mergeWateAndCleaning()
+    }
+  }
 
 }
 

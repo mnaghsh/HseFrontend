@@ -5,9 +5,9 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
   providedIn: 'root'
 })
 export class ConfigService {
-baseUrl = 'https://localhost:44377/api/'
-//baseUrl = 'http://93.126.21.21:8082/api/'
-//baseUrl="http://localhost/serverWorkbook/api/"
+//baseUrl = 'https://localhost:44377/api/'
+//baseUrl = 'http://93.126.21.21:7273/api/'
+baseUrl="http://192.168.18.117/server/api/"
 
 
   constructor(public http: HttpClient) {
@@ -28,7 +28,5 @@ baseUrl = 'https://localhost:44377/api/'
   public put(url: string, body, options?: any) {
     return this.http.put(this.baseUrl + url, body, options);
   }
-
-
 
 }
