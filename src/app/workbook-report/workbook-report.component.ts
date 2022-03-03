@@ -22,10 +22,10 @@ import { LocationsComponent } from '../utils/loading/locations/locations/locatio
 })
 export class WorkbookReportComponent implements OnInit {
 
-  displayedColumns = ['number', 'e_monitor_request_id', 'des_lkp_typ_exit',
+  displayedColumns = ['number', 'des_lkp_typ_exit',
     'des_lkp_typ_exam', 'des_request_hemre', 'num_request_hemre', 'dat_request_hemre_jalali',
     'nam_location_hsloc', 's_location_id', 'nam_param_hemop', 'nam_measur_hemrp', 'nam_real_measur_hemrp', 'flg_abssence'];
-  displayedColumnsMeasurement = ['number', 'e_monitor_request_id', 'des_lkp_typ_exit',
+  displayedColumnsMeasurement = ['number',  'des_lkp_typ_exit',
     'des_lkp_typ_exam', 'des_request_hemre', 'num_request_hemre', 'dat_request_hemre_jalali',
     'nam_location_hsloc', 's_location_id', 'nam_param_hemop', 'nam_measur_hemrp', 'nam_real_measur_hemrp', 'flg_abssence'];
   displayedColumnsReportindustrialWastePerUnit = ['number', 'ratio', 'nam_location_hsloc', 'average', 'score'
@@ -38,6 +38,7 @@ export class WorkbookReportComponent implements OnInit {
     'namAssessorHsrch', 'namLocationHsrch', 'unitCehckListsHecli', 'namDepartmentHecli', 'namEvaluationAreaHsrch'];
   displayedColumnsZoneWithoutMeasurement = ['type', 'ratio', 'percentAvg', 'scoreZone', 'coefficientCalculationZone'];
   displayedColumnsConfilicts = ['number', 'entityNumber', 'dat_Date', 'lastRound', 'contradiction1', 'contradiction2', 'ustr_KomiteName', 'str_MoghayeratDescA'];
+  displayedNrtReport = ['number', 'nam_sample', 'dat', 'nam_farsi_test', 'nam_latin_test', 'res', 'lo','hi','in_range'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -97,6 +98,12 @@ export class WorkbookReportComponent implements OnInit {
   listOfGasMeasurement: any;
   listOfDustMeasurement: any;
   listOfWaterMeasurement: any;
+  fullListOfNrtReport: any;
+  dataSourceNrtReport: MatTableDataSource<any>;
+  nrtResult: number;
+  measurementLength: number;
+  measurementPercentAvg: number;
+  measurmentRatio: number;
 
 
   constructor(public commonService: CommonService,
@@ -181,8 +188,10 @@ export class WorkbookReportComponent implements OnInit {
     }
     this.commonService.loading = true;
     this.workbokReport.getReport(body).subscribe((success) => {
-      //debugger
+      // debugger
+      // if (success.length == 0) {
 
+      // }
       this.listOfWorkbookReport = success;
       this.percentageOfScore(this.listOfWorkbookReport)
       let nam_location_hslocs;
@@ -340,7 +349,7 @@ export class WorkbookReportComponent implements OnInit {
 
 
     }
-
+    this.mergeWateAndCleaning()
   }
   getReportOfChecklists(namLocation) {
 
@@ -483,7 +492,7 @@ export class WorkbookReportComponent implements OnInit {
   getConfilicts() {
     this.selectedDate
     const now = new Date();
-    now.setFullYear(now.getFullYear() - 1);
+    now.setFullYear(now.getFullYear() - 2);
     let date = (now.toISOString().slice(0, 10));
 
     //  let thisMonthMinesOneYear = moment(date).locale('en').format('YYYY-MM') + "-01"
@@ -626,7 +635,7 @@ export class WorkbookReportComponent implements OnInit {
 
     }
 
-    if (!this.zoneWithMeasurement || this.zoneWithMeasurement.length == 0) {
+    if (!this.zoneWithMeasurement || this.zoneWithMeasurement.length == 0 ) {
       this.zoneWithoutMeasurementConfilicts[0].ratio = 4
       this.zoneWithoutMeasurement = [...arr1, ...arr2, ...this.zoneWithoutMeasurementConfilicts];
     }
@@ -729,9 +738,7 @@ export class WorkbookReportComponent implements OnInit {
             this.fullListOfMeasurement.push(items);
           });
           this.PercentageOfMeasurement(this.fullListOfMeasurement)
-          if (this.selectedZoneName == "انرژی و سیالات") {
-            this.getNrtReport()
-          }
+
           this.dataSourceReportMeasurement = new MatTableDataSource(this.fullListOfMeasurement);
           this.commonService.loading = false;
         });
@@ -749,6 +756,11 @@ export class WorkbookReportComponent implements OnInit {
 
   }
   PercentageOfMeasurement(data) {
+
+    if (this.selectedZoneName == "انرژی و سیالات") {
+      this.getNrtReport()
+    }
+
     data.forEach(element => {
       if (element['flg_abssence'] == null) {
         element['flg_abssence'] = ""
@@ -779,13 +791,20 @@ export class WorkbookReportComponent implements OnInit {
       this.percentage = Object.keys(counts).map(k => ({ [k]: + (counts[k] / sum * 100).toFixed(2) }));
       console.log('open', this.percentage);
       //this.mergeWateAndCleaning()
+
       if (data[0]) {
+
+        optionsText.length += this.fullListOfNrtReport.length
         this.zoneWithMeasurement = [];
         this.zoneWithMeasurement.push({
           coefficientCalculationZone: ratio * Number(((counts[""] / optionsText.length) * 100 * 20) / 100),
           scoreZone: ((counts[""] / optionsText.length) * 100) * 20 / 100,
           ratio: ratio, type: "اندازه گیری", percentAvg: (counts[""] / optionsText.length) * 100,
         })
+        // this.measurementLength=optionsText.length
+        //this.measurementPercentAvg=(counts[""] / optionsText.length) * 100
+        //this.measurmentRatio=ratio
+
         this.mergeWateAndCleaning()
         //       this.averagesOfCheckListReport.push({
         //         average: (counts['مطلوب'] / optionsText.length) * 100,
@@ -814,16 +833,16 @@ export class WorkbookReportComponent implements OnInit {
     }
   }
   cleaningForm() {
-
+    this.zoneWithoutMeasurementIndustrialWaste=[];
     this.dataSource = undefined
     this.dataSourceAverageMonthlyUnit = undefined;
     this.dataSourceChecklistReportPerUnit = undefined;
     this.dataSourceReportMeasurement = undefined;
     this.dataSourceChecklistReport = undefined
     this.dataSourceZoneWithoutMeasurement = undefined
-
+    this.dataSourceNrtReport = undefined
     this.zoneWithoutMeasurementIndustrialCleaning = []
-
+    this.fullListOfNrtReport = []
     this.fullListOfWorkbookReport = [];
     this.averagesOfNam_measur_hemrp = [];
     this.averagesOfCheckListReport = [];
@@ -832,6 +851,7 @@ export class WorkbookReportComponent implements OnInit {
     this.zoneWithMeasurement = [];
     this.AllOfConfilictsOfThisZone = [];
     this.weakPoint = "";
+    this.nrtResult = undefined;
     this.fullListOfcheckListReport = [];
     this.zoneWithoutMeasurementConfilicts = [];
     this.fullListOfWorkbookReport = [];
@@ -841,6 +861,7 @@ export class WorkbookReportComponent implements OnInit {
     this.zoneWithoutMeasurement = [];
     this.zoneWithMeasurement = [];
     this.listOfConfilicts = [];
+
   }
   getNrtReport() {
 
@@ -849,6 +870,20 @@ export class WorkbookReportComponent implements OnInit {
     }
     this.commonService.loading = true;
     this.workbokReport.getNrt(body).subscribe((success) => {
+      this.fullListOfNrtReport = success;
+      this.fullListOfNrtReport.forEach(eachNrtItem => {
+        eachNrtItem.dat = moment(eachNrtItem.dat).locale('fa').format('YYYY/MM/DD - HH:MM');
+        if (eachNrtItem.in_range == 0) {
+          eachNrtItem.in_range = "*"
+        }
+        else {
+          eachNrtItem.in_range = ""
+        }
+      });
+
+
+      this.dataSourceNrtReport = new MatTableDataSource(this.fullListOfNrtReport);
+
       this.commonService.loading = false;
       console.log("nrt", success)
       this.PercentageOfNrt(success)
@@ -858,13 +893,14 @@ export class WorkbookReportComponent implements OnInit {
         this.commonService.showEventMessage("وب سرویس آزمایشگاه های غیر روتین پاسخگو نیست")
       };
 
+
   }
 
   PercentageOfNrt(data) {
     // ////debugger
     if (data.length > 0) {
       let optionsText = [];
-     // let ratio = 2
+      // let ratio = 2
 
       data.forEach(eachRowOfReport => {
         optionsText.push(eachRowOfReport['in_range'])
@@ -883,8 +919,22 @@ export class WorkbookReportComponent implements OnInit {
       }
       console.log('countsNrt', counts);
       //this.counts = JSON.stringify(counts)
-      let nrtResult=(counts['1']/(counts['1']+counts['0']))
-      console.log('nrtResult', nrtResult);
+      this.nrtResult = (counts[""] / (counts['*'] + counts[""]))
+      console.log('nrtResult', this.nrtResult);
+      debugger
+      this.measurementLength += Number(this.fullListOfNrtReport.length)
+      this.measurementPercentAvg += Number(this.nrtResult * 100)
+      console.log('measurementLength', this.measurementLength);
+      // this.zoneWithMeasurement.push({
+      //   coefficientCalculationZone: ratio * Number(((counts[""] / optionsText.length) * 100 * 20) / 100),
+      //   scoreZone: ((counts[""] / optionsText.length) * 100) * 20 / 100,
+      //   ratio: ratio, type: "اندازه گیری", percentAvg: (counts[""] / optionsText.length) * 100,
+      // })
+      // this.zoneWithMeasurement[0].percentAvg=(this.measurementPercentAvg/this.measurementLength)*100
+      // this.zoneWithMeasurement[0].scoreZone=((this.measurementPercentAvg/this.measurementLength)*100)*20/100
+      //this.zoneWithMeasurement[0].coefficientCalculationZone=Number(((this.measurementPercentAvg/this.measurementLength)*100)*20/100)*this.measurmentRatio
+      // this.mergeWateAndCleaning()
+
       // if (data[0]) {
 
       //   this.averagesOfCheckListReport.push({
