@@ -76,7 +76,7 @@ export class LocationsComponent implements OnInit {
     this.commonService.loading = true;
     this.locationsService.selectAllListOflocations().subscribe((success) => {
       this.ListOfcheckListsOptions = success;
-      console.log('ListOfcheckListsOptions', this.ListOfcheckListsOptions)
+      //console.log('ListOfcheckListsOptions', this.ListOfcheckListsOptions)
       this.dataSource = new MatTableDataSource(this.ListOfcheckListsOptions);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -96,7 +96,7 @@ export class LocationsComponent implements OnInit {
     this.locationsService.insertListOflocations(object).subscribe((success) => {
       this.commonService.showEventMessage("ايجاد رديف با موفقيت انجام شد.", 3000, "green")
       this.getLocations();
-      console.log('updateListOfcheckLists', success)
+      //console.log('updateListOfcheckLists', success)
       this.newRowObj = {};
     },
       (error) => {
@@ -122,7 +122,7 @@ export class LocationsComponent implements OnInit {
     this.locationsService.updateListOflocations(row['locationId'], row).subscribe((success) => {
       this.commonService.showEventMessage("ويرايش رديف با موفقيت انجام شد.", 3000, "green")
       this.getLocations();
-      console.log('updateListOfcheckListsQuestions', success)
+      //console.log('updateListOfcheckListsQuestions', success)
         ;
 
     },
@@ -135,7 +135,7 @@ export class LocationsComponent implements OnInit {
 
   public deleteRow(row) {
    // debugger
-    console.log('del', row)
+    //console.log('del', row)
 
     this.locationsService.deleteListOflocations(row['locationId']).subscribe(
       (success) => {
@@ -143,7 +143,7 @@ export class LocationsComponent implements OnInit {
         this.getLocations();
         //this.edit = !this.edit;
         this.commonService.showEventMessage("حذف رديف با موفقيت انجام شد.", 3000, "red")
-        console.log('sucess', success)
+        //console.log('sucess', success)
 
 
       },
@@ -154,7 +154,7 @@ export class LocationsComponent implements OnInit {
   }
 
   selectRow(row) {
-    console.log(row)
+    //console.log(row)
     if (!this.edit) {
       this.dialogRef.close(row)
     }
@@ -172,7 +172,7 @@ export class LocationsComponent implements OnInit {
   }
 
   selectZones(row?) {
-debugger
+
 
     const dialogRef = this.dialog.open(ZonesComponent, {
       width: "80%",
@@ -185,7 +185,7 @@ debugger
     });
     dialogRef.afterClosed().subscribe(
       (data) => {
-        debugger
+        
         if(row){
         row.zonesZoneId = data.zoneId;
         row.namZone = data.namZone;

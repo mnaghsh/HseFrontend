@@ -42,7 +42,7 @@ export class ZonesComponent implements OnInit {
     this.commonService.loading = true;
     this.zonesService.selectAllListOfzones().subscribe((success) => {
       this.ListOfZones = success;
-      console.log('ListOfZones', this.ListOfZones)
+      //console.log('ListOfZones', this.ListOfZones)
       this.dataSource = new MatTableDataSource(this.ListOfZones);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -52,7 +52,7 @@ export class ZonesComponent implements OnInit {
 
   
   public addRow() {
-    debugger
+    
     let object = {
       "namZone": this.newRowObj.namZone,
      // "namLocation": this.checklistId,
@@ -62,7 +62,7 @@ export class ZonesComponent implements OnInit {
     this.zonesService.insertListOfzones(object).subscribe((success) => {
       this.commonService.showEventMessage("ايجاد رديف با موفقيت انجام شد.", 3000, "green")
       this.getZones();
-      console.log('updateListOfcheckLists', success)
+      //console.log('updateListOfcheckLists', success)
       this.newRowObj = {};
     },
       (error) => {
@@ -81,7 +81,7 @@ export class ZonesComponent implements OnInit {
     this.zonesService.updateListOfzones(row['zoneId'], row).subscribe((success) => {
       this.commonService.showEventMessage("ويرايش رديف با موفقيت انجام شد.", 3000, "green")
       this.getZones();
-      console.log('updateListOfcheckListsQuestions', success)
+      //console.log('updateListOfcheckListsQuestions', success)
         ;
 
     },
@@ -94,14 +94,14 @@ export class ZonesComponent implements OnInit {
 
   public deleteRow(row) {
 
-    console.log('del', row)
+    //console.log('del', row)
     this.zonesService.deleteListOfzones(row['zoneId']).subscribe(
       (success) => {
 
         this.getZones();
         //this.edit = !this.edit;
         this.commonService.showEventMessage("حذف رديف با موفقيت انجام شد.", 3000, "red")
-        console.log('sucess', success)
+        //console.log('sucess', success)
 
 
       },
@@ -112,7 +112,7 @@ export class ZonesComponent implements OnInit {
   }
 
   selectRow(row){
-    console.log(row)
+    //console.log(row)
     if(!this.edit){
       this.dialogRef.close(row)
     }

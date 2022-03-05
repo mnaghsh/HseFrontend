@@ -49,7 +49,7 @@ export class ChecklistReportComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public recievedData
 
   ) {
-    console.log('recievedData', this.recievedData)
+    //console.log('recievedData', this.recievedData)
     if (this.recievedData.itsPopup == true) {
       const body = {
         namChkHecli: this.recievedData.row.namChkHecli,
@@ -86,7 +86,7 @@ export class ChecklistReportComponent implements OnInit {
     this.commonService.loading = true;
     this.checklistAssesmentService.selectAllListOfChecklistReport().subscribe((success) => {
       this.ListOfcheckListAssesments = success;
-      console.log(' this.ListOfcheckListAssesment', this.ListOfcheckListAssesments)
+      //console.log(' this.ListOfcheckListAssesment', this.ListOfcheckListAssesments)
       this.viewThePercentageOfOptions(success);
       this.arrayForFilterDesExplainQuestionHscha = [];
       this.ListOfcheckListAssesments.forEach(eachAssesment => {
@@ -99,7 +99,7 @@ export class ChecklistReportComponent implements OnInit {
         // arrayForFilter.push({val:eachAssesment['requestDescriptionHsrch']});
 
       });
-      console.log('ListOfcheckListsQuestions', this.ListOfcheckListAssesments)
+      //console.log('ListOfcheckListsQuestions', this.ListOfcheckListAssesments)
       this.dataSource = new MatTableDataSource(this.ListOfcheckListAssesments);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -117,7 +117,7 @@ export class ChecklistReportComponent implements OnInit {
   //     }
   //     this.dataSource = new MatTableDataSource(this.firstFilter);
 
-  //     console.log('local',  this.firstFilter)
+  //     //console.log('local',  this.firstFilter)
   //   });
 
   // }
@@ -135,7 +135,7 @@ export class ChecklistReportComponent implements OnInit {
 
 
   serverFilter(body?: any) {
-    debugger
+    
     this.search = ""
     
     if (body == null) {
@@ -143,8 +143,8 @@ export class ChecklistReportComponent implements OnInit {
       let end = moment(this.endDate.nativeElement.value, 'jYYYY/jM/jD');
       let startdate = start.locale('en').format('YYYY/M/D');
       let enddate = end.locale('en').format('YYYY/M/D');
-      console.log('startDate', startdate)
-      console.log('endDate', enddate)
+      //console.log('startDate', startdate)
+      //console.log('endDate', enddate)
       body = {
 
         namChkHecli: this.namChkHecliFilter,
@@ -236,7 +236,7 @@ export class ChecklistReportComponent implements OnInit {
      // if (optionsText != eachRowOfReport['desOptionHeclo']) {
         optionsText.push(eachRowOfReport['desOptionHeclo'])
     //  }
-    }); console.log('optionsText', optionsText)
+    }); //console.log('optionsText', optionsText)
 
     var counts = {};
 
@@ -249,13 +249,13 @@ export class ChecklistReportComponent implements OnInit {
       }
     }
 
-    console.log('counts', counts);
+    //console.log('counts', counts);
     this.counts = JSON.stringify(counts)
     let sum = Object.keys(counts).reduce((s, k) => s += counts[k], 0);
 
     this.percentage = Object.keys(counts).map(k => ({ [k]: '%' + (counts[k] / sum * 100).toFixed(2) }));
     this.percentage = JSON.stringify(this.percentage)
-    console.log('percentage', this.percentage);
+    //console.log('percentage', this.percentage);
 
   }
 

@@ -179,7 +179,7 @@ export class transportationWorkbookReportComponent implements OnInit {
     const grouped = this.groupBy(WorkbookReportOfUnit, item => item.e_monitor_request_id);
     let groupedIndustrialWaste;
 
-    //console.log('grouped22', grouped);
+    ////console.log('grouped22', grouped);
     let ratio = 2;
     let totalPercent = 0;
     let average;
@@ -223,7 +223,7 @@ export class transportationWorkbookReportComponent implements OnInit {
       });
 
     }
-    console.log(' this.zoneWithoutMeasurementIndustrialWaste2323', this.zoneWithoutMeasurementIndustrialWaste)
+    //console.log(' this.zoneWithoutMeasurementIndustrialWaste2323', this.zoneWithoutMeasurementIndustrialWaste)
   }
   // getReportOfChecklists(namLocation) {
 
@@ -293,7 +293,7 @@ export class transportationWorkbookReportComponent implements OnInit {
   // serverFilter(body) {
   //   this.commonService.loading = true;
   //   this.checklistAssesmentService.filterListOfChecklistReport(body).subscribe((success) => {
-  //     //console.log('success', success)
+  //     ////console.log('success', success)
   //     this.listOfcheckListReport = success;
   //     this.PercentageOfOptions(this.listOfcheckListReport)
   //     this.listOfcheckListReport.forEach(eachCheckListReportOfUnit => {
@@ -302,7 +302,7 @@ export class transportationWorkbookReportComponent implements OnInit {
   //         this.weakPoint += " - " + eachCheckListReportOfUnit.desExplainQuestionHscha
   //       }
   //     });
-  //     //console.log('MhdfullListOfcheckListReport', this.fullListOfcheckListReport)
+  //     ////console.log('MhdfullListOfcheckListReport', this.fullListOfcheckListReport)
   //     this.dataSourceChecklistReport = new MatTableDataSource(this.fullListOfcheckListReport);
 
 
@@ -319,7 +319,7 @@ export class transportationWorkbookReportComponent implements OnInit {
   //     data.forEach(eachRowOfReport => {
   //       optionsText.push(eachRowOfReport['desOptionHeclo'])
 
-  //     }); //console.log('optionsText', optionsText)
+  //     }); ////console.log('optionsText', optionsText)
 
   //     var counts = {};
 
@@ -331,11 +331,11 @@ export class transportationWorkbookReportComponent implements OnInit {
   //         counts[optionsText[i]]++;
   //       }
   //     }
-  //     //console.log('counts', counts);
+  //     ////console.log('counts', counts);
   //     this.counts = JSON.stringify(counts)
   //     let sum = Object.keys(counts).reduce((s, k) => s += counts[k], 0);
   //     this.percentage = Object.keys(counts).map(k => ({ [k]: + (counts[k] / sum * 100).toFixed(2) }));
-  //     //console.log('nini', this.percentage);
+  //     ////console.log('nini', this.percentage);
   //     if (data[0]) {
 
   //       this.averagesOfCheckListReport.push({
@@ -400,7 +400,7 @@ export class transportationWorkbookReportComponent implements OnInit {
       else {
         ratio = 4;
       }
-      debugger
+      
       this.zoneWithoutMeasurementConfilicts = [];
       this.zoneWithoutMeasurementConfilicts.push({
         coefficientCalculationZone: ((((this.countAllOfConfilicts - this.listOfConfilicts.length) / this.countAllOfConfilicts) * 100 * 20) / 100) * ratio,
@@ -412,8 +412,8 @@ export class transportationWorkbookReportComponent implements OnInit {
       this.dataSourceConfilicts = new MatTableDataSource(this.listOfConfilicts);
       // this.commonService.loading = false;
       this.mergeWateAndCleaning();
-      //console.log('countAllOfConfilicts', this.countAllOfConfilicts)
-      //console.log('listOfConfilicts', this.listOfConfilicts)
+      ////console.log('countAllOfConfilicts', this.countAllOfConfilicts)
+      ////console.log('listOfConfilicts', this.listOfConfilicts)
     })
 
   }
@@ -528,9 +528,9 @@ export class transportationWorkbookReportComponent implements OnInit {
       }
     )
 
-    //console.log('sumOfRatio', sumOfRatio)
-    //console.log('SumOfCoefficientCalculationZone', SumOfCoefficientCalculationZone)
-    //console.log(' this.zoneWithoutMeasurement', this.zoneWithoutMeasurement)
+    ////console.log('sumOfRatio', sumOfRatio)
+    ////console.log('SumOfCoefficientCalculationZone', SumOfCoefficientCalculationZone)
+    ////console.log(' this.zoneWithoutMeasurement', this.zoneWithoutMeasurement)
     this.dataSourceZoneWithoutMeasurement = new MatTableDataSource(this.zoneWithoutMeasurement);
 
 
@@ -621,7 +621,7 @@ export class transportationWorkbookReportComponent implements OnInit {
       data.forEach(eachRowOfReport => {
         optionsText.push(eachRowOfReport['flg_abssence'])
 
-      }); //console.log('optionsText', optionsText)
+      }); ////console.log('optionsText', optionsText)
 
       var counts = {};
 
@@ -633,11 +633,11 @@ export class transportationWorkbookReportComponent implements OnInit {
           counts[optionsText[i]]++;
         }
       }
-      //console.log('counts', counts);
+      ////console.log('counts', counts);
       this.counts = JSON.stringify(counts)
       let sum = Object.keys(counts).reduce((s, k) => s += counts[k], 0);
       this.percentage = Object.keys(counts).map(k => ({ [k]: + (counts[k] / sum * 100).toFixed(2) }));
-      //console.log('open', this.percentage);
+      ////console.log('open', this.percentage);
       //this.mergeWateAndCleaning()
       if (data[0]) {
         this.zoneWithMeasurement = [];
@@ -710,9 +710,9 @@ export class transportationWorkbookReportComponent implements OnInit {
         }
       });
       avrageOfNam_measur_hemrp = (sumOfNam_measur_hemrp) / (this.fullListOfWasteReport.length);
-      console.log('sumOfNam_measur_hemrp', sumOfNam_measur_hemrp);
-      console.log('avrageOfNam_measur_hemrp', avrageOfNam_measur_hemrp);
-      console.log('this.listOfWasteReport.length', this.fullListOfWasteReport.length);
+      //console.log('sumOfNam_measur_hemrp', sumOfNam_measur_hemrp);
+      //console.log('avrageOfNam_measur_hemrp', avrageOfNam_measur_hemrp);
+      //console.log('this.listOfWasteReport.length', this.fullListOfWasteReport.length);
       //برای پیدا کردن نام مکان ها
       this.fullListOfWasteReport.forEach(eachWasteReport => {
         this.listOfWasteReport.forEach(item => {
@@ -720,7 +720,7 @@ export class transportationWorkbookReportComponent implements OnInit {
             if (item.nam_location_hsloc != null) {
               eachWasteReport.nam_location_hsloc = item.nam_location_hsloc
 
-              //console.log('fullListOfWasteReport2', this.fullListOfWasteReport);
+              ////console.log('fullListOfWasteReport2', this.fullListOfWasteReport);
             }
           }
         });

@@ -46,7 +46,7 @@ export class SchedulingComponent implements OnInit {
     this.commonService.loading = true;
     this.schedulingService.selectAllListOfScheduling().subscribe((success) => {
       this.listOfAllSchedulings = success;
-      console.log('listOfAllUsers', this.listOfAllSchedulings)
+      //console.log('listOfAllUsers', this.listOfAllSchedulings)
       this.dataSource = new MatTableDataSource(this.listOfAllSchedulings);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -84,7 +84,7 @@ export class SchedulingComponent implements OnInit {
     this.schedulingService.insertListOfScheduling(object).subscribe((success) => {
       this.commonService.showEventMessage("ايجاد رديف با موفقيت انجام شد.", 3000, "green")
       this.getAllSchedules();
-      console.log('updateListOfcheckLists', success)
+      //console.log('updateListOfcheckLists', success)
       this.newRowObj = {};
     },
       (error) => {
@@ -115,14 +115,14 @@ export class SchedulingComponent implements OnInit {
 
   public deleteRow(row) {
 
-    console.log('del', row)
+    //console.log('del', row)
     this.schedulingService.deleteListOfScheduling(row['eSchedulingId']).subscribe(
       (success) => {
 
         this.getAllSchedules();
         //this.edit = !this.edit;
         this.commonService.showEventMessage("حذف رديف با موفقيت انجام شد.", 3000, "red")
-        console.log('sucess', success)
+        //console.log('sucess', success)
 
 
       },

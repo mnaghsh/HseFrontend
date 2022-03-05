@@ -168,7 +168,7 @@ export class ChecklistAssesmentComponent implements OnInit {
       this.getChecklistOptions()
       let start = moment(this.dateOfInspection.nativeElement.value, 'jYYYY/jM/jD HH:mm:ss');
       let dateOfInspection = start.locale('en').format('YYYY/M/D HH:mm:ss');
-      debugger
+      
       console.log('Date', this.firstLevel.value.thirdCtrl)
       console.log('Date2', this.dateOfInspection.nativeElement.value)
 

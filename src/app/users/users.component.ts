@@ -41,7 +41,7 @@ export class UsersComponent implements OnInit {
     this.commonService.loading = true;
     this.usersService.selectAllUsers().subscribe((success) => {
       this.listOfAllUsers = success;
-      console.log('listOfAllUsers', this.listOfAllUsers)
+      //console.log('listOfAllUsers', this.listOfAllUsers)
       this.dataSource = new MatTableDataSource(this.listOfAllUsers);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -63,7 +63,7 @@ export class UsersComponent implements OnInit {
     this.usersService.insertUsers(object).subscribe((success) => {
       this.commonService.showEventMessage("ايجاد رديف با موفقيت انجام شد.", 3000, "green")
       this.getAllUsers();
-      console.log('updateListOfcheckLists', success)
+      //console.log('updateListOfcheckLists', success)
       this.newRowObj = {};
     },
       (error) => {
@@ -94,14 +94,14 @@ export class UsersComponent implements OnInit {
 
   public deleteRow(row) {
 
-    console.log('del', row)
+    //console.log('del', row)
     this.usersService.deleteUsers(row['id']).subscribe(
       (success) => {
 
         this.getAllUsers();
         //this.edit = !this.edit;
         this.commonService.showEventMessage("حذف رديف با موفقيت انجام شد.", 3000, "red")
-        console.log('sucess', success)
+        //console.log('sucess', success)
 
 
       },
@@ -121,7 +121,7 @@ export class UsersComponent implements OnInit {
   }
 
   selectRow(row) {
-    console.log(row)
+    //console.log(row)
     if(!this.edit){
       this.dialogRef.close(row)
     }

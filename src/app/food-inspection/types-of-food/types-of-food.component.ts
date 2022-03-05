@@ -42,7 +42,7 @@ export class TypesOfFoodComponent implements OnInit {
     this.commonService.loading = true;
     this.typeOfFoodsService.selectAllListOfHseTypeOfFoods().subscribe((success) => {
       this.ListOfTypeOfFoods = success;
-      console.log('ListOfTypeOfFoods', this.ListOfTypeOfFoods)
+      //console.log('ListOfTypeOfFoods', this.ListOfTypeOfFoods)
       this.dataSource = new MatTableDataSource(this.ListOfTypeOfFoods);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -52,7 +52,7 @@ export class TypesOfFoodComponent implements OnInit {
 
 
   public addRow() {
-    debugger
+    
     let object = {
       "namTypeOfFoodHstof": this.newRowObj.namTypeOfFoodHstof,
       // "namLocation": this.checklistId,
@@ -62,7 +62,7 @@ export class TypesOfFoodComponent implements OnInit {
     this.typeOfFoodsService.insertListOfHseTypeOfFoods(object).subscribe((success) => {
       this.commonService.showEventMessage("ايجاد رديف با موفقيت انجام شد.", 3000, "green")
       this.getTypeOfFoods();
-      console.log('updateListOfcheckLists', success)
+      //console.log('updateListOfcheckLists', success)
       this.newRowObj = {};
     },
       (error) => {
@@ -81,7 +81,7 @@ export class TypesOfFoodComponent implements OnInit {
     this.typeOfFoodsService.updateListOfHseTypeOfFoods(row['typeOfFoodId'], row).subscribe((success) => {
       this.commonService.showEventMessage("ويرايش رديف با موفقيت انجام شد.", 3000, "green")
       this.getTypeOfFoods();
-      console.log('updateListOfcheckListsQuestions', success)
+      //console.log('updateListOfcheckListsQuestions', success)
         ;
 
     },
@@ -94,14 +94,14 @@ export class TypesOfFoodComponent implements OnInit {
 
   public deleteRow(row) {
 
-    console.log('del', row)
+    //console.log('del', row)
     this.typeOfFoodsService.deleteListOfHseTypeOfFoods(row['typeOfFoodId']).subscribe(
       (success) => {
 
         this.getTypeOfFoods();
         //this.edit = !this.edit;
         this.commonService.showEventMessage("حذف رديف با موفقيت انجام شد.", 3000, "red")
-        console.log('sucess', success)
+        //console.log('sucess', success)
 
 
       },
@@ -112,7 +112,7 @@ export class TypesOfFoodComponent implements OnInit {
   }
 
   selectRow(row) {
-    console.log(row)
+    //console.log(row)
     if (!this.edit) {
       this.dialogRef.close(row)
     }

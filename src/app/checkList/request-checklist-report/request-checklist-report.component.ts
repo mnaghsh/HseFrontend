@@ -32,7 +32,7 @@ export class RequestChecklistReportComponent implements OnInit {
     this.commonService.loading = true;
     this.requestChecklistService.selectAllListOfRequestCheckListsReport().subscribe((success) => {
       this.ListOfRequestcheckList = success;
-      console.log(' this.ListOfcheckListAssesment', this.ListOfRequestcheckList)
+      //console.log(' this.ListOfcheckListAssesment', this.ListOfRequestcheckList)
       this.dataSource = new MatTableDataSource(this.ListOfRequestcheckList);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -50,7 +50,7 @@ export class RequestChecklistReportComponent implements OnInit {
   }
 
   selectAssesment(row) {
-    debugger
+    
     const dialogRef = this.dialog.open(ChecklistReportComponent, {
       width: "80%",
       height: "80%",

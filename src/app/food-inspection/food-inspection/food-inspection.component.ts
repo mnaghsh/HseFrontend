@@ -62,7 +62,7 @@ export class FoodInspectionComponent implements OnInit {
     this.foodInspectionService.selectAllListOfHseFoodInspections().subscribe((success) => {
       this.ListOfFoodInspection = success;
       this.convertToShamsi()
-      console.log('ListOfFoodInspection', this.ListOfFoodInspection)
+      //console.log('ListOfFoodInspection', this.ListOfFoodInspection)
       this.dataSource = new MatTableDataSource(this.ListOfFoodInspection);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -103,7 +103,7 @@ export class FoodInspectionComponent implements OnInit {
     this.foodInspectionService.insertListOfHseFoodInspections(object).subscribe((success) => {
       this.commonService.showEventMessage("ايجاد رديف با موفقيت انجام شد.", 3000, "green")
       this.getFoodInspection();
-      console.log('updateListOfcheckLists', success)
+      //console.log('updateListOfcheckLists', success)
       this.newRowObj = {};
     },
       (error) => {
@@ -122,7 +122,7 @@ export class FoodInspectionComponent implements OnInit {
     this.foodInspectionService.updateListOfHseFoodInspections(row['foodInspectionId'], row).subscribe((success) => {
       this.commonService.showEventMessage("ويرايش رديف با موفقيت انجام شد.", 3000, "green")
       this.getFoodInspection();
-      console.log('updateListOfcheckListsQuestions', success)
+      //console.log('updateListOfcheckListsQuestions', success)
         ;
 
     },
@@ -135,14 +135,14 @@ export class FoodInspectionComponent implements OnInit {
 
   public deleteRow(row) {
 
-    console.log('del', row)
+    //console.log('del', row)
     this.foodInspectionService.deleteListOfHseFoodInspections(row['foodInspectionId']).subscribe(
       (success) => {
 
         this.getFoodInspection();
         //this.edit = !this.edit;
         this.commonService.showEventMessage("حذف رديف با موفقيت انجام شد.", 3000, "red")
-        console.log('sucess', success)
+        //console.log('sucess', success)
 
 
       },
@@ -153,7 +153,7 @@ export class FoodInspectionComponent implements OnInit {
   }
 
   selectRow(row) {
-    console.log(row)
+    //console.log(row)
     if (!this.edit) {
       this.dialogRef.close(row)
     }
@@ -217,7 +217,7 @@ export class FoodInspectionComponent implements OnInit {
   convertToShamsi() {
     this.ListOfFoodInspection.forEach(item => {
       if (item.datDischargeHsfin)
-        debugger
+        
       item.datDischargeHsfin = moment(item.datDischargeHsfin).locale('fa').format('YYYY/MM/DD');
       if (item.datOfManufactureHsfin)
         item.datOfManufactureHsfin = moment(item.datOfManufactureHsfin).locale('fa').format('YYYY/MM/DD');
