@@ -147,7 +147,7 @@ export class WorkbookReportComponent implements OnInit {
         this.selectedZoneName = data.namLocation;
         //this.selectedZoneCharacteristic = data.zoneCharacteristic;
         this.locationId = data.locationId
-        debugger
+        // debugger
         this.getConfilicts().subscribe((success) => {
 
           this.getWorkbookReport().subscribe(
@@ -174,15 +174,16 @@ export class WorkbookReportComponent implements OnInit {
       this.commonService.loading = false;
       return
     }
+    //debugger
     let body = {
       s_location_id: s_location_id,
-      dat_request_hemre_jalali: this.m.format('YYYY') + this.selectedDate,
+      dat_request_hemre_jalali: (Number(this.m.format('YYYY')) - 1) + this.selectedDate,
       LKP_TYP_EXIT: 6,
       lkp_typ_exam: 13
     }
     this.commonService.loading = true;
     this.workbokReport.getReport(body).subscribe((success) => {
-     
+
       // debugger
       // if (success.length == 0) {
 
@@ -194,8 +195,11 @@ export class WorkbookReportComponent implements OnInit {
 
         if (nam_location_hslocs != eachIndustrialWaste.nam_location_hsloc && eachIndustrialWaste.nam_location_hsloc != null) {
           this.getReportOfChecklists(eachIndustrialWaste.nam_location_hsloc)
+
         }
       });
+      debugger
+      this.getReportOfChecklists(this.selectedZoneName)
       this.listOfWorkbookReport.forEach(eachWorkbookReportOfUnit => {
         this.fullListOfWorkbookReport.push(eachWorkbookReportOfUnit);
       });
@@ -271,8 +275,8 @@ export class WorkbookReportComponent implements OnInit {
             desQuestionHeclq: "",
             desOptionHeclo: "",
             namEvaluationAreaHsrch: "",
-            startdateHsrch: moment(this.m.format('YYYY') + this.selectedDate + "01", 'jYYYY/jM/jD'),
-            enddateHsrch: moment(this.m.format('YYYY') + this.selectedDate + "31", 'jYYYY/jM/jD')
+            startdateHsrch: moment((Number(this.m.format('YYYY')) - 1) + this.selectedDate + "01", 'jYYYY/jM/jD'),
+            enddateHsrch: moment((Number(this.m.format('YYYY')) - 1) + this.selectedDate + "31", 'jYYYY/jM/jD')
           }
           this.serverFilter(body)
           break
@@ -291,8 +295,8 @@ export class WorkbookReportComponent implements OnInit {
             desQuestionHeclq: "",
             desOptionHeclo: "",
             namEvaluationAreaHsrch: "",
-            startdateHsrch: moment(this.m.format('YYYY') + this.selectedDate + "01", 'jYYYY/jM/jD'),
-            enddateHsrch: moment(this.m.format('YYYY') + this.selectedDate + "30", 'jYYYY/jM/jD')
+            startdateHsrch: moment((Number(this.m.format('YYYY')) - 1) + this.selectedDate + "01", 'jYYYY/jM/jD'),
+            enddateHsrch: moment((Number(this.m.format('YYYY')) - 1) + this.selectedDate + "30", 'jYYYY/jM/jD')
           }
           this.serverFilter(body)
           break;
@@ -306,8 +310,8 @@ export class WorkbookReportComponent implements OnInit {
           desQuestionHeclq: "",
           desOptionHeclo: "",
           namEvaluationAreaHsrch: "",
-          startdateHsrch: moment(this.m.format('YYYY') + this.selectedDate + "01", 'jYYYY/jM/jD'),
-          enddateHsrch: moment(this.m.format('YYYY') + this.selectedDate + "29", 'jYYYY/jM/jD')
+          startdateHsrch: moment((Number(this.m.format('YYYY')) - 1) + this.selectedDate + "01", 'jYYYY/jM/jD'),
+          enddateHsrch: moment((Number(this.m.format('YYYY')) - 1) + this.selectedDate + "29", 'jYYYY/jM/jD')
         }
         this.serverFilter(body)
         break;
@@ -396,7 +400,7 @@ export class WorkbookReportComponent implements OnInit {
     let sub = new Subject<any>();
     this.selectedDate
     const now = new Date();
-    now.setFullYear(now.getFullYear() - 2);
+    now.setFullYear(now.getFullYear() - 1);
     let date = (now.toISOString().slice(0, 10));
 
     //  let thisMonthMinesOneYear = moment(date).locale('en').format('YYYY-MM') + "-01"
@@ -456,7 +460,7 @@ export class WorkbookReportComponent implements OnInit {
     popupWin.document.write(`
         <html>
           <head>
-            <title>پرینت قرارداد </title>
+            <title>کارنامه محیط زیست</title>
             <style>
             *{
                direction:rtl;
@@ -575,6 +579,30 @@ export class WorkbookReportComponent implements OnInit {
     //console.log('sumOfRatio', sumOfRatio)
     //console.log('SumOfCoefficientCalculationZone', SumOfCoefficientCalculationZone)
     //console.log(' this.zoneWithoutMeasurement', this.zoneWithoutMeasurement)
+    this.zoneWithoutMeasurement.forEach(eachRow => {
+      debugger
+      var num = eachRow['coefficientCalculationZone']
+      var roundedString = num.toFixed(2);
+      var rounded = Number(roundedString);
+      eachRow['coefficientCalculationZone'] = rounded
+      if (eachRow['percentAvg']) {
+        var num = eachRow['percentAvg']
+        var roundedString = num.toFixed(2);
+        var rounded = Number(roundedString);
+        eachRow['percentAvg'] = rounded
+      }
+      if (eachRow['scoreZone']) {
+      var num = eachRow['scoreZone']
+      var roundedString = num.toFixed(2);
+      var rounded = Number(roundedString);
+      eachRow['scoreZone'] = rounded
+      }
+
+    });
+
+
+
+
     this.dataSourceZoneWithoutMeasurement = new MatTableDataSource(this.zoneWithoutMeasurement);
 
 
@@ -606,21 +634,21 @@ export class WorkbookReportComponent implements OnInit {
     this.fullListOfMeasurement = [];
     let bodyGas = {
       s_location_id: s_location_id,
-      dat_request_hemre_jalali: this.m.format('YYYY') + this.selectedDate,
+      dat_request_hemre_jalali: (Number(this.m.format('YYYY')) - 1) + this.selectedDate,
       LKP_TYP_EXIT: 1,//گاز
       lkp_typ_exam: 9//گاز خروجی
 
     }
     let bodyDust = {
       s_location_id: s_location_id,
-      dat_request_hemre_jalali: this.m.format('YYYY') + this.selectedDate,
+      dat_request_hemre_jalali: (Number(this.m.format('YYYY')) - 1) + this.selectedDate,
       LKP_TYP_EXIT: 4,//گردغبار
       lkp_typ_exam: 7//گردغبار
     }
 
     let bodyWater = {
       s_location_id: s_location_id,
-      dat_request_hemre_jalali: this.m.format('YYYY') + this.selectedDate,
+      dat_request_hemre_jalali: (Number(this.m.format('YYYY')) - 1) + this.selectedDate,
       LKP_TYP_EXIT: 2,//آب
       lkp_typ_exam: 6//کلرباقیمانده
     }
@@ -641,7 +669,7 @@ export class WorkbookReportComponent implements OnInit {
 
         this.workbokReport.getReport(bodyWater).subscribe((success) => {
           this.listOfWaterMeasurement = success;
-        
+
           this.listOfWaterMeasurement.forEach(items => {
             this.fullListOfMeasurement.push(items);
           });
@@ -766,11 +794,11 @@ export class WorkbookReportComponent implements OnInit {
   getNrtReport(): Observable<any> {
     let sub = new Subject<any>();
     let body = {
-      dat: this.m.format('YYYY') + this.selectedDate,
+      dat: (Number(this.m.format('YYYY')) - 1) + this.selectedDate,
     }
     this.commonService.loading = true;
     this.workbokReport.getNrt(body).subscribe((success) => {
-     
+
       this.fullListOfNrtReport = success;
       this.fullListOfNrtReport.forEach(eachNrtItem => {
         eachNrtItem.dat = moment(eachNrtItem.dat).locale('fa').format('YYYY/MM/DD - HH:MM');
@@ -832,7 +860,7 @@ export class WorkbookReportComponent implements OnInit {
       // })
       // this.zoneWithMeasurement[0].percentAvg=(this.measurementPercentAvg/this.measurementLength)*100
       // this.zoneWithMeasurement[0].scoreZone=((this.measurementPercentAvg/this.measurementLength)*100)*20/100
-     //  this.zoneWithMeasurement[0].coefficientCalculationZone=Number(((this.measurementPercentAvg/this.measurementLength)*100)*20/100)*this.measurmentRatio
+      //  this.zoneWithMeasurement[0].coefficientCalculationZone=Number(((this.measurementPercentAvg/this.measurementLength)*100)*20/100)*this.measurmentRatio
       // this.mergeWateAndCleaning()
 
       // if (data[0]) {
