@@ -90,7 +90,7 @@ export class WorkbookReportComponent implements OnInit {
   AllOfConfilictsOfThisZone: any;
   zoneWithoutMeasurementConfilicts: any;
   weakPoint = "";
-  fullListOfMeasurement: any[];
+  fullListOfMeasurement: any[] = [];
   dataSourceReportMeasurement: MatTableDataSource<unknown>;
   locationId: any;
   zoneWithMeasurement: any;
@@ -101,10 +101,10 @@ export class WorkbookReportComponent implements OnInit {
   fullListOfNrtReport: any;
   dataSourceNrtReport: MatTableDataSource<any>;
   nrtResult: number;
+  measurementResult: number;
   measurementLength: number;
   measurementPercentAvg: number;
   measurmentRatio: number;
-
 
   constructor(public commonService: CommonService,
     public workbokReport: workbookReportService,
@@ -154,9 +154,13 @@ export class WorkbookReportComponent implements OnInit {
             (success) => {
               this.getMeasurement().subscribe((success) => {
                 if (this.selectedZoneName == "انرژی و سیالات") {
-                  this.getNrtReport()
+                  this.getNrtReport().subscribe((success) => {
+                    this.mergeWateAndCleaning();
+                  })
                 }
-                this.mergeWateAndCleaning();
+                else {
+                  this.mergeWateAndCleaning();
+                }
               })
             }
           )
@@ -198,7 +202,6 @@ export class WorkbookReportComponent implements OnInit {
 
         }
       });
-      debugger
       this.getReportOfChecklists(this.selectedZoneName)
       this.listOfWorkbookReport.forEach(eachWorkbookReportOfUnit => {
         this.fullListOfWorkbookReport.push(eachWorkbookReportOfUnit);
@@ -378,6 +381,28 @@ export class WorkbookReportComponent implements OnInit {
           ratio: ratio,
           coefficientCalculation: ratio * Number((((counts['مطلوب'] / optionsText.length) * 100) * 20) / 100)
         })
+
+
+
+        this.averagesOfCheckListReport.forEach(eachRow => {
+          //debugger
+          var num = eachRow['average']
+          var roundedString = num.toFixed(2);
+          var rounded = Number(roundedString);
+          eachRow['average'] = rounded
+
+          var num = eachRow['score']
+          var roundedString = num.toFixed(2);
+          var rounded = Number(roundedString);
+          eachRow['score'] = rounded
+
+          var num = eachRow['coefficientCalculation']
+          var roundedString = num.toFixed(2);
+          var rounded = Number(roundedString);
+          eachRow['coefficientCalculation'] = rounded
+
+
+        });
         this.dataSourceChecklistReportPerUnit = new MatTableDataSource(this.averagesOfCheckListReport);
         this.calcAvgOfUnitsWithWasteAndClean()
       }
@@ -419,8 +444,8 @@ export class WorkbookReportComponent implements OnInit {
         }
         eachConfilict.dat_Date = moment(eachConfilict.dat_Date).locale('fa').format('YYYY/MM/DD');
 
-        if (eachConfilict['contradiction1'] == "باز است" && (eachConfilict['contradiction2'] == "باز است"
-          || eachConfilict['contradiction2'] == null) &&
+        if (eachConfilict['contradiction1'] != "بسته است" && (eachConfilict['contradiction2'] != "بسته است"
+        ) &&
           eachConfilict['ustr_KomiteCode'] == this.selectedZoneCharacteristic
         ) {
           this.listOfConfilicts.push(eachConfilict)
@@ -435,12 +460,12 @@ export class WorkbookReportComponent implements OnInit {
       else {
         ratio = 4;
       }
-      ////debugger
+      debugger
       this.zoneWithoutMeasurementConfilicts = [];
       this.zoneWithoutMeasurementConfilicts.push({
-        coefficientCalculationZone: ((((this.countAllOfConfilicts - this.listOfConfilicts.length) / this.countAllOfConfilicts) * 100 * 20) / 100) * ratio,
-        scoreZone: ((((this.countAllOfConfilicts - this.listOfConfilicts.length) / this.countAllOfConfilicts) * 100 * 20) / 100),
-        ratio: ratio, type: "اقدامات اصلاحی", percentAvg: ((this.countAllOfConfilicts - this.listOfConfilicts.length) / this.countAllOfConfilicts) * 100
+        coefficientCalculationZone: (((( this.listOfConfilicts.length) / this.countAllOfConfilicts) * 100 * 20) / 100) * ratio,
+        scoreZone: (((( this.listOfConfilicts.length) / this.countAllOfConfilicts) * 100 * 20) / 100),
+        ratio: ratio, type: "اقدامات اصلاحی", percentAvg: ((this.listOfConfilicts.length) / this.countAllOfConfilicts) * 100
       })
 
 
@@ -466,13 +491,25 @@ export class WorkbookReportComponent implements OnInit {
                direction:rtl;
                font-family: 'b mitra'!important; 
                text-align: right;
-  
              }
+        th{
+          background-color:#4285f4;
+          border: 0px solid gray;
+          border: 1px solid gray;
+          border: 1px solid gray;
+          font-size: medium;
+      
+        }
+        
+        .titleOfWorkBook{
+          background-color:#ea4335;
+          color:white;          
+      }
              td{
                  
                border: 0px solid gray;
-               border-left: 1px solid gray;
-               border-bottom: 1px solid gray;
+               border: 1px solid gray;
+               border: 1px solid gray;
                font-size: medium;
               
              }
@@ -543,13 +580,13 @@ export class WorkbookReportComponent implements OnInit {
       this.commonService.showEventMessage("اطلاعات نظافت صنعتی برای ماه و ناحیه انتخابی در پایگاه های داده ای موجود نیست")
 
     }
-
+    debugger;
     if (!this.zoneWithMeasurement || this.zoneWithMeasurement.length == 0) {
       this.zoneWithoutMeasurementConfilicts[0].ratio = 4
       this.zoneWithoutMeasurement = [...arr1, ...arr2, ...this.zoneWithoutMeasurementConfilicts];
     }
     else {
-      ////debugger;
+
 
       this.zoneWithoutMeasurementConfilicts[0].ratio = 7;
       this.zoneWithoutMeasurementConfilicts[0].coefficientCalculationZone = (((this.zoneWithoutMeasurementConfilicts[0].coefficientCalculationZone) / 4) * 7)
@@ -580,7 +617,7 @@ export class WorkbookReportComponent implements OnInit {
     //console.log('SumOfCoefficientCalculationZone', SumOfCoefficientCalculationZone)
     //console.log(' this.zoneWithoutMeasurement', this.zoneWithoutMeasurement)
     this.zoneWithoutMeasurement.forEach(eachRow => {
-      debugger
+      //debugger
       var num = eachRow['coefficientCalculationZone']
       var roundedString = num.toFixed(2);
       var rounded = Number(roundedString);
@@ -592,20 +629,14 @@ export class WorkbookReportComponent implements OnInit {
         eachRow['percentAvg'] = rounded
       }
       if (eachRow['scoreZone']) {
-      var num = eachRow['scoreZone']
-      var roundedString = num.toFixed(2);
-      var rounded = Number(roundedString);
-      eachRow['scoreZone'] = rounded
+        var num = eachRow['scoreZone']
+        var roundedString = num.toFixed(2);
+        var rounded = Number(roundedString);
+        eachRow['scoreZone'] = rounded
       }
 
     });
-
-
-
-
     this.dataSourceZoneWithoutMeasurement = new MatTableDataSource(this.zoneWithoutMeasurement);
-
-
   }
   calcAvgOfUnitsWithWasteAndClean() {
     //  ////debugger
@@ -624,7 +655,21 @@ export class WorkbookReportComponent implements OnInit {
       ))
     )
 
+    this.averageMonthlyUnit.forEach(eachRow => {
+      //debugger
+      var num = eachRow['value']
+      var roundedString = num.toFixed(2);
+      var rounded = Number(roundedString);
+      eachRow['value'] = rounded
+
+
+    });
+
     this.dataSourceAverageMonthlyUnit = new MatTableDataSource(this.averageMonthlyUnit);
+
+
+
+
   }
   getMeasurement(): Observable<any> {
     let s_location_id = this.locationId
@@ -676,6 +721,7 @@ export class WorkbookReportComponent implements OnInit {
           this.PercentageOfMeasurement(this.fullListOfMeasurement)
           sub.next();
           this.dataSourceReportMeasurement = new MatTableDataSource(this.fullListOfMeasurement);
+          //debugger
           this.commonService.loading = false;
         });
 
@@ -713,10 +759,16 @@ export class WorkbookReportComponent implements OnInit {
           counts[optionsText[i]]++;
         }
       }
+
+      if (counts[""] == undefined) counts[""] = 0
+      if (counts["*"] == undefined) counts["*"] = 0
+      this.measurementResult = (counts[""] / (counts['*'] + counts[""]))
       //console.log('counts', counts);
       this.counts = JSON.stringify(counts)
       let sum = Object.keys(counts).reduce((s, k) => s += counts[k], 0);
       this.percentage = Object.keys(counts).map(k => ({ [k]: + (counts[k] / sum * 100).toFixed(2) }));
+
+
       //console.log('open', this.percentage);
       //this.mergeWateAndCleaning()
 
@@ -780,6 +832,7 @@ export class WorkbookReportComponent implements OnInit {
     this.AllOfConfilictsOfThisZone = [];
     this.weakPoint = "";
     this.nrtResult = undefined;
+    this.measurementResult = undefined;
     this.fullListOfcheckListReport = [];
     this.zoneWithoutMeasurementConfilicts = [];
     this.fullListOfWorkbookReport = [];
@@ -850,17 +903,19 @@ export class WorkbookReportComponent implements OnInit {
       this.nrtResult = (counts[""] / (counts['*'] + counts[""]))
       //console.log('nrtResult', this.nrtResult);
 
-      this.measurementLength += Number(this.fullListOfNrtReport.length)
-      this.measurementPercentAvg += Number(this.nrtResult * 100)
+      this.measurementLength = 0;
+      this.measurementLength = (Number(this.fullListOfNrtReport.length) + Number(this.fullListOfMeasurement.length)) + this.measurementLength
+      this.measurementPercentAvg = (((this.nrtResult) * 100 + (this.measurementResult) * 100) / this.measurementLength) * 100
+      let ratio = 3
       //console.log('measurementLength', this.measurementLength);
       // this.zoneWithMeasurement.push({
       //   coefficientCalculationZone: ratio * Number(((counts[""] / optionsText.length) * 100 * 20) / 100),
       //   scoreZone: ((counts[""] / optionsText.length) * 100) * 20 / 100,
       //   ratio: ratio, type: "اندازه گیری", percentAvg: (counts[""] / optionsText.length) * 100,
       // })
-      // this.zoneWithMeasurement[0].percentAvg=(this.measurementPercentAvg/this.measurementLength)*100
-      // this.zoneWithMeasurement[0].scoreZone=((this.measurementPercentAvg/this.measurementLength)*100)*20/100
-      //  this.zoneWithMeasurement[0].coefficientCalculationZone=Number(((this.measurementPercentAvg/this.measurementLength)*100)*20/100)*this.measurmentRatio
+      this.zoneWithMeasurement[0].percentAvg = this.measurementPercentAvg
+      this.zoneWithMeasurement[0].scoreZone = (this.measurementPercentAvg) * 20 / 100
+      this.zoneWithMeasurement[0].coefficientCalculationZone = (this.measurementPercentAvg) * 20 / 100 * ratio
       // this.mergeWateAndCleaning()
 
       // if (data[0]) {
