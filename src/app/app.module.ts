@@ -25,6 +25,8 @@ import { LocationsComponent } from './utils/loading/locations/locations/location
 import { MessagesComponent } from './utils/messages/messages.component';
 import { SchedulingComponent } from './checkList/scheduling/scheduling.component';
 import { NgPersianDatepickerModule } from 'ng-persian-datepicker';
+import { EvaluationDiscrepanciesReportComponent } from './checkList/evaluationDiscrepanciesReport/evaluationDiscrepanciesReport.component';
+import { RequestChecklistReportComponent } from './checkList/request-checklist-report/request-checklist-report.component';
 
 
 
@@ -44,6 +46,8 @@ const myRoots: Routes = [
       { path: 'users', component: UsersComponent },
       { path: 'messages', component: MessagesComponent },
       { path: 'scheduling', component: SchedulingComponent },
+      { path: 'requestChecklistReport', component: RequestChecklistReportComponent},
+      { path: 'evaluationDiscrepanciesReport', component: EvaluationDiscrepanciesReportComponent },
     ]
   }
 
@@ -65,7 +69,9 @@ const myRoots: Routes = [
     LocationsComponent,
     UsersComponent,
     MessagesComponent,
-    SchedulingComponent
+    SchedulingComponent,
+    EvaluationDiscrepanciesReportComponent,
+    RequestChecklistReportComponent
   ],
   imports: [      NgPersianDatepickerModule,
 

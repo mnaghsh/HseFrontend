@@ -33,26 +33,30 @@ export class MenuComponent implements OnInit {
       { label: 'برنامه زمانبندی', path: "/scheduling", icon: "fa fa-calendar" },
     ];
     debugger
-    if (this.commonService.activeUser.accessLevel=="admin"){
+    if (this.commonService.activeUser.accessLevel == "admin") {
       this.rightMenu = [
         { label: 'تعریف چک لیست', path: "/createCheckList", icon: "fa fa-pencil" },
         { label: 'انجام ارزیابی', path: "/checklistAssesment", icon: "fa fa-print" },
         { label: 'چاپ گزارش', path: "/checklistReport", icon: "fa fa-newspaper-o" },
         { label: 'مدیریت مکان ها ', path: "/locations", icon: "fa fa-map-marker" },
         { label: 'مدیریت کاربران ', path: "/users", icon: "fa fa-users" },
+        { label: ' گزارش مغایرت ارزیابی های انجام شده', path: "/evaluationDiscrepanciesReport", icon: "fa fa-newspaper-o" },
+        { label: 'چاپ گزارش بر اساس نام ارزیاب و تاریخ', path: "/requestChecklistReport", icon: "fa fa-newspaper-o" },
         { label: 'خروج', path: "/login", icon: "fa fa-sign-out" },
       ]
-     
+
     }
-    else{
+    else {
       this.rightMenu = [
         { label: 'تعریف چک لیست', path: "/createCheckList", icon: "fa fa-pencil" },
         { label: 'انجام ارزیابی', path: "/checklistAssesment", icon: "fa fa-print" },
         { label: 'چاپ گزارش', path: "/checklistReport", icon: "fa fa-newspaper-o" },
         { label: 'مدیریت مکان ها ', path: "/locations", icon: "fa fa-map-marker" },
+        { label: ' گزارش مغایرت ارزیابی های انجام شده', path: "/evaluationDiscrepanciesReport", icon: "fa fa-newspaper-o" },
+        { label: 'چاپ گزارش بر اساس نام ارزیاب و تاریخ', path: "/requestChecklistReport", icon: "fa fa-newspaper-o" },
         { label: 'خروج', path: "/login", icon: "fa fa-sign-out" },
       ]
-        
+
     }
 
 

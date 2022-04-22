@@ -23,7 +23,7 @@ export class SchedulingComponent implements OnInit {
     { value: 4, viewValue: 'روزانه' }
   ]
 
-  displayedColumns = ['number', 'namAssessorHsrch', 'namChkHecli', 'namPeriodHsrch', 'namLocationHsrch', 'process'];
+  displayedColumns = ['number', 'namAssessorHsrch', 'namChkHecli', 'numNumberHsrch','namPeriodHsrch', 'namLocationHsrch', 'process'];
   listOfAllSchedulings: any;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -61,6 +61,7 @@ export class SchedulingComponent implements OnInit {
       "assessorIdHsrch": this.newRowObj.assessorId,
       "hecliECheckListId": this.newRowObj.hecliECheckListId,
       "namPeriodHsrch": this.newRowObj.namPeriodHsrch,
+      "numNumberHsrch": this.newRowObj.numNumberHsrch,
       "locationIdHsrch": this.newRowObj.locationIdHsrch,
       "namLocationHsrch": this.newRowObj.namLocationHsrch,
       "namAssessorHsrch": this.newRowObj.namAssessorHsrch,
@@ -114,7 +115,7 @@ export class SchedulingComponent implements OnInit {
   }
 
   public deleteRow(row) {
-
+debugger
     console.log('del', row)
     this.schedulingService.deleteListOfScheduling(row['eSchedulingId']).subscribe(
       (success) => {
