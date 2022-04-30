@@ -364,7 +364,8 @@ export class transportationWorkbookReportComponent implements OnInit {
   //   }
   // }
   getConfilicts() {
-    this.selectedDate
+    
+ 
     const now = new Date();
     now.setFullYear(now.getFullYear() - 1);
     let date = (now.toISOString().slice(0, 10));
@@ -374,18 +375,19 @@ export class transportationWorkbookReportComponent implements OnInit {
     let body = {
       "dat_Date": date
     }
-    //debugger
+    //////debugger
     this.selectedZoneCharacteristic = this.zoneLocationCharacteristic
     this.commonService.loading = true;
     this.workbokReport.getConfilicts(body).subscribe((success) => {
+      
       success.forEach(eachConfilict => {
         if (eachConfilict['ustr_KomiteCode'] == this.selectedZoneCharacteristic) {
           this.AllOfConfilictsOfThisZone.push(eachConfilict)
         }
         eachConfilict.dat_Date = moment(eachConfilict.dat_Date).locale('fa').format('YYYY/MM/DD');
 
-        if (eachConfilict['contradiction1'] == "باز است" && (eachConfilict['contradiction2'] == "باز است"
-          || eachConfilict['contradiction2'] == null) &&
+        if (eachConfilict['contradiction1'] != "بسته است" && (eachConfilict['contradiction2'] != "بسته است"
+        ) &&
           eachConfilict['ustr_KomiteCode'] == this.selectedZoneCharacteristic
         ) {
           this.listOfConfilicts.push(eachConfilict)
@@ -400,7 +402,7 @@ export class transportationWorkbookReportComponent implements OnInit {
       else {
         ratio = 4;
       }
-      
+      debugger
       this.zoneWithoutMeasurementConfilicts = [];
       this.zoneWithoutMeasurementConfilicts.push({
         coefficientCalculationZone: ((((this.countAllOfConfilicts - this.listOfConfilicts.length) / this.countAllOfConfilicts) * 100 * 20) / 100) * ratio,
@@ -411,12 +413,66 @@ export class transportationWorkbookReportComponent implements OnInit {
 
       this.dataSourceConfilicts = new MatTableDataSource(this.listOfConfilicts);
       // this.commonService.loading = false;
-      this.mergeWateAndCleaning();
-      ////console.log('countAllOfConfilicts', this.countAllOfConfilicts)
-      ////console.log('listOfConfilicts', this.listOfConfilicts)
-    })
 
+      //console.log('countAllOfConfilicts', this.countAllOfConfilicts)
+      //console.log('listOfConfilicts', this.listOfConfilicts)
+    })
+ 
   }
+  // getConfilicts() {
+  //   this.selectedDate
+  //   const now = new Date();
+  //   now.setFullYear(now.getFullYear() - 1);
+  //   let date = (now.toISOString().slice(0, 10));
+
+  //   //  let thisMonthMinesOneYear = moment(date).locale('en').format('YYYY-MM') + "-01"
+
+  //   let body = {
+  //     "dat_Date": date
+  //   }
+  //   //debugger
+  //   this.selectedZoneCharacteristic = this.zoneLocationCharacteristic
+  //   this.commonService.loading = true;
+  //   this.workbokReport.getConfilicts(body).subscribe((success) => {
+  //     success.forEach(eachConfilict => {
+  //       if (eachConfilict['ustr_KomiteCode'] == this.selectedZoneCharacteristic) {
+  //         this.AllOfConfilictsOfThisZone.push(eachConfilict)
+  //       }
+  //       eachConfilict.dat_Date = moment(eachConfilict.dat_Date).locale('fa').format('YYYY/MM/DD');
+
+  //       if (eachConfilict['contradiction1'] == "باز است" && (eachConfilict['contradiction2'] == "باز است"
+  //         || eachConfilict['contradiction2'] == null) &&
+  //         eachConfilict['ustr_KomiteCode'] == this.selectedZoneCharacteristic
+  //       ) {
+  //         this.listOfConfilicts.push(eachConfilict)
+  //       }
+  //     });
+  //     this.countAllOfConfilicts = this.AllOfConfilictsOfThisZone.length;
+  //     let ratio
+  //     //ugger
+  //     if (this.zoneWithMeasurement.length > 0) {
+  //       ratio = 7;
+  //     }
+  //     else {
+  //       ratio = 4;
+  //     }
+      
+  //     this.zoneWithoutMeasurementConfilicts = [];
+  //     this.zoneWithoutMeasurementConfilicts.push({
+  //       coefficientCalculationZone: ((((this.countAllOfConfilicts - this.listOfConfilicts.length) / this.countAllOfConfilicts) * 100 * 20) / 100) * ratio,
+  //       scoreZone: ((((this.countAllOfConfilicts - this.listOfConfilicts.length) / this.countAllOfConfilicts) * 100 * 20) / 100),
+  //       ratio: ratio, type: "اقدامات اصلاحی", percentAvg: ((this.countAllOfConfilicts - this.listOfConfilicts.length) / this.countAllOfConfilicts) * 100
+  //     })
+
+
+  //     this.dataSourceConfilicts = new MatTableDataSource(this.listOfConfilicts);
+  //     // this.commonService.loading = false;
+  //     this.mergeWateAndCleaning();
+  //     ////console.log('countAllOfConfilicts', this.countAllOfConfilicts)
+  //     ////console.log('listOfConfilicts', this.listOfConfilicts)
+  //   })
+
+  // }
   print(): void {
     let printContents, popupWin;
     printContents = document.getElementById('print-section').innerHTML;
@@ -527,7 +583,26 @@ export class transportationWorkbookReportComponent implements OnInit {
         ratio: "", type: "معدل ماه", percentAvg: ""
       }
     )
+    this.zoneWithoutMeasurement.forEach(eachRow => {
+      //debugger
+      var num = eachRow['coefficientCalculationZone']
+      var roundedString = num.toFixed(2);
+      var rounded = Number(roundedString);
+      eachRow['coefficientCalculationZone'] = rounded
+      if (eachRow['percentAvg']) {
+        var num = eachRow['percentAvg']
+        var roundedString = num.toFixed(2);
+        var rounded = Number(roundedString);
+        eachRow['percentAvg'] = rounded
+      }
+      if (eachRow['scoreZone']) {
+        var num = eachRow['scoreZone']
+        var roundedString = num.toFixed(2);
+        var rounded = Number(roundedString);
+        eachRow['scoreZone'] = rounded
+      }
 
+    });
     ////console.log('sumOfRatio', sumOfRatio)
     ////console.log('SumOfCoefficientCalculationZone', SumOfCoefficientCalculationZone)
     ////console.log(' this.zoneWithoutMeasurement', this.zoneWithoutMeasurement)
