@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-
+import * as moment from 'jalali-moment'
 import { CommonService } from 'src/app/services/common.service';
 import { evaluationDiscrepanciesReportService } from 'src/app/services/evaluationDiscrepanciesReport/evaluationDiscrepanciesReport.service';
 import { RequestChecklistService } from 'src/app/services/requestChecklistService/RequestChecklistService';
@@ -26,7 +26,7 @@ export class EvaluationDiscrepanciesReportComponent implements OnInit {
     { value: 4, viewValue: 'روزانه' }
   ]
 
-  displayedColumns = ['number', 'namAssessorHsrch', 'assessmentDid', 'numberOfDuties'];
+  displayedColumns = ['number', 'namAssessorHsrch', 'assessmentDid', 'numberOfDuties', 'namPeriodHsrch'];
   listOfAllSchedulings: any;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -35,7 +35,10 @@ export class EvaluationDiscrepanciesReportComponent implements OnInit {
   edit = false;
   enable: boolean = true;
   requests: any;
+
   schedules: any;
+  period: { value: number; viewValue: string; }[];
+  selectedPeriod;
   constructor(public commonService: CommonService,
     public evaluationDiscrepancies: evaluationDiscrepanciesReportService,
     private dialog: MatDialog,
@@ -48,12 +51,19 @@ export class EvaluationDiscrepanciesReportComponent implements OnInit {
     this.newRowObj = {}
     let sumNumNumberHsrch
     this.getAllSchedules();
+    this.period = [
+      { value: 1, viewValue: 'هفتگی' },
+      { value: 2, viewValue: 'ماهانه' },
+      { value: 3, viewValue: 'سالانه' },
 
+    ];
 
   }
 
   public getAllSchedules() {
+    debugger
     let assessmentDid = []
+    let filteredRequests = []
     let obj = []
     this.commonService.loading = true;
     this.requestChecklist.selectAllListOfRequestCheckLists().subscribe((success) => {
@@ -63,15 +73,90 @@ export class EvaluationDiscrepanciesReportComponent implements OnInit {
         this.schedules.forEach(item1 => {
           assessmentDid = [];
           this.requests.forEach(item2 => {
-            if (item1.namAssessorHsrch == item2.namAssessorHsrch) {
-              assessmentDid.push(success)
+            let requestDateHsrch = moment(item2.requestDateHsrch, 'YYYY/MM/DD');
+            let dateMinusWeek = moment(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), 'YYYY/MM/DD');
+            let dateMinusMonth = moment(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), 'YYYY/MM/DD');
+            let dateMinusYear = moment(new Date(Date.now() - 365 * 24 * 60 * 60 * 1000), 'YYYY/MM/DD');
+
+            switch (this.selectedPeriod) {
+              case 1:
+                if (requestDateHsrch > dateMinusWeek) {
+                  filteredRequests.push(item2)
+                  this.requests = filteredRequests
+                  if (item1.namAssessorHsrch == item2.namAssessorHsrch) {
+                    this.requests = this.requests.filter((value, index, self) =>
+                      index === self.findIndex((t) => (
+                        t.eRequestId === value.eRequestId
+                      ))
+                    )
+                    assessmentDid.push(this.requests)
+                  }
+
+                }
+
+                break;
+              case 2:
+                if (requestDateHsrch > dateMinusMonth) {
+                  filteredRequests.push(item2)
+                  this.requests = filteredRequests
+                  if (item1.namAssessorHsrch == item2.namAssessorHsrch) {
+                    this.requests = this.requests.filter((value, index, self) =>
+                      index === self.findIndex((t) => (
+                        t.eRequestId === value.eRequestId
+                      ))
+                    )
+                    assessmentDid.push(this.requests)
+                  }
+
+                }
+                break;
+              case 3:
+                if (requestDateHsrch > dateMinusYear) {
+                  filteredRequests.push(item2)
+                  this.requests = filteredRequests
+                  if (item1.namAssessorHsrch == item2.namAssessorHsrch) {
+                    this.requests = this.requests.filter((value, index, self) =>
+                      index === self.findIndex((t) => (
+                        t.eRequestId === value.eRequestId
+                      ))
+                    )
+                    assessmentDid.push(this.requests)
+                  }
+
+                }
+                break;
+
+              default:
+                
+               if (requestDateHsrch > dateMinusWeek) 
+                  filteredRequests.push(item2)
+                  this.requests = filteredRequests
+                  if (item1.namAssessorHsrch == item2.namAssessorHsrch) {
+                    this.requests = this.requests.filter((value, index, self) =>
+                      index === self.findIndex((t) => (
+                        t.eRequestId === value.eRequestId
+                      ))
+                    )
+                    assessmentDid.push(this.requests)
+                  }
+
+                
+
+                break;
+
             }
+
           });
-          obj.push({
-            namAssessorHsrch: item1.namAssessorHsrch,
-            assessmentDid: assessmentDid.length,
-            numberOfDuties: item1.numberOfDuties,
-          })
+          if (this.selectedPeriod == item1.numPeriodHsrch) {
+            obj.push({
+              namAssessorHsrch: item1.namAssessorHsrch,
+              assessmentDid: assessmentDid.length,
+              numberOfDuties: item1.numberOfDuties,
+              namPeriodHsrch: item1.namPeriodHsrch
+
+            })
+          }
+
           this.dataSource = new MatTableDataSource(obj);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
