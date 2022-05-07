@@ -194,11 +194,13 @@
                         </ng-container>
 
 
-                        <ng-container matColumnDef="lastRound">
+                        <ng-container matColumnDef="receiverName">
                             <th mat-header-cell  *matHeaderCellDef> آخرین گردش</th>
 
                             <td mat-cell *matCellDef="let element">
-                                <p>{{element.firstName+" "+ element.lastName}}</p>
+                                <!-- <p>{{element.firstName+" "+ element.lastName}}</p> -->
+                                <p>{{element.receiverName}}</p>
+                                
                             </td>
                             <td mat-footer-cell *matFooterCellDef>
                                 <!-- <p style="color: red;">مجموع گزینه ها</p> -->

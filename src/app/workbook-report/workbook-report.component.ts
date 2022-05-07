@@ -38,7 +38,7 @@ export class WorkbookReportComponent implements OnInit {
     'desQuestionHeclq', 'desOptionHeclo', 'desExplainQuestionHscha', 'requestDateJalaliHsrch',
     'namAssessorHsrch', 'namLocationHsrch', 'unitCehckListsHecli', 'namDepartmentHecli', 'namEvaluationAreaHsrch'];
   displayedColumnsZoneWithoutMeasurement = ['type', 'ratio', 'percentAvg', 'scoreZone', 'coefficientCalculationZone'];
-  displayedColumnsConfilicts = ['number', 'entityNumber', 'dat_Date', 'lastRound', 'contradiction1', 'contradiction2', 'ustr_KomiteName', 'str_MoghayeratDescA'];
+  displayedColumnsConfilicts = ['number', 'entityNumber', 'dat_Date', 'receiverName', 'contradiction1', 'contradiction2', 'ustr_KomiteName', 'str_MoghayeratDescA'];
   displayedNrtReport = ['number', 'nam_sample', 'dat', 'nam_farsi_test', 'nam_latin_test', 'res', 'lo', 'hi', 'in_range'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
