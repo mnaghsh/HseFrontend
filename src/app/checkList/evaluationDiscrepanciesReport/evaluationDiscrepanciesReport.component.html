@@ -11,15 +11,33 @@
 
     </div>
     <mat-card>
-
         <mat-form-field appearance="fill">
             <mat-label>بازه</mat-label>
             <mat-select [(ngModel)]="selectedPeriod">
                 <mat-option (click)="getAllSchedules()" *ngFor="let f of period" [value]="f.value">{{f.viewValue}}
                 </mat-option>
             </mat-select>
+
         </mat-form-field>
+        <br>
+        <div>
+            <mat-form-field *ngIf="selectedPeriod==4">
+                <input placeholder="از تاریخ" matInput type="text" #startDate />
+                <ng-persian-datepicker [timeEnable]="false" [uiTheme]="'blue'" [dateFormat]="'jYYYY-jMM-jDD'"
+                    [input]="startDate"  (click)="getAllSchedules()">
+                </ng-persian-datepicker>
+            </mat-form-field>
+            &nbsp;
+            <mat-form-field *ngIf="selectedPeriod==4">
+                <input placeholder="تا تاریخ" matInput type="text" #endDate />
+                <ng-persian-datepicker [timeEnable]="false" [uiTheme]="'blue'" [dateFormat]="'jYYYY-jMM-jDD'"
+                    [input]="endDate"  (click)="getAllSchedules()" >
+                </ng-persian-datepicker>
+            </mat-form-field>
+        </div>
+
     </mat-card>
+
 
     <mat-form-field class="example-container ">
         <input matInput (keyup)="applyFilter($event)" placeholder="جستجو">
@@ -109,7 +127,7 @@
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            <!-- <tr style="background-color: #794c7454;" mat-footer-row *matFooterRowDef="displayedColumns ; sticky: true">
+            <!-- <tr style="background-color: #06acea30;" mat-footer-row *matFooterRowDef="displayedColumns ; sticky: true">
 
             </tr> -->
 

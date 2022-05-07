@@ -30,11 +30,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   margin-bottom: 4%!important;
 }
 /*.mat-raised-button{
-  background-color: #794c74 !important;
+  background-color: #06acea !important;
 }*/
 .titrCard{
 
-  background-color: #794c74;
+  background-color: #06acea;
   /*background-image: linear-gradient(#2684ff, #0049b0);
   background: linear-gradient(to right, #2684ff, #0049b0); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
@@ -46,7 +46,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .titrCardDialog{
 
-  background-color: #794c74;
+  background-color: #06acea;
   color:white;
   width: 100%;
 
@@ -140,4 +140,7 @@ th{
   font-weight:bolder !important;
  padding-right: 2px!important;
 
+}
+input{
+  cursor: pointer;
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -35,7 +35,8 @@ export class EvaluationDiscrepanciesReportComponent implements OnInit {
   edit = false;
   enable: boolean = true;
   requests: any;
-
+  @ViewChild('startDate') startDate: ElementRef;
+  @ViewChild('endDate') endDate: ElementRef;
   schedules: any;
   period: { value: number; viewValue: string; }[];
   selectedPeriod;
@@ -53,15 +54,16 @@ export class EvaluationDiscrepanciesReportComponent implements OnInit {
     this.getAllSchedules();
     this.period = [
       { value: 1, viewValue: 'هفتگی' },
-      { value: 2, viewValue: 'ماهانه' },
+      { value: 2, viewValue: 'ماهانه'},
       { value: 3, viewValue: 'سالانه' },
-
+      { value: 4, viewValue: 'تاریخ انتخابی' },
     ];
 
   }
 
   public getAllSchedules() {
-    debugger
+    console.log('getAllSchedules')
+
     let assessmentDid = []
     let filteredRequests = []
     let obj = []
@@ -71,8 +73,9 @@ export class EvaluationDiscrepanciesReportComponent implements OnInit {
       this.evaluationDiscrepancies.selectAllListOfevaluationDiscrepancies().subscribe((success) => {
         this.schedules = success
         this.schedules.forEach(item1 => {
-          assessmentDid = [];
+
           this.requests.forEach(item2 => {
+
             let requestDateHsrch = moment(item2.requestDateHsrch, 'YYYY/MM/DD');
             let dateMinusWeek = moment(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), 'YYYY/MM/DD');
             let dateMinusMonth = moment(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), 'YYYY/MM/DD');
@@ -89,7 +92,14 @@ export class EvaluationDiscrepanciesReportComponent implements OnInit {
                         t.eRequestId === value.eRequestId
                       ))
                     )
-                    assessmentDid.push(this.requests)
+
+                    assessmentDid = [...assessmentDid, ...this.requests];
+
+                    assessmentDid = assessmentDid.filter((value, index, self) =>
+                    index === self.findIndex((t) => (
+                      t.eRequestId === value.eRequestId
+                    ))
+                  )
                   }
 
                 }
@@ -105,7 +115,9 @@ export class EvaluationDiscrepanciesReportComponent implements OnInit {
                         t.eRequestId === value.eRequestId
                       ))
                     )
-                    assessmentDid.push(this.requests)
+                    assessmentDid = [...assessmentDid, ...this.requests];
+
+                    
                   }
 
                 }
@@ -125,10 +137,10 @@ export class EvaluationDiscrepanciesReportComponent implements OnInit {
 
                 }
                 break;
-
-              default:
-                
-               if (requestDateHsrch > dateMinusWeek) 
+              case 4:
+                let start = moment(this.startDate.nativeElement.value, 'jYYYY/jMM/jDD');
+                let end = moment(this.endDate.nativeElement.value, 'jYYYY/jMM/jDD');
+                if (requestDateHsrch >= start && requestDateHsrch <= end) {
                   filteredRequests.push(item2)
                   this.requests = filteredRequests
                   if (item1.namAssessorHsrch == item2.namAssessorHsrch) {
@@ -140,14 +152,32 @@ export class EvaluationDiscrepanciesReportComponent implements OnInit {
                     assessmentDid.push(this.requests)
                   }
 
-                
+                }
+                break;
+
+              default:
+
 
                 break;
 
             }
 
           });
-          if (this.selectedPeriod == item1.numPeriodHsrch) {
+          assessmentDid = assessmentDid.filter((value, index, self) =>
+                    index === self.findIndex((t) => (
+                      t.eRequestId === value.eRequestId
+                    ))
+                  )
+          if (this.selectedPeriod == item1.numPeriodHsrch && this.selectedPeriod != 4) {
+            obj.push({
+              namAssessorHsrch: item1.namAssessorHsrch,
+              assessmentDid: assessmentDid.length,
+              numberOfDuties: item1.numberOfDuties,
+              namPeriodHsrch: item1.namPeriodHsrch
+
+            })
+          }
+          if (this.selectedPeriod == 4) {
             obj.push({
               namAssessorHsrch: item1.namAssessorHsrch,
               assessmentDid: assessmentDid.length,
