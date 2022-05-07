@@ -437,36 +437,49 @@ export class WorkbookReportComponent implements OnInit {
     let body = {
       "dat_Date": date
     }
-    //////debugger
+    debugger
     this.selectedZoneCharacteristic = this.zoneLocationCharacteristic
     this.commonService.loading = true;
     this.workbokReport.getConfilicts(body).subscribe((success) => {
       sub.next();
       success.forEach(eachConfilict => {
 
-        if (eachConfilict['ustr_KomiteCode'] == this.selectedZoneCharacteristic) {
 
+        if (this.selectedZoneCharacteristic == "SMC" &&
+          eachConfilict['ustr_KomiteCode'] == "SMC" ||
+          eachConfilict['ustr_KomiteCode'] == "CCA" ||
+          eachConfilict['ustr_KomiteCode'] == "DAD" ||
+          eachConfilict['ustr_KomiteCode'] == "SPR" ||
+          eachConfilict['ustr_KomiteCode'] == "PRO") {
           this.AllOfConfilictsOfThisZone.push(eachConfilict)
-          if (eachConfilict['ustr_KomiteCode'] == "SMC" || eachConfilict['ustr_KomiteCode'] == "CCA" ||
-            eachConfilict['ustr_KomiteCode'] == "DAD" ||
-            eachConfilict['ustr_KomiteCode'] == "SPR" ||
-            eachConfilict['ustr_KomiteCode'] == "PRO") {
-
-            this.AllOfConfilictsOfThisZone.push(eachConfilict)
-
-          }
         }
+      });
+
+      this.AllOfConfilictsOfThisZone.forEach(eachConfilict => {
 
 
         eachConfilict.dat_Date = moment(eachConfilict.dat_Date).locale('fa').format('YYYY/MM/DD');
 
-        if (eachConfilict['contradiction1'] != "بسته است" && (eachConfilict['contradiction2'] != "بسته است"
-        ) &&
-          eachConfilict['ustr_KomiteCode'] == this.selectedZoneCharacteristic
-        ) {
+        if (
+         
+
+          ((eachConfilict['contradiction1'] == "باز است" &&
+            eachConfilict['contradiction2'] == null) ||
+            ////////////////
+            (eachConfilict['contradiction1'] == "باز است" &&
+              eachConfilict['contradiction2'] == "باز است") ||
+            ///////////////////
+            (eachConfilict['contradiction1'] == null &&
+              eachConfilict['contradiction2'] == null)
+            ////////////////////
+          )
+          ) {
           this.listOfConfilicts.push(eachConfilict)
         }
+
       });
+      console.log('salaam', this.AllOfConfilictsOfThisZone)
+
       this.countAllOfConfilicts = this.AllOfConfilictsOfThisZone.length;
       let ratio
       //ugger
@@ -654,30 +667,30 @@ export class WorkbookReportComponent implements OnInit {
     this.dataSourceZoneWithoutMeasurement = new MatTableDataSource(this.zoneWithoutMeasurement);
   }
   calcAvgOfUnitsWithWasteAndClean() {
-  
+
     this.averagesOfNam_measur_hemrp.forEach(rowOfFirstTable => {
       this.averagesOfCheckListReport.forEach(rowOf2ndTable => {
         if ((rowOfFirstTable.nam_location_hsloc).trim() == (rowOf2ndTable.nam_location_hsloc).trim()) {
           this.averageMonthlyUnit.forEach(items => {
-            
+
           });
           this.averageMonthlyUnit.push({ loc: rowOf2ndTable.nam_location_hsloc, value: (rowOfFirstTable.coefficientCalculation + rowOf2ndTable.coefficientCalculation) / 4 })
         }
       });
     });
 
-  //   this.averageMonthlyUnit.forEach((item, index) => {
-  //     if (index !== this.averageMonthlyUnit.findIndex(i => i.loc == item.loc)) 
-  //     {
-  //         this.averageMonthlyUnit.splice(index, 1);
-  //     }
+    //   this.averageMonthlyUnit.forEach((item, index) => {
+    //     if (index !== this.averageMonthlyUnit.findIndex(i => i.loc == item.loc)) 
+    //     {
+    //         this.averageMonthlyUnit.splice(index, 1);
+    //     }
 
-  // });
+    // });
 
 
     this.averageMonthlyUnit = this.averageMonthlyUnit.filter((value, index, self) =>
       index === self.findIndex((t) => (
-        t.loc === value.loc 
+        t.loc === value.loc
         //&& t.value === value.value
       ))
     )
@@ -685,7 +698,7 @@ export class WorkbookReportComponent implements OnInit {
     //this.averageMonthlyUnit=    this.averageMonthlyUnit.filter((v,i,a)=>a.findIndex(v2=>(JSON.stringify(v2) === JSON.stringify(v)))===i)
 
 
-  
+
 
     this.dataSourceAverageMonthlyUnit = new MatTableDataSource(this.averageMonthlyUnit);
 
