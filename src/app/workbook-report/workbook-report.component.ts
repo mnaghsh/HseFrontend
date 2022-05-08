@@ -445,13 +445,18 @@ export class WorkbookReportComponent implements OnInit {
       success.forEach(eachConfilict => {
 
 
-        if (this.selectedZoneCharacteristic == "SMC" &&
-          eachConfilict['ustr_KomiteCode'] == "SMC" ||
-          eachConfilict['ustr_KomiteCode'] == "CCA" ||
-          eachConfilict['ustr_KomiteCode'] == "DAD" ||
-          eachConfilict['ustr_KomiteCode'] == "SPR" ||
-          eachConfilict['ustr_KomiteCode'] == "PRO") {
+        if ((this.selectedZoneCharacteristic == "SMC") &&
+          (eachConfilict['ustr_KomiteCode'] == "SMC" ||
+            eachConfilict['ustr_KomiteCode'] == "CCA" ||
+            eachConfilict['ustr_KomiteCode'] == "DAD" ||
+            eachConfilict['ustr_KomiteCode'] == "SPR" ||
+            eachConfilict['ustr_KomiteCode'] == "PRO")) {
           this.AllOfConfilictsOfThisZone.push(eachConfilict)
+        }
+        else {
+          if (this.selectedZoneCharacteristic == eachConfilict['ustr_KomiteCode']) {
+            this.AllOfConfilictsOfThisZone.push(eachConfilict)
+          }
         }
       });
 
@@ -461,7 +466,7 @@ export class WorkbookReportComponent implements OnInit {
         eachConfilict.dat_Date = moment(eachConfilict.dat_Date).locale('fa').format('YYYY/MM/DD');
 
         if (
-         
+
 
           ((eachConfilict['contradiction1'] == "باز است" &&
             eachConfilict['contradiction2'] == null) ||
@@ -473,7 +478,7 @@ export class WorkbookReportComponent implements OnInit {
               eachConfilict['contradiction2'] == null)
             ////////////////////
           )
-          ) {
+        ) {
           this.listOfConfilicts.push(eachConfilict)
         }
 
