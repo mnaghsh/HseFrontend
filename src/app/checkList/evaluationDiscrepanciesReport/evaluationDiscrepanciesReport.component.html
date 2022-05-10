@@ -59,65 +59,65 @@
                 </td>
             </ng-container>
 
-            <ng-container matColumnDef="namAssessorHsrch">
+            <ng-container matColumnDef="NAM_ASSESSOR_HSRCH">
                 <th mat-header-cell mat-sort-header *matHeaderCellDef> نام ارزیاب</th>
                 <td mat-cell *matCellDef="let element">
                     <mat-form-field *ngIf="edit" class="example-full-width" appearance="fill">
                         <input (click)="selectAssessor()" matInput *ngIf="edit" [placeholder]=""
-                            [(ngModel)]="element.namAssessorHsrch" type="text">
+                            [(ngModel)]="element.NAM_ASSESSOR_HSRCH" type="text">
                     </mat-form-field>
-                    <p *ngIf="!edit">{{element.namAssessorHsrch}}</p>
+                    <p *ngIf="!edit">{{element.NAM_ASSESSOR_HSRCH}}</p>
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
                     <mat-form-field style="max-height: 52px;" class="example-full-width" appearance="fill">
-                        <input placeholder="نام ارزیاب" matInput [(ngModel)]="newRowObj.namAssessorHsrch" type="text">
+                        <input placeholder="نام ارزیاب" matInput [(ngModel)]="newRowObj.NAM_ASSESSOR_HSRCH" type="text">
                     </mat-form-field>
                 </td>
             </ng-container>
 
 
-            <ng-container matColumnDef="assessmentDid">
+            <ng-container matColumnDef="PreviouslyEvaluated">
                 <th mat-header-cell mat-sort-header *matHeaderCellDef> تعداد چک لیست های ارزیابی شده</th>
                 <td mat-cell *matCellDef="let element">
                     <mat-form-field *ngIf="edit" class="example-full-width" appearance="fill">
-                        <input matInput *ngIf="edit" [placeholder]="" [(ngModel)]="element.assessmentDid" type="text">
+                        <input matInput *ngIf="edit" [placeholder]="" [(ngModel)]="element.PreviouslyEvaluated" type="text">
                     </mat-form-field>
-                    <p *ngIf="!edit">{{element.assessmentDid}}</p>
+                    <p *ngIf="!edit">{{element.PreviouslyEvaluated}}</p>
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
                     <mat-form-field style="max-height: 52px;" class="example-full-width" appearance="fill">
-                        <input matInput placeholder="نام چک لیست" [(ngModel)]="newRowObj.assessmentDid" type="text">
+                        <input matInput placeholder="نام چک لیست" [(ngModel)]="newRowObj.PreviouslyEvaluated" type="text">
                     </mat-form-field>
                 </td>
             </ng-container>
 
-            <ng-container matColumnDef="numberOfDuties">
+            <ng-container matColumnDef="NumberOfDuties">
                 <th mat-header-cell mat-sort-header *matHeaderCellDef> تعداد چک لیست های برنامه ریزی شده </th>
                 <td mat-cell *matCellDef="let element">
                     <mat-form-field *ngIf="edit" class="example-full-width" appearance="fill">
-                        <input matInput *ngIf="edit" [placeholder]="" [(ngModel)]="element.numberOfDuties" type="text">
+                        <input matInput *ngIf="edit" [placeholder]="" [(ngModel)]="element.NumberOfDuties" type="text">
                     </mat-form-field>
-                    <p *ngIf="!edit">{{element.numberOfDuties}}</p>
+                    <p *ngIf="!edit">{{element.NumberOfDuties}}</p>
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
                     <mat-form-field style="max-height: 52px;" class="example-full-width" appearance="fill">
-                        <input type="number" matInput placeholder="تعداد" [(ngModel)]="newRowObj.numberOfDuties"
+                        <input type="number" matInput placeholder="تعداد" [(ngModel)]="newRowObj.NumberOfDuties"
                             type="text">
                     </mat-form-field>
                 </td>
             </ng-container>
 
-            <ng-container matColumnDef="namPeriodHsrch">
+            <ng-container matColumnDef="NAM_PERIOD_HSRCH">
                 <th mat-header-cell mat-sort-header *matHeaderCellDef> بازه </th>
                 <td mat-cell *matCellDef="let element">
                     <mat-form-field *ngIf="edit" class="example-full-width" appearance="fill">
-                        <input matInput *ngIf="edit" [placeholder]="" [(ngModel)]="element.namPeriodHsrch" type="text">
+                        <input matInput *ngIf="edit" [placeholder]="" [(ngModel)]="element.NAM_PERIOD_HSRCH" type="text">
                     </mat-form-field>
-                    <p *ngIf="!edit">{{element.namPeriodHsrch}}</p>
+                    <p *ngIf="!edit">{{element.NAM_PERIOD_HSRCH}}</p>
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
                     <mat-form-field style="max-height: 52px;" class="example-full-width" appearance="fill">
-                        <input type="number" matInput placeholder="تعداد" [(ngModel)]="newRowObj.namPeriodHsrch"
+                        <input type="number" matInput placeholder="تعداد" [(ngModel)]="newRowObj.NAM_PERIOD_HSRCH"
                             type="text">
                     </mat-form-field>
                 </td>
