@@ -40,8 +40,9 @@ export class MenuComponent implements OnInit {
         { label: 'چاپ گزارش', path: "/checklistReport", icon: "fa fa-newspaper-o" },
         { label: 'مدیریت مکان ها ', path: "/locations", icon: "fa fa-map-marker" },
         { label: 'مدیریت کاربران ', path: "/users", icon: "fa fa-users" },
-        { label: ' گزارش مغایرت ارزیابی های انجام شده', path: "/evaluationDiscrepanciesReport", icon: "fa fa-newspaper-o" },
-        { label: 'چاپ گزارش بر اساس نام ارزیاب و تاریخ', path: "/requestChecklistReport", icon: "fa fa-newspaper-o" },
+        { label: ' گزارش مغایرت ارزیابی های انجام شده', path: "/evaluationDiscrepanciesReportByAssessor", icon: "fa fa-newspaper-o" },
+        { label: ' گزارش مغایرت ارزیابی های انجام شده', path: "/evaluationDiscrepanciesReportByLocation", icon: "fa fa-newspaper-o" },
+        { label: ' گزارش مغایرت ارزیابی های انجام شده', path: "/evaluationDiscrepanciesReportByCheckList", icon: "fa fa-newspaper-o" },        { label: 'چاپ گزارش بر اساس نام ارزیاب و تاریخ', path: "/requestChecklistReport", icon: "fa fa-newspaper-o" },
         { label: 'خروج', path: "/login", icon: "fa fa-sign-out" },
       ]
 
@@ -52,7 +53,9 @@ export class MenuComponent implements OnInit {
         { label: 'انجام ارزیابی', path: "/checklistAssesment", icon: "fa fa-print" },
         { label: 'چاپ گزارش', path: "/checklistReport", icon: "fa fa-newspaper-o" },
         { label: 'مدیریت مکان ها ', path: "/locations", icon: "fa fa-map-marker" },
-        { label: ' گزارش مغایرت ارزیابی های انجام شده', path: "/evaluationDiscrepanciesReport", icon: "fa fa-newspaper-o" },
+        { label: ' گزارش مغایرت ارزیابی های انجام شده', path: "/evaluationDiscrepanciesReportByAssessor", icon: "fa fa-newspaper-o" },
+        { label: ' گزارش مغایرت ارزیابی های انجام شده', path: "/evaluationDiscrepanciesReportByLocation", icon: "fa fa-newspaper-o" },
+        { label: ' گزارش مغایرت ارزیابی های انجام شده', path: "/evaluationDiscrepanciesReportByCheckList", icon: "fa fa-newspaper-o" },
         { label: 'چاپ گزارش بر اساس نام ارزیاب و تاریخ', path: "/requestChecklistReport", icon: "fa fa-newspaper-o" },
         { label: 'خروج', path: "/login", icon: "fa fa-sign-out" },
       ]

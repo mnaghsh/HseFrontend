@@ -14,8 +14,14 @@
         <mat-form-field appearance="fill">
             <mat-label>بازه</mat-label>
             <mat-select [(ngModel)]="selectedPeriod">
-                <mat-option (click)="getAllSchedules()" *ngFor="let f of period" [value]="f.value">{{f.viewValue}}
-                </mat-option>
+                <div *ngIf="selectedPeriod!=4">
+                    <mat-option (click)="getAllSchedules()" *ngFor="let f of period" [value]="f.value">{{f.viewValue}}
+                    </mat-option>
+                    </div>
+                <div *ngIf="selectedPeriod==4">
+                    <mat-option  *ngFor="let f of period" [value]="f.value">{{f.viewValue}}
+                    </mat-option>
+                </div>
             </mat-select>
 
         </mat-form-field>
@@ -24,16 +30,20 @@
             <mat-form-field *ngIf="selectedPeriod==4">
                 <input placeholder="از تاریخ" matInput type="text" #startDate />
                 <ng-persian-datepicker [timeEnable]="false" [uiTheme]="'blue'" [dateFormat]="'jYYYY-jMM-jDD'"
-                    [input]="startDate"  (click)="getAllSchedules()">
+                    [input]="startDate">
                 </ng-persian-datepicker>
             </mat-form-field>
             &nbsp;
             <mat-form-field *ngIf="selectedPeriod==4">
                 <input placeholder="تا تاریخ" matInput type="text" #endDate />
                 <ng-persian-datepicker [timeEnable]="false" [uiTheme]="'blue'" [dateFormat]="'jYYYY-jMM-jDD'"
-                    [input]="endDate"  (click)="getAllSchedules()" >
+                    [input]="endDate">
                 </ng-persian-datepicker>
             </mat-form-field>
+            <BR>
+            <button  *ngIf="selectedPeriod==4" mat-raised-button color="accent" (click)="getAllSchedules()">
+                <i class="fa fa-filter" aria-hidden="true"></i> اعمال فیلتر
+            </button>
         </div>
 
     </mat-card>
@@ -80,13 +90,15 @@
                 <th mat-header-cell mat-sort-header *matHeaderCellDef> تعداد چک لیست های ارزیابی شده</th>
                 <td mat-cell *matCellDef="let element">
                     <mat-form-field *ngIf="edit" class="example-full-width" appearance="fill">
-                        <input matInput *ngIf="edit" [placeholder]="" [(ngModel)]="element.PreviouslyEvaluated" type="text">
+                        <input matInput *ngIf="edit" [placeholder]="" [(ngModel)]="element.PreviouslyEvaluated"
+                            type="text">
                     </mat-form-field>
                     <p *ngIf="!edit">{{element.PreviouslyEvaluated}}</p>
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
                     <mat-form-field style="max-height: 52px;" class="example-full-width" appearance="fill">
-                        <input matInput placeholder="نام چک لیست" [(ngModel)]="newRowObj.PreviouslyEvaluated" type="text">
+                        <input matInput placeholder="نام چک لیست" [(ngModel)]="newRowObj.PreviouslyEvaluated"
+                            type="text">
                     </mat-form-field>
                 </td>
             </ng-container>
@@ -111,7 +123,8 @@
                 <th mat-header-cell mat-sort-header *matHeaderCellDef> بازه </th>
                 <td mat-cell *matCellDef="let element">
                     <mat-form-field *ngIf="edit" class="example-full-width" appearance="fill">
-                        <input matInput *ngIf="edit" [placeholder]="" [(ngModel)]="element.NAM_PERIOD_HSRCH" type="text">
+                        <input matInput *ngIf="edit" [placeholder]="" [(ngModel)]="element.NAM_PERIOD_HSRCH"
+                            type="text">
                     </mat-form-field>
                     <p *ngIf="!edit">{{element.NAM_PERIOD_HSRCH}}</p>
                 </td>

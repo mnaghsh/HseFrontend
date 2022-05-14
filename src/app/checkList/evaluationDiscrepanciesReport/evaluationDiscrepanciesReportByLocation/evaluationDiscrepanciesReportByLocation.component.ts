@@ -10,14 +10,13 @@ import { RequestChecklistService } from 'src/app/services/requestChecklistServic
 import { SchedulingService } from 'src/app/services/scheduling/scheduling.service';
 import { UsersComponent } from 'src/app/users/users.component';
 import { LocationsComponent } from 'src/app/utils/loading/locations/locations/locations.component';
-import { CreateCheckListComponent } from '../create-check-list/create-check-list.component';
 
 @Component({
   selector: 'app-evaluationDiscrepanciesReport',
-  templateUrl: './evaluationDiscrepanciesReport.component.html',
-  styleUrls: ['./evaluationDiscrepanciesReport.component.css']
+  templateUrl: './evaluationDiscrepanciesReportByLocation.component.html',
+  styleUrls: ['./evaluationDiscrepanciesReportByLocation.component.css']
 })
-export class EvaluationDiscrepanciesReportComponent implements OnInit {
+export class EvaluationDiscrepanciesReportByLocationComponent implements OnInit {
 
   unit = [
     { value: 1, viewValue: 'هفتگی' },
@@ -26,7 +25,7 @@ export class EvaluationDiscrepanciesReportComponent implements OnInit {
     { value: 4, viewValue: 'روزانه' }
   ]
 
-  displayedColumns = ['number', 'NAM_ASSESSOR_HSRCH', 'PreviouslyEvaluated', 'NumberOfDuties', 'NAM_PERIOD_HSRCH'];
+  displayedColumns = ['number', 'NAM_LOCATION_HSRCH', 'PreviouslyEvaluated', 'NumberOfDuties', 'NAM_PERIOD_HSRCH'];
   listOfAllSchedulings: any;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -70,8 +69,11 @@ export class EvaluationDiscrepanciesReportComponent implements OnInit {
 
     if (this.selectedPeriod != 4) {
       this.commonService.loading = true;
-      this.evaluationDiscrepancies.selectEvaluationDiscrepanciesReports(this.selectedPeriod).subscribe(
-        // this.evaluationDiscrepancies.selectEvaluationDiscrepanciesReports(moment(time.toString()), this.selectedPeriod).subscribe(
+      let body = {
+        "period": this.selectedPeriod.toString(),
+      }
+      // this.evaluationDiscrepancies.selectEvaluationDiscrepanciesReports(this.selectedPeriod).subscribe(
+      this.evaluationDiscrepancies.filterEvaluationDiscrepanciesReportsByLocation(body).subscribe(
 
         (success) => {
           this.dataSource = new MatTableDataSource(success);
@@ -83,15 +85,20 @@ export class EvaluationDiscrepanciesReportComponent implements OnInit {
     }
     else {
 
-debugger
-      this.commonService.loading = true;
+      debugger
+
       let start = moment(this.startDate.nativeElement.value, 'jYYYY/jM/jD');
       let startDate = start.locale('en').format('YYYY/M/D');
       let end = moment(this.endDate.nativeElement.value, 'jYYYY/jM/jD');
       let endDate = end.locale('en').format('YYYY/M/D');
-
-      this.evaluationDiscrepancies.selectEvaluationDiscrepanciesReportsByDate((this.startDate.nativeElement.value).toString(),(this.endDate.nativeElement.value).toString(), this.selectedPeriod).subscribe(
-        // this.evaluationDiscrepancies.selectEvaluationDiscrepanciesReports(moment(time.toString()), this.selectedPeriod).subscribe(
+      this.commonService.loading = true;
+      let body = {
+        "fromDate": (this.startDate.nativeElement.value).toString(),
+        "toDate": (this.endDate.nativeElement.value).toString(),
+        "period": this.selectedPeriod.toString(),
+      }
+      // this.evaluationDiscrepancies.selectEvaluationDiscrepanciesReportsByDate((this.startDate.nativeElement.value).toString(), (this.endDate.nativeElement.value).toString(), this.selectedPeriod).subscribe(
+      this.evaluationDiscrepancies.filterEvaluationDiscrepanciesReportsByLocation(body).subscribe(
 
         (success) => {
 

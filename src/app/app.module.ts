@@ -25,8 +25,10 @@ import { LocationsComponent } from './utils/loading/locations/locations/location
 import { MessagesComponent } from './utils/messages/messages.component';
 import { SchedulingComponent } from './checkList/scheduling/scheduling.component';
 import { NgPersianDatepickerModule } from 'ng-persian-datepicker';
-import { EvaluationDiscrepanciesReportComponent } from './checkList/evaluationDiscrepanciesReport/evaluationDiscrepanciesReport.component';
 import { RequestChecklistReportComponent } from './checkList/request-checklist-report/request-checklist-report.component';
+import { EvaluationDiscrepanciesReportByAssessorComponent } from './checkList/evaluationDiscrepanciesReport/evaluationDiscrepanciesReportByAssessor/evaluationDiscrepanciesReportByAssessor.component';
+import { EvaluationDiscrepanciesReportByCheckListComponent } from './checkList/evaluationDiscrepanciesReport/evaluationDiscrepanciesReportByChecklist/evaluationDiscrepanciesReportByChecklist.component';
+import { EvaluationDiscrepanciesReportByLocationComponent } from './checkList/evaluationDiscrepanciesReport/evaluationDiscrepanciesReportByLocation/evaluationDiscrepanciesReportByLocation.component';
 
 
 
@@ -47,7 +49,9 @@ const myRoots: Routes = [
       { path: 'messages', component: MessagesComponent },
       { path: 'scheduling', component: SchedulingComponent },
       { path: 'requestChecklistReport', component: RequestChecklistReportComponent},
-      { path: 'evaluationDiscrepanciesReport', component: EvaluationDiscrepanciesReportComponent },
+      { path: 'evaluationDiscrepanciesReportByAssessor', component: EvaluationDiscrepanciesReportByAssessorComponent },
+      { path: 'evaluationDiscrepanciesReportByLocation', component: EvaluationDiscrepanciesReportByLocationComponent },
+      { path: 'evaluationDiscrepanciesReportByCheckList', component: EvaluationDiscrepanciesReportByCheckListComponent },
     ]
   }
 
@@ -70,7 +74,9 @@ const myRoots: Routes = [
     UsersComponent,
     MessagesComponent,
     SchedulingComponent,
-    EvaluationDiscrepanciesReportComponent,
+    EvaluationDiscrepanciesReportByAssessorComponent,
+    EvaluationDiscrepanciesReportByCheckListComponent,
+    EvaluationDiscrepanciesReportByLocationComponent,
     RequestChecklistReportComponent
   ],
   imports: [      NgPersianDatepickerModule,

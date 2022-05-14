@@ -14,16 +14,25 @@ export class evaluationDiscrepanciesReportsService {
   //   return this.configService.get('evaluationDiscrepanciesReports');
   // }
   //this.userId ? this.userId : "",
-  public selectEvaluationDiscrepanciesReports(period): Observable<any> {
-    return this.configService.get('evaluationDiscrepanciesReports/' + Date.now()+','+ Date.now() + ',' + period);
-  }
-  public selectEvaluationDiscrepanciesReportsByDate(fromDate,toDate,period): Observable<any> {
-    return this.configService.get('evaluationDiscrepanciesReports/' + fromDate.toString()+','+ toDate.toString()+ ',' + period);
+  // public selectEvaluationDiscrepanciesReports(period): Observable<any> {
+  //   return this.configService.get('evaluationDiscrepanciesReports/' + Date.now()+','+ Date.now() + ',' + period);
+  // }
+  // public selectEvaluationDiscrepanciesReportsByDate(fromDate,toDate,period): Observable<any> {
+  //   return this.configService.get('evaluationDiscrepanciesReports/' + fromDate.toString()+','+ toDate.toString()+ ',' + period);
+  // }
+ 
+  public filterEvaluationDiscrepanciesReportsByAssessor(body):Observable<any>{
+    return this.configService.post('evaluationDiscrepanciesReports/evaluationDiscrepanciesReportByAssessorSp',body);
   }
 
-  // public insertEvaluationDiscrepanciesReports(body):Observable<any>{
-  //   return this.configService.post('evaluationDiscrepanciesReports',body);
-  // }
+  public filterEvaluationDiscrepanciesReportsByLocation(body):Observable<any>{
+    return this.configService.post('evaluationDiscrepanciesReports/evaluationDiscrepanciesReportByLocationSp',body);
+  }
+
+  public filterEvaluationDiscrepanciesReportsByCheckList(body):Observable<any>{
+    return this.configService.post('evaluationDiscrepanciesReports/evaluationDiscrepanciesReportByChecklistSp',body);
+  }
+
 
   // public updateEvaluationDiscrepanciesReports(id,body):Observable<any>{
   //   return this.configService.put('evaluationDiscrepanciesReports/'+id,body);
