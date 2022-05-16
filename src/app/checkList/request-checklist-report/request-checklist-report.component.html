@@ -6,11 +6,18 @@
     </mat-card>
 </div>
 <app-loading *ngIf="commonService.loading==true"></app-loading>
+<mat-form-field style="min-width: 100%;" class="example-container">
+    <input matInput  (keyup)="applyFilter($event)"
+        placeholder=" جستجو در چک لیست های فیلتر شده">
+</mat-form-field>
+<button mat-raised-button class="btnExcel" (click)="commonService.exportTable()">
+    <i class="fa fa-file-excel-o" aria-hidden="true"></i> انتقال به اکسل
+</button>
+<button mat-raised-button color="accent" (click)="commonService.print()">
+    <i class="fa fa-print" aria-hidden="true"></i> چاپ
+</button>
 <div id="print-section" class="example-container">
-    <mat-form-field style="min-width: 100%;" class="example-container">
-        <input matInput  (keyup)="applyFilter($event)"
-            placeholder=" جستجو در چک لیست های فیلتر شده">
-    </mat-form-field>
+    
     <table id="mainTable" dir="rtl" matSort class="table table-responsive table-bordered  table-striped  table-hover"
         mat-table #table [dataSource]="dataSource">
 
@@ -79,4 +86,5 @@ The actual rendered columns are set as a property on the row definition" -->
             <!-- </tr> -->
 
     </table>
-    <mat-paginator [pageSizeOptions]="[20,50, 100,1000]"></mat-paginator>
+</div>
+    <mat-paginator [pageSizeOptions]="[1000,50, 100]"></mat-paginator>

@@ -53,8 +53,14 @@
         <input matInput (keyup)="applyFilter($event)" placeholder="جستجو">
     </mat-form-field>
     <div class="example-container ">
-
-        <table dir="rtl" matSort class="table table-responsive table-bordered  table-striped  table-hover" mat-table
+        <button mat-raised-button class="btnExcel" (click)="commonService.exportTable()">
+            <i class="fa fa-file-excel-o" aria-hidden="true"></i> انتقال به اکسل
+        </button>
+        <button mat-raised-button color="accent" (click)="commonService.print()">
+            <i class="fa fa-print" aria-hidden="true"></i> چاپ
+        </button>
+        <div  id="print-section">
+        <table   id="mainTable"  dir="rtl" matSort class="table table-responsive table-bordered  table-striped  table-hover" mat-table
             #table [dataSource]="dataSource">
 
             <!--- Note that these columns can be defined in any order.
@@ -145,7 +151,7 @@
             </tr> -->
 
         </table>
-
+</div>
         <mat-paginator [pageSizeOptions]="[5, 100]"></mat-paginator>
 
     </div>

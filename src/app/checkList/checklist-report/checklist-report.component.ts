@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { ElementRef, ViewChild } from '@angular/core';
+import { ElementRef, Inject, ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -8,6 +8,7 @@ import { checklistAssesmentService } from 'src/app/services/checklistAssesmentSe
 import { CommonService } from 'src/app/services/common.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import * as moment from 'jalali-moment'
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-checklist-report',
@@ -19,7 +20,7 @@ export class ChecklistReportComponent implements OnInit {
   campaignTwo: FormGroup;
   displayedColumns = ['number', 'namChkHecli', 'requestDescriptionHsrch',
     'desQuestionHeclq', 'desOptionHeclo', 'desExplainQuestionHscha', 'requestDateJalaliHsrch',
-    'namAssessorHsrch', 'namLocationHsrch', 'unitCehckListsHecli','namEvaluationAreaHsrch'];
+    'namAssessorHsrch', 'namLocationHsrch', 'unitCehckListsHecli', 'namDepartmentHecli'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: MatTableDataSource<any>
@@ -43,17 +44,37 @@ export class ChecklistReportComponent implements OnInit {
   counts: string;
   @ViewChild('startDate') startDate: ElementRef;
   @ViewChild('endDate') endDate: ElementRef;
-
   constructor(public commonService: CommonService,
     public checklistAssesmentService: checklistAssesmentService,
-  ) {
+    @Inject(MAT_DIALOG_DATA) public recievedData
 
+  ) {
+    //console.log('recievedData', this.recievedData)
+    if (this.recievedData.itsPopup == true) {
+      const body = {
+        namChkHecli: this.recievedData.row.namChkHecli,
+        namDepartmentHecli: "",
+        namAssessorHsrch: this.recievedData.row.namAssessorHsrch,
+        namLocationHsrch: this.recievedData.row.namLocationHsrch,
+        desQuestionHeclq: "",
+        desOptionHeclo: "",
+        namEvaluationAreaHsrch: this.recievedData.row.namEvaluationAreaHsrch,
+        startdateHsrch: moment(this.recievedData.row.requestDateHsrch, 'jYYYY/jM/jD'),
+        enddateHsrch: moment(this.recievedData.row.requestDateHsrch, 'jYYYY/jM/jD')
+      }
+      this.serverFilter(body)
+    }
+    else{
+      this.getChecklistQuestions()
+
+    }
   }
 
 
   ngOnInit(): void {
-    this.getChecklistQuestions()
+
   }
+
   public getChecklistQuestions() {
     this.namChkHecliFilter = ""
     this.namDepartmentHecliFilter = ""
@@ -65,7 +86,7 @@ export class ChecklistReportComponent implements OnInit {
     this.commonService.loading = true;
     this.checklistAssesmentService.selectAllListOfChecklistReport().subscribe((success) => {
       this.ListOfcheckListAssesments = success;
-      console.log(' this.ListOfcheckListAssesment', this.ListOfcheckListAssesments)
+      //console.log(' this.ListOfcheckListAssesment', this.ListOfcheckListAssesments)
       this.viewThePercentageOfOptions(success);
       this.arrayForFilterDesExplainQuestionHscha = [];
       this.ListOfcheckListAssesments.forEach(eachAssesment => {
@@ -78,7 +99,7 @@ export class ChecklistReportComponent implements OnInit {
         // arrayForFilter.push({val:eachAssesment['requestDescriptionHsrch']});
 
       });
-      console.log('ListOfcheckListsQuestions', this.ListOfcheckListAssesments)
+      //console.log('ListOfcheckListsQuestions', this.ListOfcheckListAssesments)
       this.dataSource = new MatTableDataSource(this.ListOfcheckListAssesments);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -96,7 +117,7 @@ export class ChecklistReportComponent implements OnInit {
   //     }
   //     this.dataSource = new MatTableDataSource(this.firstFilter);
 
-  //     console.log('local',  this.firstFilter)
+  //     //console.log('local',  this.firstFilter)
   //   });
 
   // }
@@ -112,33 +133,39 @@ export class ChecklistReportComponent implements OnInit {
     }
   }
 
-  serverFilter() {
-    debugger
-    let start = moment(this.startDate.nativeElement.value, 'jYYYY/jM/jD');
-    let end = moment(this.endDate.nativeElement.value, 'jYYYY/jM/jD');
-    let startdate = start.locale('en').format('YYYY/M/D');
-    let enddate = end.locale('en').format('YYYY/M/D');
-    console.log('startDate', startdate)
-    console.log('endDate', enddate)
-    //console.log('startDate', moment( this.startDate.nativeElement.value, 'YYYY/MM/DD').locale('en').format('YYYY/MM/DD'))
-    //console.log('endDate', moment(this.endDate.nativeElement.value, 'YYYY/MM/DD').locale('en').format('YYYY/MM/DD'))
 
+  serverFilter(body?: any) {
+    
     this.search = ""
-    const body = {
+    
+    if (body == null) {
+      let start = moment(this.startDate.nativeElement.value, 'jYYYY/jM/jD');
+      let end = moment(this.endDate.nativeElement.value, 'jYYYY/jM/jD');
+      let startdate = start.locale('en').format('YYYY/M/D');
+      let enddate = end.locale('en').format('YYYY/M/D');
+      //console.log('startDate', startdate)
+      //console.log('endDate', enddate)
+      body = {
 
-      namChkHecli: this.namChkHecliFilter,
-      namDepartmentHecli: this.namDepartmentHecliFilter,
-      namAssessorHsrch: this.namAssessorHsrchFilter,
-      namLocationHsrch: this.namLocationHsrchFilter,
-      desQuestionHeclq: this.desQuestionHeclqFilter,
-      desOptionHeclo: this.desOptionHecloFilter,
-      namEvaluationAreaHsrch: this.namEvaluationAreaHsrch,
-      startdateHsrch: startdate,
-      enddateHsrch: enddate
+        namChkHecli: this.namChkHecliFilter,
+        namDepartmentHecli: this.namDepartmentHecliFilter,
+        namAssessorHsrch: this.namAssessorHsrchFilter,
+        namLocationHsrch: this.namLocationHsrchFilter,
+        desQuestionHeclq: this.desQuestionHeclqFilter,
+        desOptionHeclo: this.desOptionHecloFilter,
+        namEvaluationAreaHsrch: this.namEvaluationAreaHsrch,
+        startdateHsrch: startdate,
+        enddateHsrch: enddate
 
+      }
     }
     this.commonService.loading = true;
     this.checklistAssesmentService.filterListOfChecklistReport(body).subscribe((success) => {
+      if(success.length==0){
+        this.commonService.showEventMessage("به فیلتر تاریخ دقت کنید", 2000, "green")
+
+      }
+      
       this.viewThePercentageOfOptions(success)
       this.dataSource = new MatTableDataSource(success);
       this.dataSource.paginator = this.paginator;
@@ -153,68 +180,66 @@ export class ChecklistReportComponent implements OnInit {
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
   }
-  exportTable() {
-    this.commonService.exportToExcel("mainTable");
-  }
-  print(): void {
-    let printContents, popupWin;
-    printContents = document.getElementById('print-section').innerHTML;
-    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
-    popupWin.document.open();
-    popupWin.document.write(`
-      <html>
-        <head>
-          <title>پرینت قرارداد </title>
-          <style>
-          *{
-             direction:rtl;
-             font-family: 'b mitra'!important; 
-             text-align: right;
-
-           }
-           td{
+  // exportTable() {
+  //   this.commonService.exportToExcel("mainTable");
+  // }
+  // print(): void {
+  //   let printContents, popupWin;
+  //   printContents = document.getElementById('print-section').innerHTML;
+  //   popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+  //   popupWin.document.open();
+  //   popupWin.document.write(`
+  //     <html>
+  //       <head>
+  //         <title>پرینت قرارداد </title>
+  //         <style>
+  //         *{
+  //            direction:rtl;
+  //            font-family: 'b mitra'!important; 
+  //            text-align: right;
+  //          }
+  //          td{
                
-             border: 0px solid gray;
-             border-left: 1px solid gray;
-             border-bottom: 1px solid gray;
-             font-size: medium;
+  //            border: 0px solid gray;
+  //            border-left: 1px solid gray;
+  //            border-bottom: 1px solid gray;
+  //            font-size: medium;
             
-           }
+  //          }
          
-           .table-striped tbody tr:nth-of-type(odd) {
-             background-color: rgba(0,0,0,.05);
-         }
-
-        .headerGridTotal{
-         font-size: medium !important;
-        }
-        .gridTotal{
-         width:100%;
-        }
+  //          .table-striped tbody tr:nth-of-type(odd) {
+  //            background-color: rgba(0,0,0,.05);
+  //        }
+  //       .headerGridTotal{
+  //        font-size: medium !important;
+  //       }
+  //       .gridTotal{
+  //        width:100%;
+  //       }
           
-           .mat-sort-header-button{
-             border-bottom: 1px solid gray;
-             font-size: medium;
-             background-color: white;
-             border: 0px solid gray;
-             text-align: center;
-           }
+  //          .mat-sort-header-button{
+  //            border-bottom: 1px solid gray;
+  //            font-size: medium;
+  //            background-color: white;
+  //            border: 0px solid gray;
+  //            text-align: center;
+  //          }
           
-         //........Customized style.......
-         </style>
-        </head>
-    <body onload="window.print();window.close()">${printContents}</body>
-      </html>`
-    );
-    popupWin.document.close();
-  }
+  //        //........Customized style.......
+  //        </style>
+  //       </head>
+  //   <body onload="window.print();window.close()">${printContents}</body>
+  //     </html>`
+  //   );
+  //   popupWin.document.close();
+  // }
   viewThePercentageOfOptions(data) {
     let optionsText = [];
     data.forEach(eachRowOfReport => {
-      if (optionsText != eachRowOfReport['desOptionHeclo']) {
+     // if (optionsText != eachRowOfReport['desOptionHeclo']) {
         optionsText.push(eachRowOfReport['desOptionHeclo'])
-      }
-    }); console.log('optionsText', optionsText)
+    //  }
+    }); //console.log('optionsText', optionsText)
 
     var counts = {};
 
@@ -227,13 +252,13 @@ export class ChecklistReportComponent implements OnInit {
       }
     }
 
-    console.log('counts', counts);
+    //console.log('counts', counts);
     this.counts = JSON.stringify(counts)
     let sum = Object.keys(counts).reduce((s, k) => s += counts[k], 0);
 
     this.percentage = Object.keys(counts).map(k => ({ [k]: '%' + (counts[k] / sum * 100).toFixed(2) }));
     this.percentage = JSON.stringify(this.percentage)
-    console.log('percentage', this.percentage);
+    //console.log('percentage', this.percentage);
 
   }
 

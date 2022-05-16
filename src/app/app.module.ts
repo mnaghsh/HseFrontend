@@ -29,6 +29,7 @@ import { RequestChecklistReportComponent } from './checkList/request-checklist-r
 import { EvaluationDiscrepanciesReportByAssessorComponent } from './checkList/evaluationDiscrepanciesReport/evaluationDiscrepanciesReportByAssessor/evaluationDiscrepanciesReportByAssessor.component';
 import { EvaluationDiscrepanciesReportByCheckListComponent } from './checkList/evaluationDiscrepanciesReport/evaluationDiscrepanciesReportByChecklist/evaluationDiscrepanciesReportByChecklist.component';
 import { EvaluationDiscrepanciesReportByLocationComponent } from './checkList/evaluationDiscrepanciesReport/evaluationDiscrepanciesReportByLocation/evaluationDiscrepanciesReportByLocation.component';
+import { LoadingDialogComponent } from './utils/loadingDialog/loadingDialog.component';
 
 
 
@@ -61,6 +62,7 @@ const myRoots: Routes = [
 @NgModule({
   declarations: [
     LoadingComponent,
+    LoadingDialogComponent,
     AppComponent,
     HomeComponent,
     MenuComponent,
