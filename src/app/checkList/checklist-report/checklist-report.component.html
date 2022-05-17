@@ -11,9 +11,9 @@
             <input matInput [(ngModel)]="namChkHecliFilter" placeholder="فیلتر نام چک لیست">
         </mat-form-field>
 
-        <mat-form-field class="example-container">
+        <!-- <mat-form-field class="example-container">
             <input matInput [(ngModel)]="namDepartmentHecliFilter" placeholder=" فیلتر نام ناحیه">
-        </mat-form-field>
+        </mat-form-field> -->
 
         <mat-form-field class="example-container">
             <input matInput [(ngModel)]="namAssessorHsrchFilter" placeholder=" فیلتر نام ارزیاب">
@@ -32,9 +32,9 @@
         </mat-form-field>
         <!-- این قسمت برای ارگونومی کاربردی ندارد -->
 
-        <!-- <mat-form-field class="example-container">
+        <mat-form-field class="example-container">
             <input matInput [(ngModel)]="namEvaluationAreaHsrch" placeholder="ناحیه مکان ارزیابی شده">
-        </mat-form-field> -->
+        </mat-form-field>
 
         <mat-form-field style="overflow-x: hidden;" class="example-container">
             <input placeholder="از تاریخ" matInput type="text" #startDate />
@@ -181,14 +181,14 @@
             </td>
         </ng-container>
 
-        <ng-container matColumnDef="namDepartmentHecli">
+        <!-- <ng-container matColumnDef="namDepartmentHecli">
             <th mat-header-cell mat-sort-header *matHeaderCellDef>ناحیه </th>
             <td mat-cell *matCellDef="let element">
                 <p>{{element.namDepartmentHecli}}</p>
             </td>
             <td mat-footer-cell *matFooterCellDef>
             </td>
-        </ng-container>
+        </ng-container> -->
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
