@@ -25,7 +25,7 @@ import * as moment from 'jalali-moment'
 export class ChecklistAssesmentComponent implements OnInit {
   favoriteSeason: string;
   seasons: string[] = [];
-  displayedColumns = ['number', 'desQuestionHeclq', 'options', 'desExplainQuestionHscha', 'process'];
+  displayedColumns = ['number', 'desQuestionHeclq', 'options', 'desExplainQuestionHscha'];
   edit = false;
   newRowObj: any;
   checklistId: any;

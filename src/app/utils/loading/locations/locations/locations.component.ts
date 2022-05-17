@@ -13,6 +13,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { LocationsService } from 'src/app/services/locations/locations.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ZonesComponent } from 'src/app/utils/zones/zones.component';
+import { RequestChecklistService } from 'src/app/services/requestChecklistService/RequestChecklistService';
 
 
 
@@ -27,20 +28,24 @@ export class LocationsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: MatTableDataSource<any>;
-  displayedColumns = ['number', 'locationId', 'namLocation', 'zonesZoneId', 'process'];
+  displayedColumns = ['number', 'locationId', 'namLocation'];
   ListOfcheckListsOptions: any;
   newRowObj: any;
   unit: { value: number; viewValue: string; }[];
   department: { value: number; viewValue: string; }[];
   checklistId: any;
+
   checklistName: any;
   firstLevel = this.fb.group({
     firstCtrl: ['', Validators.required],
 
   });
+  filteredLocation: any;
+  filtered=false;
 
   constructor(
     private fb: FormBuilder,
+    private requestChecklist: RequestChecklistService,
     public locationsService: LocationsService,
     public commonService: CommonService,
     private dialog: MatDialog,
@@ -49,7 +54,7 @@ export class LocationsComponent implements OnInit {
   ) {
     // this.checklistId = recievedData.checkListId
     // this.checklistName = recievedData.checkListName
-    this.getLocations();
+    this.changeFilter();
   }
 
   ngOnInit() {
@@ -81,15 +86,16 @@ export class LocationsComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
       this.commonService.loading = false;
+
     });
   }
 
 
   public addRow() {
-//debugger
+    //debugger
     let object = {
       "namLocation": this.newRowObj.namLocation,
-     "zonesZoneId": this.newRowObj.zonesZoneId,
+      "zonesZoneId": this.newRowObj.zonesZoneId,
       // "createDate": new Date()
     }
 
@@ -123,7 +129,7 @@ export class LocationsComponent implements OnInit {
       this.commonService.showEventMessage("ويرايش رديف با موفقيت انجام شد.", 3000, "green")
       this.getLocations();
       //console.log('updateListOfcheckListsQuestions', success)
-        ;
+      ;
 
     },
       (error) => {
@@ -134,7 +140,7 @@ export class LocationsComponent implements OnInit {
   }
 
   public deleteRow(row) {
-   // debugger
+    // debugger
     //console.log('del', row)
 
     this.locationsService.deleteListOflocations(row['locationId']).subscribe(
@@ -185,13 +191,13 @@ export class LocationsComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(
       (data) => {
-        
-        if(row){
-        row.zonesZoneId = data.zoneId;
-        row.namZone = data.namZone;
-      }
-        this.newRowObj.zonesZoneId=data.zoneId;
-        
+
+        if (row) {
+          row.zonesZoneId = data.zoneId;
+          row.namZone = data.namZone;
+        }
+        this.newRowObj.zonesZoneId = data.zoneId;
+
         // this.namChkHecli = data.namChkHecli;
         //this.namLocationHsrch = data.namLocationHsrch;
         // this.firstLevel.value.firstCtrl=data.desChkHecli
@@ -205,5 +211,45 @@ export class LocationsComponent implements OnInit {
     )
 
   }
+  changeFilter() {
+    
+    this.filtered=!this.filtered;
+    if(this.filtered==true){
+    this.filteredLocation=[];
+    this.commonService.loading = true;
+    this.locationsService.selectAllListOflocations().subscribe((success) => {
 
+      this.ListOfcheckListsOptions = success;
+      this.requestChecklist.selectAllListOfRequestCheckLists().subscribe((data) => {
+        this.ListOfcheckListsOptions.forEach(eachLocation => {
+          data.forEach(eachRequest => {
+            
+            if (eachLocation.locationId == eachRequest.locationIdHsrch) {
+             
+              this.filteredLocation.push(eachLocation)
+            }
+          });
+
+        });
+        this.filteredLocation = this.filteredLocation.filter((value, index, self) =>
+        index === self.findIndex((t) => (
+          t.locationId === value.locationId
+          //&& t.value === value.value
+        ))
+      )
+        console.log('filteredLocation', this.filteredLocation)
+        this.dataSource = new MatTableDataSource(this.filteredLocation);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.commonService.loading = false;
+        
+      })
+  
+    });
+  
+  }
+  else{
+    this.getLocations()
+  }
+}
 }

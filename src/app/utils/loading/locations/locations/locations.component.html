@@ -13,6 +13,11 @@
   </mat-form-field>
 
 </div>
+<div>
+
+  <p style="padding: 10px;">مکان های اخیرا استفاده شده   <mat-checkbox [ngModel]="true" (click)="changeFilter()"></mat-checkbox></p> 
+
+</div>
 
 <div class="example-container ">
 
@@ -23,6 +28,8 @@
         The actual rendered columns are set as a property on the row definition" -->
 
     <!-- Position Column -->
+
+
     <ng-container matColumnDef="number">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>ردیف </th>
       <td mat-cell *matCellDef="let row;let index = index"> {{index+1}} </td>
