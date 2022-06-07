@@ -42,7 +42,7 @@ export class MenuComponent implements OnInit {
      // { label: 'ارسال پیامک', path: "/messages", icon: "fa fa-envelope-open" },
       { label: 'مدیریت کاربران ', path: "/users", icon: "fa fa-users" },
       { label: 'مدیریت واحد ها ', path: "/locations", icon: "fa fa-map-marker" },
-    //  { label: 'مدیریت  نواحی ', path: "/zones", icon: "fa fa-location-arrow" },
+     { label: 'مدیریت  نواحی ', path: "/zones", icon: "fa fa-location-arrow" },
       { label: 'خروج', path: "/login", icon: "fa fa-sign-out" },
     ];
 

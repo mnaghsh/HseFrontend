@@ -24,6 +24,9 @@ export class LocationsOfZonesService {
     return this.configService.post('locationsOfZones/FilterLocationsOfZone',body);
   }
 
+
+
+
   // public insertListOfChecklistAssesment(body):Observable<any>{
   //   return this.configService.post('HseEChecklistAssessments',body);
   // }

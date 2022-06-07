@@ -30,6 +30,23 @@
           <p style=" min-width:50px;font-weight: bold;">ایجاد ناحیه جدید </p>
         </td>
       </ng-container>
+
+
+      <ng-container matColumnDef="zoneId"> 
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> کد ناحیه</th>
+        <td style="cursor: pointer;" mat-cell *matCellDef="let element" (click)="selectRow(element)">
+          <mat-form-field *ngIf="edit" class="example-full-width" appearance="fill">
+            <input matInput *ngIf="edit" [placeholder]="" [(ngModel)]="element.zoneId" type="text">
+          </mat-form-field>
+          <p *ngIf="!edit">{{element.zoneId}}</p>
+        </td>
+        <td mat-footer-cell *matFooterCellDef>
+          <mat-form-field style="max-height: 52px;" class="example-full-width" appearance="fill">
+            <input matInput placeholder="نام چک لیست" [(ngModel)]="newRowObj.zoneId" type="text">
+          </mat-form-field>
+        </td>
+      </ng-container>
+
   
       <ng-container matColumnDef="namZone"> 
         <th mat-header-cell mat-sort-header *matHeaderCellDef> نام ناحیه</th>
@@ -70,6 +87,6 @@
   
     </table>
   
-    <mat-paginator [pageSizeOptions]="[5,10,50,100]"></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[20,50,100]"></mat-paginator>
   
   </div>

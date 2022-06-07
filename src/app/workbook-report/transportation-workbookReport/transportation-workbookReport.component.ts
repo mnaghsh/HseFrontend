@@ -13,6 +13,7 @@ import { workbookReportService } from 'src/app/services/workbookReport/workbookR
 import { LocationsOfZonesService } from 'src/app/services/locationsOfZones/locationsOfZonesService';
 import { checklistAssesmentService } from 'src/app/services/checklistAssesmentService/checklistAssesmentService';
 import { LocationsComponent } from 'src/app/utils/loading/locations/locations/locations.component';
+import { Observable, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-transportation-workbook',
@@ -21,7 +22,7 @@ import { LocationsComponent } from 'src/app/utils/loading/locations/locations/lo
 })
 export class transportationWorkbookReportComponent implements OnInit {
 
-  displayedColumns = ['number', 'e_monitor_request_id', 'des_lkp_typ_exit',
+  displayedColumns = ['number', 'des_lkp_typ_exit',
     'des_lkp_typ_exam', 'des_request_hemre', 'num_request_hemre', 'dat_request_hemre_jalali',
     'nam_location_hsloc', 's_location_id', 'nam_param_hemop', 'nam_measur_hemrp', 'nam_real_measur_hemrp', 'flg_abssence'];
   displayedColumnsMeasurement = ['number', 'e_monitor_request_id', 'des_lkp_typ_exit',
@@ -122,21 +123,34 @@ export class transportationWorkbookReportComponent implements OnInit {
 
   }
   selectZones(row?) {
-
+    debugger
     this.fullListOfcheckListReport = []
     this.cleaningForm();
-    this.zoneLocationCharacteristic = this.commonService.selectedZoneObj.zoneCharacteristic
-    this.selectedZoneName = this.commonService.selectedZoneObj.namLocation;
-    this.getConfilicts();
-    this.getWorkbookReport(this.commonService.selectedZoneObj.locationId)
-    this.WasteReport()
-    this.getMeasurement(this.commonService.selectedZoneObj.locationId)
 
-    this.locationId = this.commonService.selectedZoneObj.locationId
+    this.zoneLocationCharacteristic = this.commonService.selectedZoneObj.zoneCharacteristic
+    //this.selectedZoneName = this.commonService.selectedZoneObj.namLocation;
+    this.selectedZoneName = this.commonService.selectedZoneObj.namZone;
+    this.getConfilicts().subscribe((success) => {
+      this.WasteReport().subscribe((success) => {
+        this.getWorkbookReport(404724).subscribe((success)=>{
+          this.mergeWateAndCleaning()
+          
+        })
+      })
+
+    })
+    // this.getWorkbookReport(this.commonService.selectedZoneObj.locationId)
+
+
+
+    //this.getMeasurement(this.commonService.selectedZoneObj.locationId)
+    // this.getMeasurement(404724)
+
+    this.locationId = 404724
 
   }
-  getWorkbookReport(s_location_id) {
-
+  getWorkbookReport (s_location_id) : Observable<any> {
+    let sub = new Subject<any>();
     this.fullListOfWorkbookReport = [];
     this.selectedDate = this.commonService.selctedDateForWorkBook
     if (!this.selectedDate) {
@@ -154,25 +168,20 @@ export class transportationWorkbookReportComponent implements OnInit {
     this.workbokReport.getReport(body).subscribe((success) => {
       this.listOfWorkbookReport = success;
       this.percentageOfScore(this.listOfWorkbookReport)
-      let nam_location_hslocs;
-      this.listOfWorkbookReport.forEach(eachIndustrialWaste => {
 
-        // if (nam_location_hslocs != eachIndustrialWaste.nam_location_hsloc && eachIndustrialWaste.nam_location_hsloc != null) {
-        //   this.getReportOfChecklists(eachIndustrialWaste.nam_location_hsloc)
-        // }
-      });
       this.listOfWorkbookReport.forEach(eachWorkbookReportOfUnit => {
         this.fullListOfWorkbookReport.push(eachWorkbookReportOfUnit);
       });
-
+      debugger
       this.dataSourceReportindustrialWastePerUnit = new MatTableDataSource(this.averagesOfNam_measur_hemrp);
       this.dataSource = new MatTableDataSource(this.fullListOfWorkbookReport);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+      sub.next();
 
 
     });
-
+return sub;
 
   }
   percentageOfScore(WorkbookReportOfUnit) {
@@ -225,147 +234,10 @@ export class transportationWorkbookReportComponent implements OnInit {
     }
     //console.log(' this.zoneWithoutMeasurementIndustrialWaste2323', this.zoneWithoutMeasurementIndustrialWaste)
   }
-  // getReportOfChecklists(namLocation) {
 
-  //   switch (this.selectedDate) {
-  //     case "01":
-  //     case "02":
-  //     case "03":
-  //     case "04":
-  //     case "05":
-  //     case "06":
-  //       {
-  //         const body = {
-  //           namChkHecli: "",
-  //           namDepartmentHecli: "",
-  //           namAssessorHsrch: "",
-  //           namLocationHsrch: namLocation,
-  //           desQuestionHeclq: "",
-  //           desOptionHeclo: "",
-  //           namEvaluationAreaHsrch: "",
-  //           startdateHsrch: moment(this.m.format('YYYY') + this.selectedDate + "01", 'jYYYY/jM/jD'),
-  //           enddateHsrch: moment(this.m.format('YYYY') + this.selectedDate + "31", 'jYYYY/jM/jD')
-  //         }
-  //         this.serverFilter(body)
-  //         break
-  //       }
-  //     case "07":
-  //     case "08":
-  //     case "09":
-  //     case "10":
-  //     case "11":
-  //       {
-  //         const body = {
-  //           namChkHecli: "",
-  //           namDepartmentHecli: "",
-  //           namAssessorHsrch: "",
-  //           namLocationHsrch: namLocation,
-  //           desQuestionHeclq: "",
-  //           desOptionHeclo: "",
-  //           namEvaluationAreaHsrch: "",
-  //           startdateHsrch: moment(this.m.format('YYYY') + this.selectedDate + "01", 'jYYYY/jM/jD'),
-  //           enddateHsrch: moment(this.m.format('YYYY') + this.selectedDate + "30", 'jYYYY/jM/jD')
-  //         }
-  //         this.serverFilter(body)
-  //         break;
-  //       }
-  //     case "12": {
-  //       const body = {
-  //         namChkHecli: "",
-  //         namDepartmentHecli: "",
-  //         namAssessorHsrch: "",
-  //         namLocationHsrch: namLocation,
-  //         desQuestionHeclq: "",
-  //         desOptionHeclo: "",
-  //         namEvaluationAreaHsrch: "",
-  //         startdateHsrch: moment(this.m.format('YYYY') + this.selectedDate + "01", 'jYYYY/jM/jD'),
-  //         enddateHsrch: moment(this.m.format('YYYY') + this.selectedDate + "29", 'jYYYY/jM/jD')
-  //       }
-  //       this.serverFilter(body)
-  //       break;
-  //     }
-  //       break;
-
-  //   }
-
-
-  // }
-  // serverFilter(body) {
-  //   this.commonService.loading = true;
-  //   this.checklistAssesmentService.filterListOfChecklistReport(body).subscribe((success) => {
-  //     ////console.log('success', success)
-  //     this.listOfcheckListReport = success;
-  //     this.PercentageOfOptions(this.listOfcheckListReport)
-  //     this.listOfcheckListReport.forEach(eachCheckListReportOfUnit => {
-  //       this.fullListOfcheckListReport.push(eachCheckListReportOfUnit);
-  //       if (eachCheckListReportOfUnit.desExplainQuestionHscha) {
-  //         this.weakPoint += " - " + eachCheckListReportOfUnit.desExplainQuestionHscha
-  //       }
-  //     });
-  //     ////console.log('MhdfullListOfcheckListReport', this.fullListOfcheckListReport)
-  //     this.dataSourceChecklistReport = new MatTableDataSource(this.fullListOfcheckListReport);
-
-
-
-
-  //   })
-  // }
-  // PercentageOfOptions(data) {
-  //   // debugger
-  //   if (data.length > 0) {
-  //     let optionsText = [];
-  //     let ratio = 2
-
-  //     data.forEach(eachRowOfReport => {
-  //       optionsText.push(eachRowOfReport['desOptionHeclo'])
-
-  //     }); ////console.log('optionsText', optionsText)
-
-  //     var counts = {};
-
-  //     for (var i = 0; i < optionsText.length; i++) {
-  //       if (!counts.hasOwnProperty(optionsText[i] = optionsText[i])) {
-  //         counts[optionsText[i]] = 1;
-  //       }
-  //       else {
-  //         counts[optionsText[i]]++;
-  //       }
-  //     }
-  //     ////console.log('counts', counts);
-  //     this.counts = JSON.stringify(counts)
-  //     let sum = Object.keys(counts).reduce((s, k) => s += counts[k], 0);
-  //     this.percentage = Object.keys(counts).map(k => ({ [k]: + (counts[k] / sum * 100).toFixed(2) }));
-  //     ////console.log('nini', this.percentage);
-  //     if (data[0]) {
-
-  //       this.averagesOfCheckListReport.push({
-  //         average: (counts['مطلوب'] / optionsText.length) * 100,
-  //         nam_location_hsloc: data[0]['namLocationHsrch'],
-  //         nam_measur_hemrp: 0,
-  //         score: (((counts['مطلوب'] / optionsText.length) * 100) * 20) / 100,
-  //         ratio: ratio,
-  //         coefficientCalculation: ratio * Number((((counts['مطلوب'] / optionsText.length) * 100) * 20) / 100)
-  //       })
-  //       this.dataSourceChecklistReportPerUnit = new MatTableDataSource(this.averagesOfCheckListReport);
-  //       this.calcAvgOfUnitsWithWasteAndClean()
-  //     }
-  //     //پیدا کردن میانگین در صدها برای در آوردن نمره ناحیه
-  //     let summ = 0
-  //     this.averagesOfCheckListReport.forEach(eachAvegargesOfUnit => {
-  //       summ = eachAvegargesOfUnit.average + summ
-  //       this.zoneWithoutMeasurementIndustrialCleaning = [];
-  //       this.zoneWithoutMeasurementIndustrialCleaning.push({
-  //         coefficientCalculationZone: (((summ / this.averagesOfCheckListReport.length) * 20) / 100) * ratio,
-  //         scoreZone: (((summ / this.averagesOfCheckListReport.length) * 20) / 100),
-  //         ratio: ratio, type: "نظافت صنعتی", percentAvg: (summ / this.averagesOfCheckListReport.length)
-  //       })
-  //     });
-  //     this.mergeWateAndCleaning()
-  //   }
-  // }
-  getConfilicts() {
-    
- 
+  getConfilicts(): Observable<any> {
+    let sub = new Subject<any>();
+    this.selectedDate
     const now = new Date();
     now.setFullYear(now.getFullYear() - 1);
     let date = (now.toISOString().slice(0, 10));
@@ -375,24 +247,54 @@ export class transportationWorkbookReportComponent implements OnInit {
     let body = {
       "dat_Date": date
     }
-    //////debugger
+    ////debugger
     this.selectedZoneCharacteristic = this.zoneLocationCharacteristic
     this.commonService.loading = true;
     this.workbokReport.getConfilicts(body).subscribe((success) => {
-      
+      sub.next();
       success.forEach(eachConfilict => {
-        if (eachConfilict['ustr_KomiteCode'] == this.selectedZoneCharacteristic) {
+
+
+        if ((this.selectedZoneCharacteristic == "SMC") &&
+          (eachConfilict['ustr_KomiteCode'] == "SMC" ||
+            eachConfilict['ustr_KomiteCode'] == "CCA" ||
+            eachConfilict['ustr_KomiteCode'] == "DAD" ||
+            eachConfilict['ustr_KomiteCode'] == "SPR" ||
+            eachConfilict['ustr_KomiteCode'] == "PRO")) {
           this.AllOfConfilictsOfThisZone.push(eachConfilict)
         }
+        else {
+          if (this.selectedZoneCharacteristic == eachConfilict['ustr_KomiteCode']) {
+            this.AllOfConfilictsOfThisZone.push(eachConfilict)
+          }
+        }
+      });
+
+      this.AllOfConfilictsOfThisZone.forEach(eachConfilict => {
+
+
         eachConfilict.dat_Date = moment(eachConfilict.dat_Date).locale('fa').format('YYYY/MM/DD');
 
-        if (eachConfilict['contradiction1'] != "بسته است" && (eachConfilict['contradiction2'] != "بسته است"
-        ) &&
-          eachConfilict['ustr_KomiteCode'] == this.selectedZoneCharacteristic
+        if (
+
+
+          ((eachConfilict['contradiction1'] == "باز است" &&
+            eachConfilict['contradiction2'] == null) ||
+            ////////////////
+            (eachConfilict['contradiction1'] == "باز است" &&
+              eachConfilict['contradiction2'] == "باز است") ||
+            ///////////////////
+            (eachConfilict['contradiction1'] == null &&
+              eachConfilict['contradiction2'] == null)
+            ////////////////////
+          )
         ) {
           this.listOfConfilicts.push(eachConfilict)
         }
+
       });
+      console.log('salaam', this.AllOfConfilictsOfThisZone)
+
       this.countAllOfConfilicts = this.AllOfConfilictsOfThisZone.length;
       let ratio
       //ugger
@@ -402,7 +304,7 @@ export class transportationWorkbookReportComponent implements OnInit {
       else {
         ratio = 4;
       }
-      debugger
+
       this.zoneWithoutMeasurementConfilicts = [];
       this.zoneWithoutMeasurementConfilicts.push({
         coefficientCalculationZone: ((((this.countAllOfConfilicts - this.listOfConfilicts.length) / this.countAllOfConfilicts) * 100 * 20) / 100) * ratio,
@@ -417,62 +319,9 @@ export class transportationWorkbookReportComponent implements OnInit {
       //console.log('countAllOfConfilicts', this.countAllOfConfilicts)
       //console.log('listOfConfilicts', this.listOfConfilicts)
     })
- 
+    return sub;
   }
-  // getConfilicts() {
-  //   this.selectedDate
-  //   const now = new Date();
-  //   now.setFullYear(now.getFullYear() - 1);
-  //   let date = (now.toISOString().slice(0, 10));
 
-  //   //  let thisMonthMinesOneYear = moment(date).locale('en').format('YYYY-MM') + "-01"
-
-  //   let body = {
-  //     "dat_Date": date
-  //   }
-  //   //debugger
-  //   this.selectedZoneCharacteristic = this.zoneLocationCharacteristic
-  //   this.commonService.loading = true;
-  //   this.workbokReport.getConfilicts(body).subscribe((success) => {
-  //     success.forEach(eachConfilict => {
-  //       if (eachConfilict['ustr_KomiteCode'] == this.selectedZoneCharacteristic) {
-  //         this.AllOfConfilictsOfThisZone.push(eachConfilict)
-  //       }
-  //       eachConfilict.dat_Date = moment(eachConfilict.dat_Date).locale('fa').format('YYYY/MM/DD');
-
-  //       if (eachConfilict['contradiction1'] == "باز است" && (eachConfilict['contradiction2'] == "باز است"
-  //         || eachConfilict['contradiction2'] == null) &&
-  //         eachConfilict['ustr_KomiteCode'] == this.selectedZoneCharacteristic
-  //       ) {
-  //         this.listOfConfilicts.push(eachConfilict)
-  //       }
-  //     });
-  //     this.countAllOfConfilicts = this.AllOfConfilictsOfThisZone.length;
-  //     let ratio
-  //     //ugger
-  //     if (this.zoneWithMeasurement.length > 0) {
-  //       ratio = 7;
-  //     }
-  //     else {
-  //       ratio = 4;
-  //     }
-      
-  //     this.zoneWithoutMeasurementConfilicts = [];
-  //     this.zoneWithoutMeasurementConfilicts.push({
-  //       coefficientCalculationZone: ((((this.countAllOfConfilicts - this.listOfConfilicts.length) / this.countAllOfConfilicts) * 100 * 20) / 100) * ratio,
-  //       scoreZone: ((((this.countAllOfConfilicts - this.listOfConfilicts.length) / this.countAllOfConfilicts) * 100 * 20) / 100),
-  //       ratio: ratio, type: "اقدامات اصلاحی", percentAvg: ((this.countAllOfConfilicts - this.listOfConfilicts.length) / this.countAllOfConfilicts) * 100
-  //     })
-
-
-  //     this.dataSourceConfilicts = new MatTableDataSource(this.listOfConfilicts);
-  //     // this.commonService.loading = false;
-  //     this.mergeWateAndCleaning();
-  //     ////console.log('countAllOfConfilicts', this.countAllOfConfilicts)
-  //     ////console.log('listOfConfilicts', this.listOfConfilicts)
-  //   })
-
-  // }
   print(): void {
     let printContents, popupWin;
     printContents = document.getElementById('print-section').innerHTML;
@@ -481,19 +330,34 @@ export class transportationWorkbookReportComponent implements OnInit {
     popupWin.document.write(`
         <html>
           <head>
-            <title>پرینت قرارداد </title>
+            <title>کارنامه محیط زیست</title>
             <style>
             *{
                direction:rtl;
                font-family: 'b mitra'!important; 
                text-align: right;
-  
              }
+             table{
+               width:100% !important;
+             }
+        th{
+          background-color:#4285f4;
+          border: 0px solid gray;
+          border: 1px solid gray;
+          border: 1px solid gray;
+          font-size: medium;
+      
+        }
+        
+        .titleOfWorkBook{
+          background-color:#ea4335;
+          color:white;          
+      }
              td{
                  
                border: 0px solid gray;
-               border-left: 1px solid gray;
-               border-bottom: 1px solid gray;
+               border: 1px solid gray;
+               border: 1px solid gray;
                font-size: medium;
               
              }
@@ -607,7 +471,7 @@ export class transportationWorkbookReportComponent implements OnInit {
     ////console.log('SumOfCoefficientCalculationZone', SumOfCoefficientCalculationZone)
     ////console.log(' this.zoneWithoutMeasurement', this.zoneWithoutMeasurement)
     this.dataSourceZoneWithoutMeasurement = new MatTableDataSource(this.zoneWithoutMeasurement);
-
+this.commonService.loading=false;
 
   }
   calcAvgOfUnitsWithWasteAndClean() {
@@ -627,105 +491,105 @@ export class transportationWorkbookReportComponent implements OnInit {
 
     this.dataSourceAverageMonthlyUnit = new MatTableDataSource(this.averageMonthlyUnit);
   }
-  getMeasurement(s_location_id) {
-    this.commonService.loading = true;
-    this.fullListOfMeasurement = [];
-    let bodyGas = {
-      s_location_id: s_location_id,
-      dat_request_hemre_jalali: this.m.format('YYYY') + this.selectedDate,
-      LKP_TYP_EXIT: 1,//گاز
-      lkp_typ_exam: 9//گاز خروجی
+  // getMeasurement(s_location_id) {
+  //   this.commonService.loading = true;
+  //   this.fullListOfMeasurement = [];
+  //   let bodyGas = {
+  //     s_location_id: s_location_id,
+  //     dat_request_hemre_jalali: this.m.format('YYYY') + this.selectedDate,
+  //     LKP_TYP_EXIT: 1,//گاز
+  //     lkp_typ_exam: 9//گاز خروجی
 
-    }
-    let bodyDust = {
-      s_location_id: s_location_id,
-      dat_request_hemre_jalali: this.m.format('YYYY') + this.selectedDate,
-      LKP_TYP_EXIT: 4,//گردغبار
-      lkp_typ_exam: 7//گردغبار
-    }
+  //   }
+  //   let bodyDust = {
+  //     s_location_id: s_location_id,
+  //     dat_request_hemre_jalali: this.m.format('YYYY') + this.selectedDate,
+  //     LKP_TYP_EXIT: 4,//گردغبار
+  //     lkp_typ_exam: 7//گردغبار
+  //   }
 
-    let bodyWater = {
-      s_location_id: s_location_id,
-      dat_request_hemre_jalali: this.m.format('YYYY') + this.selectedDate,
-      LKP_TYP_EXIT: 2,//آب
-      lkp_typ_exam: 6//کلرباقیمانده
-    }
+  //   let bodyWater = {
+  //     s_location_id: s_location_id,
+  //     dat_request_hemre_jalali: this.m.format('YYYY') + this.selectedDate,
+  //     LKP_TYP_EXIT: 2,//آب
+  //     lkp_typ_exam: 6//کلرباقیمانده
+  //   }
 
-    this.commonService.loading = true;
-    this.workbokReport.getReport(bodyGas).subscribe((success) => {
-      this.listOfGasMeasurement = success;
-      // this.PercentageOfMeasurement(this.listOfGasMeasurement)
-      this.listOfGasMeasurement.forEach(items => {
-        this.fullListOfMeasurement.push(items);
-      });
-      this.workbokReport.getReport(bodyDust).subscribe((success) => {
-        this.listOfDustMeasurement = success;
-        this.listOfDustMeasurement.forEach(items => {
-          this.fullListOfMeasurement.push(items);
-        });
+  //   this.commonService.loading = true;
+  //   this.workbokReport.getReport(bodyGas).subscribe((success) => {
+  //     this.listOfGasMeasurement = success;
+  //     // this.PercentageOfMeasurement(this.listOfGasMeasurement)
+  //     this.listOfGasMeasurement.forEach(items => {
+  //       this.fullListOfMeasurement.push(items);
+  //     });
+  //     this.workbokReport.getReport(bodyDust).subscribe((success) => {
+  //       this.listOfDustMeasurement = success;
+  //       this.listOfDustMeasurement.forEach(items => {
+  //         this.fullListOfMeasurement.push(items);
+  //       });
 
-        this.workbokReport.getReport(bodyWater).subscribe((success) => {
-          this.listOfWaterMeasurement = success;
+  //       this.workbokReport.getReport(bodyWater).subscribe((success) => {
+  //         this.listOfWaterMeasurement = success;
 
-          this.listOfWaterMeasurement.forEach(items => {
-            this.fullListOfMeasurement.push(items);
-          });
-          this.PercentageOfMeasurement(this.fullListOfMeasurement)
-          this.dataSourceReportMeasurement = new MatTableDataSource(this.fullListOfMeasurement);
-          this.commonService.loading = false;
-        });
-
-
-      });
-
-    });
+  //         this.listOfWaterMeasurement.forEach(items => {
+  //           this.fullListOfMeasurement.push(items);
+  //         });
+  //         this.PercentageOfMeasurement(this.fullListOfMeasurement)
+  //         this.dataSourceReportMeasurement = new MatTableDataSource(this.fullListOfMeasurement);
+  //         this.commonService.loading = false;
+  //       });
 
 
-  }
-  PercentageOfMeasurement(data) {
-    data.forEach(element => {
-      if (element['flg_abssence'] == null) {
-        element['flg_abssence'] = ""
-      }
-    });
+  //     });
 
-    if (data.length > 0) {
-      let optionsText = [];
-      let ratio = 3
+  //   });
 
-      data.forEach(eachRowOfReport => {
-        optionsText.push(eachRowOfReport['flg_abssence'])
 
-      }); ////console.log('optionsText', optionsText)
+  // }
+  // PercentageOfMeasurement(data) {
+  //   data.forEach(element => {
+  //     if (element['flg_abssence'] == null) {
+  //       element['flg_abssence'] = ""
+  //     }
+  //   });
 
-      var counts = {};
+  //   if (data.length > 0) {
+  //     let optionsText = [];
+  //     let ratio = 3
 
-      for (var i = 0; i < optionsText.length; i++) {
-        if (!counts.hasOwnProperty(optionsText[i] = optionsText[i])) {
-          counts[optionsText[i]] = 1;
-        }
-        else {
-          counts[optionsText[i]]++;
-        }
-      }
-      ////console.log('counts', counts);
-      this.counts = JSON.stringify(counts)
-      let sum = Object.keys(counts).reduce((s, k) => s += counts[k], 0);
-      this.percentage = Object.keys(counts).map(k => ({ [k]: + (counts[k] / sum * 100).toFixed(2) }));
-      ////console.log('open', this.percentage);
-      //this.mergeWateAndCleaning()
-      if (data[0]) {
-        this.zoneWithMeasurement = [];
-        this.zoneWithMeasurement.push({
-          coefficientCalculationZone: ratio * Number(((counts[""] / optionsText.length) * 100 * 20) / 100),
-          scoreZone: ((counts[""] / optionsText.length) * 100) * 20 / 100,
-          ratio: ratio, type: "اندازه گیری", percentAvg: (counts[""] / optionsText.length) * 100,
-        })
-        this.mergeWateAndCleaning()
+  //     data.forEach(eachRowOfReport => {
+  //       optionsText.push(eachRowOfReport['flg_abssence'])
 
-      }
-    }
-  }
+  //     }); ////console.log('optionsText', optionsText)
+
+  //     var counts = {};
+
+  //     for (var i = 0; i < optionsText.length; i++) {
+  //       if (!counts.hasOwnProperty(optionsText[i] = optionsText[i])) {
+  //         counts[optionsText[i]] = 1;
+  //       }
+  //       else {
+  //         counts[optionsText[i]]++;
+  //       }
+  //     }
+  //     ////console.log('counts', counts);
+  //     this.counts = JSON.stringify(counts)
+  //     let sum = Object.keys(counts).reduce((s, k) => s += counts[k], 0);
+  //     this.percentage = Object.keys(counts).map(k => ({ [k]: + (counts[k] / sum * 100).toFixed(2) }));
+  //     ////console.log('open', this.percentage);
+  //     //this.mergeWateAndCleaning()
+  //     if (data[0]) {
+  //       this.zoneWithMeasurement = [];
+  //       this.zoneWithMeasurement.push({
+  //         coefficientCalculationZone: ratio * Number(((counts[""] / optionsText.length) * 100 * 20) / 100),
+  //         scoreZone: ((counts[""] / optionsText.length) * 100) * 20 / 100,
+  //         ratio: ratio, type: "اندازه گیری", percentAvg: (counts[""] / optionsText.length) * 100,
+  //       })
+  //      //this.mergeWateAndCleaning()
+
+  //     }
+  //   }
+  // }
   cleaningForm() {
 
     this.dataSource = undefined
@@ -756,7 +620,8 @@ export class transportationWorkbookReportComponent implements OnInit {
     this.listOfConfilicts = [];
   }
   //گزارش پسماند
-  WasteReport() {
+  WasteReport(): Observable<any> {
+    let sub = new Subject<any>();
     // debugger
     this.commonService.loading = true;
     this.fullListOfWorkbookReport = [];
@@ -776,6 +641,7 @@ export class transportationWorkbookReportComponent implements OnInit {
     let avrageOfNam_measur_hemrp: number = 0
     this.commonService.loading = true;
     this.workbokReport.getReport(body).subscribe((success) => {
+
       this.listOfWasteReport = success;
       this.percentageOfScore(this.listOfWasteReport)
       success.forEach(eachWorkbookReportOfUnit => {
@@ -805,17 +671,17 @@ export class transportationWorkbookReportComponent implements OnInit {
         coefficientCalculationZone: (((avrageOfNam_measur_hemrp) * 20) / 100) * 2,
         scoreZone: (((avrageOfNam_measur_hemrp) * 20) / 100),
         ratio: 2, type: "حمل ضایعات", percentAvg: avrageOfNam_measur_hemrp,
-       
+
       }
       )
 
-      this.mergeWateAndCleaning()
+      //this.mergeWateAndCleaning()
       this.dataSourceWasteReport = new MatTableDataSource(this.fullListOfWasteReport);
       this.commonService.loading = false;
-
+      sub.next();
     });
 
-
+    return sub;
   }
 
 }

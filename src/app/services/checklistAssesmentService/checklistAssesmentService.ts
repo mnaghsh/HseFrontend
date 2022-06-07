@@ -7,7 +7,7 @@ import { ConfigService } from '../config.service';
 })
 export class checklistAssesmentService {
 
-  constructor(public configService:ConfigService) { }
+  constructor(public configService: ConfigService) { }
 
   // public selectAllListOfChecklistAssesment():Observable<any>{
   //   return this.configService.get('HseEChecklistAssessments');
@@ -15,24 +15,28 @@ export class checklistAssesmentService {
   // public selectListOfRequestOfCheckList(HecliECheckListId):Observable<any>{
   //   return this.configService.get('HseECheckListRequest/GetHseECheckListRequestOfChecklist/'+HecliECheckListId);
   // }
-  
-  public selectAllListOfChecklistReport():Observable<any>{
+
+  public selectAllListOfChecklistReport(): Observable<any> {
     return this.configService.get('checklistReport');
   }
 
-  public filterListOfChecklistReport(body):Observable<any>{
-    return this.configService.post('checklistReport/FilterReportChecklist',body);
+  public filterListOfChecklistReport(body): Observable<any> {
+    return this.configService.post('checklistReport/FilterReportChecklist', body);
   }
 
-  public insertListOfChecklistAssesment(body):Observable<any>{
-    return this.configService.post('HseEChecklistAssessments',body);
+  public filterListOfChecklistReportByLocationId(body): Observable<any> {
+    return this.configService.post('checklistReport/FilterReportChecklistByLocationId', body);
   }
-  
-  public updateListOfChecklistAssesment(id,body):Observable<any>{
-    return this.configService.put('HseEChecklistAssessments/'+id,body);
+
+  public insertListOfChecklistAssesment(body): Observable<any> {
+    return this.configService.post('HseEChecklistAssessments', body);
   }
-  public deleteListOfChecklistAssesment(id):Observable<any>{
-    return this.configService.delete('HseEChecklistAssessments/'+id);
+
+  public updateListOfChecklistAssesment(id, body): Observable<any> {
+    return this.configService.put('HseEChecklistAssessments/' + id, body);
+  }
+  public deleteListOfChecklistAssesment(id): Observable<any> {
+    return this.configService.delete('HseEChecklistAssessments/' + id);
   }
 
 

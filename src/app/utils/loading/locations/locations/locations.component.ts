@@ -28,7 +28,7 @@ export class LocationsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: MatTableDataSource<any>;
-  displayedColumns = ['number', 'locationId', 'namLocation'];
+  displayedColumns = ['number', 'locationId', 'namLocation','zonesZoneId','process'];
   ListOfcheckListsOptions: any;
   newRowObj: any;
   unit: { value: number; viewValue: string; }[];

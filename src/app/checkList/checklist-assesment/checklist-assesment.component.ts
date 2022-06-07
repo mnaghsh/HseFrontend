@@ -168,7 +168,7 @@ export class ChecklistAssesmentComponent implements OnInit {
       this.getChecklistOptions()
       let start = moment(this.dateOfInspection.nativeElement.value, 'jYYYY/jM/jD HH:mm:ss');
       let dateOfInspection = start.locale('en').format('YYYY/M/D HH:mm:ss');
-      
+
       console.log('Date', this.firstLevel.value.thirdCtrl)
       console.log('Date2', this.dateOfInspection.nativeElement.value)
 
@@ -196,6 +196,10 @@ export class ChecklistAssesmentComponent implements OnInit {
 
     this.checkListQuestionService.selectListOfQuestionsOfCheckList(this.checklistId).subscribe((success) => {
       this.ListOfcheckListsQuestions = success;
+      let defaltOption = this.ListOfcheckListsOptions.filter(x => x.desOptionHeclo == "مطلوب")[0].eOptionId;
+      this.ListOfcheckListsQuestions.forEach(eachQuestion => {
+        eachQuestion['SelectedOptionId'] = defaltOption
+      })
       console.log('ListOfcheckListsQuestions', this.ListOfcheckListsQuestions)
       this.dataSource = new MatTableDataSource(this.ListOfcheckListsQuestions);
       this.dataSource.paginator = this.paginator;
@@ -283,7 +287,7 @@ export class ChecklistAssesmentComponent implements OnInit {
 
 
     this.ListOfcheckListsQuestions.forEach(eachQuestion => {
-
+     // eachQuestion['SelectedOptionId'] = defaltOption
       if (eachQuestion['SelectedOptionId'] == undefined) {
         this.commonService.showEventMessage("لطفا همه گزینه ها را تکمیل کنید", 3000, "green")
         this.topScroll.nativeElement.scrollIntoView({ behavior: 'smooth' });

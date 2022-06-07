@@ -17,7 +17,7 @@ export class ZonesComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: MatTableDataSource<any>;
-  displayedColumns = ['number', 'namZone', 'process'];
+  displayedColumns = ['number','zoneId', 'namZone', 'process'];
   ListOfZones: any;
   newRowObj: any;
   unit: { value: number; viewValue: string; }[];
