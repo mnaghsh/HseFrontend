@@ -27,7 +27,7 @@
           <mat-divider>
           </mat-divider>
         </mat-list-item>
-
+        <div *ngIf="evaluationDiscrepanciesReport.length>0">
         <mat-expansion-panel class="panel">
           <mat-expansion-panel-header class="mat-expansion-panel-header">
             <mat-panel-title style="color: white; margin-top: 15px;">
@@ -36,15 +36,17 @@
               <p>گزارشات </p>
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <mat-list-item (click)="drawer.toggle()" role="listitem" *ngFor="let link of evaluationDiscrepanciesReport"
-            [routerLink]="link.path">
-            <i [class]="link.icon" style="font-size: large;" class="menuIcons" aria-hidden="true"></i>
-            <span class="label">{{link.label}}</span>
-            <mat-divider>
-            </mat-divider>
-          </mat-list-item>
+         
+            <mat-list-item (click)="drawer.toggle()" role="listitem" *ngFor="let link of evaluationDiscrepanciesReport"
+              [routerLink]="link.path">
+              <i [class]="link.icon" style="font-size: large;" class="menuIcons" aria-hidden="true"></i>
+              <span class="label">{{link.label}}</span>
+              <mat-divider>
+              </mat-divider>
+            </mat-list-item>
+       
         </mat-expansion-panel>
-
+      </div>
 
         <mat-list-item (click)="drawer.toggle()" role="listitem" *ngFor="let link of rightMenu"
           [routerLink]="link.path">

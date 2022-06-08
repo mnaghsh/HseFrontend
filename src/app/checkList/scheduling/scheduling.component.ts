@@ -23,7 +23,7 @@ export class SchedulingComponent implements OnInit {
     { value: 4, viewValue: 'روزانه' }
   ]
 
-  displayedColumns = ['number', 'namAssessorHsrch', 'namChkHecli', 'numNumberHsrch','namPeriodHsrch', 'namLocationHsrch', 'process'];
+  displayedColumns = ['number', 'namAssessorHsrch', 'namChkHecli', 'numNumberHsrch', 'namPeriodHsrch', 'namLocationHsrch', 'process'];
   listOfAllSchedulings: any;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -43,9 +43,19 @@ export class SchedulingComponent implements OnInit {
   }
 
   public getAllSchedules() {
+    let filteredSchedulings = []
     this.commonService.loading = true;
     this.schedulingService.selectAllListOfScheduling().subscribe((success) => {
       this.listOfAllSchedulings = success;
+      if(this.commonService.activeUser.accessLevel=="بازرس"){
+      this.listOfAllSchedulings.forEach(eachSchedule => {
+        if ((eachSchedule.namAssessorHsrch).replace(/\s/g, "") == (this.commonService.activeUser.firstname + this.commonService.activeUser.lastname).trim()) {
+          filteredSchedulings.push(eachSchedule)
+        }
+      });
+      this.listOfAllSchedulings=filteredSchedulings;
+    }
+      
       console.log('listOfAllUsers', this.listOfAllSchedulings)
       this.dataSource = new MatTableDataSource(this.listOfAllSchedulings);
       this.dataSource.paginator = this.paginator;
@@ -77,7 +87,7 @@ export class SchedulingComponent implements OnInit {
       case 'سالانه':
         object['numPeriodHsrch'] = 3;
         break;
-        case 'روزانه':
+      case 'روزانه':
         object['numPeriodHsrch'] = 4;
         break;
     }
@@ -115,7 +125,7 @@ export class SchedulingComponent implements OnInit {
   }
 
   public deleteRow(row) {
-debugger
+    debugger
     console.log('del', row)
     this.schedulingService.deleteListOfScheduling(row['eSchedulingId']).subscribe(
       (success) => {

@@ -25,7 +25,7 @@ export class MenuComponent implements OnInit {
 
   ngOnInit() {
     this.myRoute.navigate(['checklistAssesment']);
-
+    if (this.commonService.activeUser.accessLevel == "مدیر") {
     this.navBarItem = [
       // { label: ' صفحه اصلی', path: "/home", icon: "fa fa-home" },
       { label: 'تعریف چک لیست', path: "/createCheckList", icon: "fa fa-pencil" },
@@ -33,14 +33,38 @@ export class MenuComponent implements OnInit {
       { label: 'چاپ گزارش', path: "/checklistReport", icon: "fa fa-newspaper-o" },
       { label: 'برنامه زمانبندی', path: "/scheduling", icon: "fa fa-calendar" },
     ];
+    }
+    if (this.commonService.activeUser.accessLevel == "کارشناس") {
+      this.navBarItem = [
+        // { label: ' صفحه اصلی', path: "/home", icon: "fa fa-home" },
+        { label: 'تعریف چک لیست', path: "/createCheckList", icon: "fa fa-pencil" },
+        { label: 'انجام ارزیابی', path: "/checklistAssesment", icon: "fa fa-print" },
+        { label: 'چاپ گزارش', path: "/checklistReport", icon: "fa fa-newspaper-o" },
+        { label: 'برنامه زمانبندی', path: "/scheduling", icon: "fa fa-calendar" },
+      ];
+      }
+      if (this.commonService.activeUser.accessLevel == "بازرس") {
+        this.navBarItem = [
+          // { label: ' صفحه اصلی', path: "/home", icon: "fa fa-home" },
+         // { label: 'تعریف چک لیست', path: "/createCheckList", icon: "fa fa-pencil" },
+          { label: 'انجام ارزیابی', path: "/checklistAssesment", icon: "fa fa-print" },
+         // { label: 'چاپ گزارش', path: "/checklistReport", icon: "fa fa-newspaper-o" },
+          { label: 'برنامه زمانبندی', path: "/scheduling", icon: "fa fa-calendar" },
+        ];
+        }
+        ///////////////////////////
+        "منو سمت راست"
     debugger
-    if (this.commonService.activeUser.accessLevel == "admin") {
+    if (this.commonService.activeUser.accessLevel == "مدیر") {
       this.rightMenu = [
         { label: 'تعریف چک لیست', path: "/createCheckList", icon: "fa fa-pencil" },
         { label: 'انجام ارزیابی', path: "/checklistAssesment", icon: "fa fa-print" },
         { label: 'مدیریت مکان ها ', path: "/locations", icon: "fa fa-map-marker" },
         { label: 'مدیریت کاربران ', path: "/users", icon: "fa fa-users" },
         { label: 'خروج', path: "/login", icon: "fa fa-sign-out" },
+        { label: 'برنامه زمانبندی', path: "/scheduling", icon: "fa fa-calendar" },
+
+        
       ]
 
       this.evaluationDiscrepanciesReport = [
@@ -52,23 +76,65 @@ export class MenuComponent implements OnInit {
       ];
 
     }
-    else {
+
+      if (this.commonService.activeUser.accessLevel == "کارشناس") {
       this.rightMenu = [
         { label: 'تعریف چک لیست', path: "/createCheckList", icon: "fa fa-pencil" },
         { label: 'انجام ارزیابی', path: "/checklistAssesment", icon: "fa fa-print" },
         { label: 'مدیریت مکان ها ', path: "/locations", icon: "fa fa-map-marker" },
+        { label: 'مدیریت کاربران ', path: "/users", icon: "fa fa-users" },
         { label: 'خروج', path: "/login", icon: "fa fa-sign-out" },
-      ]
-      // this.evaluationDiscrepanciesReport = [
-      //   { label: 'چاپ گزارش چک لیست ها', path: "/checklistReport", icon: "fa fa-newspaper-o" },
-      //   { label: 'چاپ گزارش بر اساس نام ارزیاب و تاریخ', path: "/requestChecklistReport", icon: "fa fa-newspaper-o" },
-      //   { label: 'گزارش مغایرت ارزیابی های انجام شده بر اسا نام ارزیاب', path: "/evaluationDiscrepanciesReportByAssessor", icon: "fa fa-newspaper-o" },
-      //   { label: 'گزارش مغایرت ارزیابی های انجام شده بر اساس نام مکان', path: "/evaluationDiscrepanciesReportByLocation", icon: "fa fa-newspaper-o" },
-      //   { label: 'گزارش مغایرت ارزیابی های انجام شده بر اساس نام چک لیست', path: "/evaluationDiscrepanciesReportByCheckList", icon: "fa fa-newspaper-o" }, { label: 'چاپ گزارش بر اساس نام ارزیاب و تاریخ', path: "/requestChecklistReport", icon: "fa fa-newspaper-o" },
+        { label: 'برنامه زمانبندی', path: "/scheduling", icon: "fa fa-calendar" },
 
-      // ];
+      ]
+
+      this.evaluationDiscrepanciesReport = [
+        { label: 'چاپ گزارش چک لیست ها', path: "/checklistReport", icon: "fa fa-newspaper-o" },
+        { label: 'گزارش مغایرت ارزیابی های انجام شده بر اساس نام ارزیاب', path: "/evaluationDiscrepanciesReportByAssessor", icon: "fa fa-newspaper-o" },
+        { label: 'گزارش مغایرت ارزیابی های انجام شده بر اساس نام مکان', path: "/evaluationDiscrepanciesReportByLocation", icon: "fa fa-newspaper-o" },
+        { label: 'گزارش مغایرت ارزیابی های انجام شده بر اساس نام چک لیست', path: "/evaluationDiscrepanciesReportByCheckList", icon: "fa fa-newspaper-o" }, { label: 'چاپ گزارش بر اساس نام ارزیاب و تاریخ', path: "/requestChecklistReport", icon: "fa fa-newspaper-o" },
+
+      ];
 
     }
+    if (this.commonService.activeUser.accessLevel == "بازرس") {
+      this.rightMenu = [
+       // { label: 'تعریف چک لیست', path: "/createCheckList", icon: "fa fa-pencil" },
+        { label: 'انجام ارزیابی', path: "/checklistAssesment", icon: "fa fa-print" },
+       // { label: 'مدیریت مکان ها ', path: "/locations", icon: "fa fa-map-marker" },
+       // { label: 'مدیریت کاربران ', path: "/users", icon: "fa fa-users" },
+       { label: 'برنامه زمانبندی', path: "/scheduling", icon: "fa fa-calendar" },
+
+        { label: 'خروج', path: "/login", icon: "fa fa-sign-out" },
+      ]
+      this.evaluationDiscrepanciesReport = [
+        // { label: 'چاپ گزارش چک لیست ها', path: "/checklistReport", icon: "fa fa-newspaper-o" },
+        // { label: 'گزارش مغایرت ارزیابی های انجام شده بر اساس نام ارزیاب', path: "/evaluationDiscrepanciesReportByAssessor", icon: "fa fa-newspaper-o" },
+        // { label: 'گزارش مغایرت ارزیابی های انجام شده بر اساس نام مکان', path: "/evaluationDiscrepanciesReportByLocation", icon: "fa fa-newspaper-o" },
+        // { label: 'گزارش مغایرت ارزیابی های انجام شده بر اساس نام چک لیست', path: "/evaluationDiscrepanciesReportByCheckList", icon: "fa fa-newspaper-o" }, { label: 'چاپ گزارش بر اساس نام ارزیاب و تاریخ', path: "/requestChecklistReport", icon: "fa fa-newspaper-o" },
+
+      ];
+    
+
+    }
+
+    // else {
+    //   this.rightMenu = [
+    //     { label: 'تعریف چک لیست', path: "/createCheckList", icon: "fa fa-pencil" },
+    //     { label: 'انجام ارزیابی', path: "/checklistAssesment", icon: "fa fa-print" },
+    //     { label: 'مدیریت مکان ها ', path: "/locations", icon: "fa fa-map-marker" },
+    //     { label: 'خروج', path: "/login", icon: "fa fa-sign-out" },
+    //   ]
+    //   // this.evaluationDiscrepanciesReport = [
+    //   //   { label: 'چاپ گزارش چک لیست ها', path: "/checklistReport", icon: "fa fa-newspaper-o" },
+    //   //   { label: 'چاپ گزارش بر اساس نام ارزیاب و تاریخ', path: "/requestChecklistReport", icon: "fa fa-newspaper-o" },
+    //   //   { label: 'گزارش مغایرت ارزیابی های انجام شده بر اسا نام ارزیاب', path: "/evaluationDiscrepanciesReportByAssessor", icon: "fa fa-newspaper-o" },
+    //   //   { label: 'گزارش مغایرت ارزیابی های انجام شده بر اساس نام مکان', path: "/evaluationDiscrepanciesReportByLocation", icon: "fa fa-newspaper-o" },
+    //   //   { label: 'گزارش مغایرت ارزیابی های انجام شده بر اساس نام چک لیست', path: "/evaluationDiscrepanciesReportByCheckList", icon: "fa fa-newspaper-o" }, { label: 'چاپ گزارش بر اساس نام ارزیاب و تاریخ', path: "/requestChecklistReport", icon: "fa fa-newspaper-o" },
+
+    //   // ];
+
+    // }
 
 
 

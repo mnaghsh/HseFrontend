@@ -70,8 +70,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   min-width: 100%!important;
   min-height: 100%!important;
   background-color: rgba(0, 0, 0, 0.0)!important;
- 
+
 }
+/* td{
+  cursor: pointer!important;
+} */
 .btnPrint{
   background-color: #cd0a0a!important;
    margin-right: 1%!important;

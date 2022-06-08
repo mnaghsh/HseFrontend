@@ -25,13 +25,15 @@ export class LocationsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: MatTableDataSource<any>;
-  displayedColumns = ['number', 'namLocation', 'process'];
+ 
+
   ListOfcheckListsOptions: any;
   newRowObj: any;
   unit: { value: number; viewValue: string; }[];
   department: { value: number; viewValue: string; }[];
   checklistId: any;
   checklistName: any;
+  displayedColumns: string[];
 
   constructor(
     public locationsService: LocationsService,
@@ -40,6 +42,13 @@ export class LocationsComponent implements OnInit {
     public dialogRef: MatDialogRef<any>,
     @Inject(MAT_DIALOG_DATA) public recievedData
   ) {
+    if(commonService.activeUser.accessLevel== "مدیر"){
+      this.displayedColumns = ['number', 'namLocation', 'process'];
+    }
+    else{
+      this.displayedColumns = ['number', 'namLocation'];
+
+    }
     // this.checklistId = recievedData.checkListId
     // this.checklistName = recievedData.checkListName
     this.getLocations();

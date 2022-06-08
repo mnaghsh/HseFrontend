@@ -26,11 +26,11 @@ export class CreateCheckListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: MatTableDataSource<any>;
-  displayedColumns = ['number', 'namChkHecli', 'unitCehckListsHecli', 'namDepartmentHecli', 'process'];
   ListOfcheckLists: any;
   newRowObj: any;
   unit: { value: number; viewValue: string; }[];
   department: { value: number; viewValue: string; }[];
+  displayedColumns: string[];
 
   constructor(
 
@@ -51,10 +51,10 @@ export class CreateCheckListComponent implements OnInit {
   fillDropDowns() {
 
     this.unit = [
-      { value: 1, viewValue: 'بهداشت محيط ' },
-      { value: 2, viewValue: 'ايمني' },
-      { value: 3, viewValue: 'محیط زیست' },
-      { value: 4, viewValue: 'بهداشت و ارگونومی' },
+      // { value: 1, viewValue: 'بهداشت محيط ' },
+      { value: 1, viewValue: 'ايمني' },
+      { value: 2, viewValue: 'محیط زیست' },
+      { value: 3, viewValue: 'بهداشت حرفه ای ' },
     ];
 
     this.department = [
@@ -75,13 +75,30 @@ export class CreateCheckListComponent implements OnInit {
   }
   ngOnInit() {
     this.newRowObj = {}
+    if (this.commonService.activeUser.accessLevel == "مدیر") {
+      this.displayedColumns = ['number', 'namChkHecli', 'unitCehckListsHecli', 'namDepartmentHecli', 'process'];
+    }
+    else {
+      this.displayedColumns = ['number', 'namChkHecli', 'unitCehckListsHecli', 'namDepartmentHecli'];
 
+    }
   }
 
   public getChecklists() {
     this.commonService.loading = true;
     this.checkListService.selectListOfcheckLists().subscribe((success) => {
-      this.ListOfcheckLists=success
+      this.ListOfcheckLists = success
+      let filteredcheckList=[]
+      if(this.commonService.activeUser.accessLevel!="مدیر"){
+        this.ListOfcheckLists.forEach(eachcheckLists => {
+          if ((eachcheckLists.unitCehckListsHecli).replace(/\s/g, "") == (this.commonService.activeUser.section).trim()) {
+            filteredcheckList.push(eachcheckLists)
+          }
+        });
+        this.ListOfcheckLists = filteredcheckList;
+      }
+
+
       this.commonService.loading = false;
       console.log('ListOfcheckLists', this.ListOfcheckLists)
       this.dataSource = new MatTableDataSource(this.ListOfcheckLists);
@@ -200,7 +217,7 @@ export class CreateCheckListComponent implements OnInit {
 
   selectRow(row) {
     console.log(row)
-    if(!this.edit){
+    if (!this.edit) {
       this.dialogRef.close(row)
     }
   }

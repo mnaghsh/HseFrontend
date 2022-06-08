@@ -16,7 +16,7 @@
 
 <div class="example-container ">
 
-  <table dir="rtl" matSort class="table table-responsive table-bordered  table-striped  table-hover" mat-table #table
+  <table dir="rtl" matSort class="table  table-bordered  table-striped  table-hover" mat-table #table
     [dataSource]="dataSource">
 
     <!--- Note that these columns can be defined in any order.
@@ -118,6 +118,48 @@
       </td>
     </ng-container>
 
+    <ng-container matColumnDef="accessLevel">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef> سطح دسترسی</th>
+      <td mat-cell *matCellDef="let element">
+        <mat-form-field *ngIf="edit" class="example-full-width" appearance="fill">
+          <mat-label>سطح دسترسی</mat-label>
+          <mat-select [(ngModel)]="element.accessLevel">
+            <mat-option *ngFor="let f of accessLevel" [value]="f.viewValue">{{f.viewValue}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <p *ngIf="!edit">{{element.accessLevel}}</p>
+      </td>
+      <td mat-footer-cell *matFooterCellDef>
+        <mat-form-field style="max-height: 52px;" ass="example-full-width" appearance="fill">
+          <mat-label>ناحیه</mat-label>
+          <mat-select [(ngModel)]="newRowObj.accessLevel">
+            <mat-option *ngFor="let f of accessLevel" [value]="f.viewValue">{{f.viewValue}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="section">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>قسمت</th>
+      <td mat-cell *matCellDef="let element">
+        <mat-form-field *ngIf="edit" class="example-full-width" appearance="fill">
+          <mat-label>ناحیه</mat-label>
+          <mat-select [(ngModel)]="element.section">
+            <mat-option *ngFor="let f of section" [value]="f.viewValue">{{f.viewValue}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <p *ngIf="!edit">{{element.section}}</p>
+      </td>
+      <td mat-footer-cell *matFooterCellDef>
+        <mat-form-field style="max-height: 52px;" ass="example-full-width" appearance="fill">
+          <mat-label>ناحیه</mat-label>
+          <mat-select [(ngModel)]="newRowObj.section">
+            <mat-option *ngFor="let f of section" [value]="f.viewValue">{{f.viewValue}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </td>
+    </ng-container>
+
 
 
     <ng-container matColumnDef="process">
@@ -133,7 +175,7 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
-    <tr  (click)="selectRow(row)" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr (click)="selectRow(row)" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     <tr style="background-color: #06acea30;" mat-footer-row *matFooterRowDef="displayedColumns ; sticky: true">
 
     </tr>

@@ -36,7 +36,7 @@
 
     <ng-container matColumnDef="namChkHecli">
       <th mat-header-cell mat-sort-header *matHeaderCellDef> نام چک لیست</th>
-      <td style="cursor: pointer;" mat-cell *matCellDef="let element" (click)="selectRow(element)">
+      <td  style="cursor: pointer ;" mat-cell *matCellDef="let element" (click)="selectRow(element)">
         <mat-form-field *ngIf="edit" class="example-full-width" appearance="fill">
           <input matInput *ngIf="edit" [placeholder]="" [(ngModel)]="element.namChkHecli" type="text">
         </mat-form-field>
@@ -107,7 +107,7 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr  mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     <tr style="background-color: #06acea30;" mat-footer-row *matFooterRowDef="displayedColumns ; sticky: true">
 
     </tr>

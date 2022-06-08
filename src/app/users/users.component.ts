@@ -20,9 +20,19 @@ export class UsersComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: MatTableDataSource<any>;
-  displayedColumns = ['number', 'firstname','lastname','username','password','personCode','mobile', 'process'];
+  displayedColumns = ['number', 'firstname', 'lastname', 'username', 'password', 'personCode', 'mobile','accessLevel','section', 'process'];
   newRowObj: any;
   listOfAllUsers: any;
+  section = [
+    { value: 1, viewValue: 'ايمني' },
+    { value: 2, viewValue: 'محیط زیست' },
+    { value: 3, viewValue: 'بهداشت حرفه ای ' },
+  ];
+  accessLevel = [
+    { value: 1, viewValue: 'مدیر' },
+    { value: 2, viewValue: 'کارشناس' },
+    { value: 3, viewValue: 'بازرس' },
+  ];
   constructor(
     public commonService: CommonService,
     private myRoute: Router,
@@ -31,18 +41,17 @@ export class UsersComponent implements OnInit {
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: any,
     @Inject(MAT_DIALOG_DATA) public recievedData
   ) {
-    
+
     this.getAllUsers();
   }
 
   ngOnInit() {
     this.newRowObj = {}
-   
+
   }
 
   public getAllUsers() {
-    if (this.commonService.activeUser.accessLevel!="admin")
-    {
+    if (this.commonService.activeUser.accessLevel != "مدیر") {
       this.commonService.showEventMessage("شما دسترسی به محتوای این فرم را ندارید.", 3000, "green")
       this.myRoute.navigate(['menu']);
       return
@@ -132,7 +141,7 @@ export class UsersComponent implements OnInit {
 
   selectRow(row) {
     console.log(row)
-    if(!this.edit){
+    if (!this.edit) {
       this.dialogRef.close(row)
     }
   }
