@@ -161,7 +161,9 @@ export class WorkbookReportComponent implements OnInit {
         }
         // ////debugger
         this.getConfilicts().subscribe((success) => {
+           this.commonService.loading=true;
           if (this.selectedZoneName == "حمل و نقل") {
+             this.commonService.loading=true;
             this.WasteReport().subscribe((success) => {
              
             })
@@ -174,8 +176,10 @@ export class WorkbookReportComponent implements OnInit {
                   this.getMeasurement().subscribe((success) => {
                     // //debugger
                     if (this.selectedZoneName == "انرژی و سیالات") {
+                      // this.commonService.loading=true;
                       this.getNrtReport().subscribe((success) => {
                         this.mergeWateAndCleaning();
+                         this.commonService.loading=false;
                       })
                     }
                  
@@ -183,6 +187,7 @@ export class WorkbookReportComponent implements OnInit {
 
                     else {
                       this.mergeWateAndCleaning();
+                       this.commonService.loading=false;
                     }
                   })
 
@@ -203,7 +208,7 @@ export class WorkbookReportComponent implements OnInit {
     this.fullListOfWorkbookReport = [];
     if (!this.selectedDate) {
       this.commonService.showEventMessage("ماه را انتخاب کنید")
-      this.commonService.loading = false;
+      // // this.commonService.loading=false;
       return
     }
 
@@ -211,7 +216,7 @@ export class WorkbookReportComponent implements OnInit {
     let bodyLocationsOfZone = {
       zoneId: this.ZoneId,
     }
-    this.commonService.loading = true;
+    // this.commonService.loading=true;
     this.locationsOfZonesService.FilterListLocationsOfZone(bodyLocationsOfZone).subscribe(
       (success) => {
         let listLocationsOfZone = success;
@@ -313,9 +318,10 @@ export class WorkbookReportComponent implements OnInit {
       }
     });
 
-
+    debugger;
     if (WorkbookReportOfUnit.length > 0) {
       let summ = 0
+     
       this.averagesOfNam_measur_hemrp.forEach(eachAvegargesOfUnit => {
         summ = eachAvegargesOfUnit.average + summ
         this.zoneWithoutMeasurementIndustrialWaste = [];
@@ -400,7 +406,7 @@ export class WorkbookReportComponent implements OnInit {
   }
   serverFilter(body): Observable<any> {
     let sub = new Subject<any>();
-    this.commonService.loading = true;
+    // this.commonService.loading=true;
     this.checklistAssesmentService.filterListOfChecklistReportByLocationId(body).subscribe((success) => {
       sub.next();
       //console.log('success', success)
@@ -509,7 +515,7 @@ export class WorkbookReportComponent implements OnInit {
     }
     ////debugger
     this.selectedZoneCharacteristic = this.zoneLocationCharacteristic
-    this.commonService.loading = true;
+    // this.commonService.loading=true;
     this.workbokReport.getConfilicts(body).subscribe((success) => {
       sub.next();
       success.forEach(eachConfilict => {
@@ -574,7 +580,7 @@ export class WorkbookReportComponent implements OnInit {
 
 
       this.dataSourceConfilicts = new MatTableDataSource(this.listOfConfilicts);
-      // this.commonService.loading = false;
+      // // // this.commonService.loading=false;
 
       //console.log('countAllOfConfilicts', this.countAllOfConfilicts)
       //console.log('listOfConfilicts', this.listOfConfilicts)
@@ -798,7 +804,7 @@ export class WorkbookReportComponent implements OnInit {
     let bodyLocationsOfZone = {
       zoneId: this.ZoneId,
     }
-    this.commonService.loading = true;
+    // this.commonService.loading=true;
     this.locationsOfZonesService.FilterListLocationsOfZone(bodyLocationsOfZone).subscribe(
       (success) => {
         let locationZones = success
@@ -827,7 +833,7 @@ export class WorkbookReportComponent implements OnInit {
             lkp_typ_exam: 6//کلرباقیمانده
           }
 
-          this.commonService.loading = true;
+          // this.commonService.loading=true;
           this.workbokReport.getReport(bodyGas).subscribe((success) => {
             this.listOfGasMeasurement = success;
             // this.PercentageOfMeasurement(this.listOfGasMeasurement)
@@ -856,7 +862,7 @@ export class WorkbookReportComponent implements OnInit {
                 }
                 this.dataSourceReportMeasurement = new MatTableDataSource(this.fullListOfMeasurement);
 
-                this.commonService.loading = false;
+                // // this.commonService.loading=false;
               });
 
             });
@@ -1001,7 +1007,7 @@ export class WorkbookReportComponent implements OnInit {
     let body = {
       dat: (Number(this.m.format('YYYY'))) + this.selectedDate,
     }
-    this.commonService.loading = true;
+    // this.commonService.loading=true;
     this.workbokReport.getNrt(body).subscribe((success) => {
 
       this.fullListOfNrtReport = success;
@@ -1017,13 +1023,13 @@ export class WorkbookReportComponent implements OnInit {
 
 
       this.dataSourceNrtReport = new MatTableDataSource(this.fullListOfNrtReport);
-      this.commonService.loading = false;
+      // // this.commonService.loading=false;
       //console.log("nrt", success)
       this.PercentageOfNrt(success)
       sub.next();
     })
       , (error) => {
-        this.commonService.loading = false;
+        // // this.commonService.loading=false;
         this.commonService.showEventMessage("وب سرویس آزمایشگاه های غیر روتین پاسخگو نیست")
       };
 
@@ -1110,12 +1116,12 @@ export class WorkbookReportComponent implements OnInit {
   WasteReport(): Observable<any> {
     let sub = new Subject<any>();
     // debugger
-    this.commonService.loading = true;
+    // this.commonService.loading=true;
     this.fullListOfWorkbookReport = [];
     this.selectedDate = this.commonService.selctedDateForWorkBook
     if (!this.selectedDate) {
       this.commonService.showEventMessage("ماه را انتخاب کنید")
-      this.commonService.loading = false;
+      // // this.commonService.loading=false;
       return
     }
     let body = {
@@ -1126,11 +1132,12 @@ export class WorkbookReportComponent implements OnInit {
     }
     let sumOfNam_measur_hemrp: number = 0
     let avrageOfNam_measur_hemrp: number = 0
-    this.commonService.loading = true;
+    // this.commonService.loading=true;
     this.workbokReport.getReport(body).subscribe((success) => {
       sub.next();
       this.listOfWasteReport = success;
-      this.percentageOfScore(this.listOfWasteReport)
+      
+      //this.percentageOfScore(this.listOfWasteReport)
       success.forEach(eachWorkbookReportOfUnit => {
         if (eachWorkbookReportOfUnit.nam_param_hemop == "حمل به موقع ضایعات") {
           this.fullListOfWasteReport.push(eachWorkbookReportOfUnit);
@@ -1164,7 +1171,7 @@ export class WorkbookReportComponent implements OnInit {
 
       //this.mergeWateAndCleaning()
       this.dataSourceWasteReport = new MatTableDataSource(this.fullListOfWasteReport);
-      this.commonService.loading = false;
+      // // this.commonService.loading=false;
    
     });
 
