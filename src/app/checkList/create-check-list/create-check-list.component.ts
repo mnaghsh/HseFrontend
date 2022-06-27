@@ -90,8 +90,9 @@ export class CreateCheckListComponent implements OnInit {
       this.ListOfcheckLists = success
       let filteredcheckList=[]
       if(this.commonService.activeUser.accessLevel!="مدیر"){
+        
         this.ListOfcheckLists.forEach(eachcheckLists => {
-          if ((eachcheckLists.unitCehckListsHecli).replace(/\s/g, "") == (this.commonService.activeUser.section).trim()) {
+          if ((eachcheckLists.unitCehckListsHecli).replace(/\s/g, "") == (this.commonService.activeUser.section).replace(/\s/g, "")) {
             filteredcheckList.push(eachcheckLists)
           }
         });

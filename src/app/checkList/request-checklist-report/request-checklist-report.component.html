@@ -7,8 +7,7 @@
 </div>
 <app-loading *ngIf="commonService.loading==true"></app-loading>
 <mat-form-field style="min-width: 100%;" class="example-container">
-    <input matInput  (keyup)="applyFilter($event)"
-        placeholder=" جستجو در چک لیست های فیلتر شده">
+    <input matInput (keyup)="applyFilter($event)" placeholder=" جستجو در چک لیست های فیلتر شده">
 </mat-form-field>
 <button mat-raised-button class="btnExcel" (click)="commonService.exportTable()">
     <i class="fa fa-file-excel-o" aria-hidden="true"></i> انتقال به اکسل
@@ -17,7 +16,7 @@
     <i class="fa fa-print" aria-hidden="true"></i> چاپ
 </button>
 <div id="print-section" class="example-container">
-    
+
     <table id="mainTable" dir="rtl" matSort class="table table-responsive table-bordered  table-striped  table-hover"
         mat-table #table [dataSource]="dataSource">
 
@@ -78,8 +77,29 @@ The actual rendered columns are set as a property on the row definition" -->
             </td>
         </ng-container>
 
+        <ng-container matColumnDef="process">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>عملیات </th>
+            <td mat-cell *matCellDef="let row;let index = index">
 
-        <tr  mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <!-- <button mat-raised-button color="primary" (click)="sendForSpecializedErgonomics()"> -->
+                    <i (click)="sendForSpecializedErgonomics()"
+                    matTooltip="ارسال برای ارگونومی تخصصی"
+                    style=" padding: 5px; color:green; cursor: pointer;" class="fa fa-telegram" aria-hidden="true"></i> 
+               
+                    <!-- </button> -->
+
+
+
+            </td>
+            <td mat-footer-cell *matFooterCellDef="let row;let index = index">
+                <!-- <i *ngIf="edit==false " class="fa fa-plus-square iconAdd" (click)="addRow()"></i> -->
+            </td>
+        </ng-container>
+
+
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
         <tr (click)="selectAssesment(row)" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         <tr style="background-color: #06acea30;" mat-footer-row *matFooterRowDef="displayedColumns ; sticky: true">
 
@@ -87,4 +107,4 @@ The actual rendered columns are set as a property on the row definition" -->
 
     </table>
 </div>
-    <mat-paginator [pageSizeOptions]="[1000,50, 100]"></mat-paginator>
+<mat-paginator [pageSizeOptions]="[1000,50, 100]"></mat-paginator>

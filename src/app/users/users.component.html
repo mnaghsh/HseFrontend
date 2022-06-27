@@ -160,6 +160,20 @@
       </td>
     </ng-container>
 
+    <ng-container matColumnDef="higherPerson">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>  انتساب به کارشناس</th>
+      <td mat-cell *matCellDef="let element">
+        <mat-form-field *ngIf="edit" class="example-full-width" appearance="fill">
+          <input (click)="selectUsers(element)" matInput *ngIf="edit" [placeholder]="" [(ngModel)]="element.higherPerson" type="text">
+        </mat-form-field>
+        <p *ngIf="!edit">{{element.higherPerson}}</p>
+      </td>
+      <td mat-footer-cell *matFooterCellDef>
+        <mat-form-field style="max-height: 52px;" class="example-full-width" appearance="fill">
+          <input (click)="selectUsers(null)" matInput placeholder=" انتساب به کارشناس" [(ngModel)]="newRowObj.higherPerson" type="text">
+        </mat-form-field>
+      </td>
+    </ng-container>
 
 
     <ng-container matColumnDef="process">

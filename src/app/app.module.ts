@@ -30,6 +30,7 @@ import { EvaluationDiscrepanciesReportByAssessorComponent } from './checkList/ev
 import { EvaluationDiscrepanciesReportByCheckListComponent } from './checkList/evaluationDiscrepanciesReport/evaluationDiscrepanciesReportByChecklist/evaluationDiscrepanciesReportByChecklist.component';
 import { EvaluationDiscrepanciesReportByLocationComponent } from './checkList/evaluationDiscrepanciesReport/evaluationDiscrepanciesReportByLocation/evaluationDiscrepanciesReportByLocation.component';
 import { LoadingDialogComponent } from './utils/loadingDialog/loadingDialog.component';
+import { SendSpechializedErgonomiToAssessorComponent } from './specializedErgonmi/send-spechialized-ergonomi-to-assessor/send-spechialized-ergonomi-to-assessor.component';
 
 
 
@@ -79,7 +80,8 @@ const myRoots: Routes = [
     EvaluationDiscrepanciesReportByAssessorComponent,
     EvaluationDiscrepanciesReportByCheckListComponent,
     EvaluationDiscrepanciesReportByLocationComponent,
-    RequestChecklistReportComponent
+    RequestChecklistReportComponent,
+    SendSpechializedErgonomiToAssessorComponent
   ],
   imports: [      NgPersianDatepickerModule,
 

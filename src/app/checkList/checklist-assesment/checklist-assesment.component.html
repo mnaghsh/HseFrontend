@@ -157,7 +157,7 @@
     <mat-step [stepControl]="secondFormGroup" label=" پایان ">
       <div *ngIf="Validation!=false">
         <h2>چک لیست با موفقیت ذخیره شد.</h2>
-        <h3>از منو چاپ گزارش میتوانید از چک لیست های ذخیره شده گزارش بگیرید.</h3>
+        <h3 *ngIf="commonService.activeUser.accessLevel!='بازرس'">از منو چاپ گزارش میتوانید از چک لیست های ذخیره شده گزارش بگیرید.</h3>
       </div>
       <div *ngIf="Validation==false">
         <h2>لطفا ابتدا چک لیست موجود در مرحله دو را تکمیل کنید.</h2>

@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, Optional, ViewChild } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -20,7 +20,7 @@ export class UsersComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: MatTableDataSource<any>;
-  displayedColumns = ['number', 'firstname', 'lastname', 'username', 'password', 'personCode', 'mobile','accessLevel','section', 'process'];
+  displayedColumns = ['number', 'firstname', 'lastname', 'username', 'password', 'personCode', 'mobile', 'higherPerson', 'accessLevel', 'section', 'process'];
   newRowObj: any;
   listOfAllUsers: any;
   section = [
@@ -33,9 +33,12 @@ export class UsersComponent implements OnInit {
     { value: 2, viewValue: 'کارشناس' },
     { value: 3, viewValue: 'بازرس' },
   ];
+  username: any;
+  higerPersonUsername: any;
   constructor(
     public commonService: CommonService,
     private myRoute: Router,
+    private dialog: MatDialog,
     public dialogRef: MatDialogRef<any>,
     public usersService: UsersService,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: any,
@@ -49,6 +52,31 @@ export class UsersComponent implements OnInit {
     this.newRowObj = {}
 
   }
+
+  selectUsers(element) {
+    {
+      debugger
+      const dialogRef = this.dialog.open(UsersComponent, {
+        width: "80%",
+        height: "80%",
+        data: {
+          // checkListId: row.eCheckListId,
+          //  checkListName: row.desChkHecli,
+        }
+      });
+      dialogRef.afterClosed().subscribe(
+        (data) => {
+          if(element){
+            element.higherPerson=(data.firstname+" "+data.lastname)
+          }
+         // this.higerPersonUsername = data.id
+          this.newRowObj.higherPerson=(data.firstname+" "+data.lastname)
+
+        }
+      )
+    }
+  }
+
 
   public getAllUsers() {
     if (this.commonService.activeUser.accessLevel != "مدیر") {
@@ -76,7 +104,8 @@ export class UsersComponent implements OnInit {
       "firstname": this.newRowObj.firstname,
       "lastname": this.newRowObj.lastname,
       "personCode": this.newRowObj.personCode,
-      "mobile": this.newRowObj.mobile
+      "mobile": this.newRowObj.mobile,
+      "higherPerson": this.newRowObj.higherPerson
     }
 
     this.usersService.insertUsers(object).subscribe((success) => {
