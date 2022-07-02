@@ -76,10 +76,10 @@ export class CreateCheckListComponent implements OnInit {
   ngOnInit() {
     this.newRowObj = {}
     if (this.commonService.activeUser.accessLevel == "مدیر") {
-      this.displayedColumns = ['number', 'namChkHecli', 'unitCehckListsHecli', 'namDepartmentHecli', 'process'];
+      this.displayedColumns = ['number', 'namChkHecli', 'unitCehckListsHecli', 'namDepartmentHecli','flgChkHecli', 'process'];
     }
     else {
-      this.displayedColumns = ['number', 'namChkHecli', 'unitCehckListsHecli', 'namDepartmentHecli'];
+      this.displayedColumns = ['number', 'namChkHecli', 'unitCehckListsHecli', 'namDepartmentHecli','flgChkHecli'];
 
     }
   }

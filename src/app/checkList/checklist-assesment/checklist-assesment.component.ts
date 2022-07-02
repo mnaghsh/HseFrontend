@@ -15,6 +15,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { ChecklistOptionsService } from 'src/app/services/checklistOptions/checklist-options.service';
 import { checklistAssesmentService } from 'src/app/services/checklistAssesmentService/checklistAssesmentService';
+//import { CheckListService } from 'src/app/services/checkList/check-list.service';
 
 @Component({
   selector: 'app-checklist-assesment',
@@ -24,7 +25,7 @@ import { checklistAssesmentService } from 'src/app/services/checklistAssesmentSe
 export class ChecklistAssesmentComponent implements OnInit {
   favoriteSeason: string;
   seasons: string[] = [];
-  displayedColumns = ['number', 'desQuestionHeclq', 'options', 'desExplainQuestionHscha', 'process'];
+  displayedColumns = ['number', 'desQuestionHeclq', 'options','desExplainQuestionHscha', 'process'];
   edit = false;
   newRowObj: any;
   checklistId: any;
@@ -63,7 +64,7 @@ export class ChecklistAssesmentComponent implements OnInit {
   Validation = false;
   requestChecklistObject: any;
 
- 
+
   department = [
     { value: 1, viewValue: 'آهن سازی' },
     { value: 2, viewValue: 'فولاد سازی' },
@@ -79,11 +80,13 @@ export class ChecklistAssesmentComponent implements OnInit {
     { value: 12, viewValue: 'خدمات عمومی' },
     { value: 13, viewValue: 'خارج از فولاد' },
   ];
+  flgChkHecli: any;
 
   constructor(private fb: FormBuilder,
     public checkListQuestionService: ChecklistQuestionService,
     public checkListOptionsService: ChecklistOptionsService,
     public checkListAssesment: checklistAssesmentService,
+    // public checkList:CheckListService,
     private dialog: MatDialog,
     public commonService: CommonService,
     public requestCheckListService: RequestChecklistService,
@@ -114,6 +117,7 @@ export class ChecklistAssesmentComponent implements OnInit {
 
         this.checklistId = data.eCheckListId;
         this.namChkHecli = data.namChkHecli;
+        this.flgChkHecli = data.flgChkHecli
         //this.namLocationHsrch = data.namLocationHsrch;
         // this.firstLevel.value.firstCtrl=data.desChkHecli
         this.firstLevel.controls['firstCtrl'].setValue(data.namChkHecli);
@@ -121,6 +125,9 @@ export class ChecklistAssesmentComponent implements OnInit {
         //   firstCtrl: [data.desChkHecli, Validators.required]
 
         // });
+        if(this.flgChkHecli!=1){
+          this.displayedColumns = ['number', 'desQuestionHeclq','namScoreHscha', 'desExplainQuestionHscha', 'process'];
+        }
 
       }
     )
@@ -276,10 +283,10 @@ export class ChecklistAssesmentComponent implements OnInit {
 
   gotoStep3() {
 
-
+ 
     this.ListOfcheckListsQuestions.forEach(eachQuestion => {
-
-      if (eachQuestion['SelectedOptionId'] == undefined) {
+debugger
+      if (eachQuestion['SelectedOptionId'] == undefined && this.flgChkHecli==1) {
         this.commonService.showEventMessage("لطفا همه گزینه ها را تکمیل کنید", 3000, "green")
         this.topScroll.nativeElement.scrollIntoView({ behavior: 'smooth' });
         this.Validation = false;
@@ -301,6 +308,7 @@ export class ChecklistAssesmentComponent implements OnInit {
             "hecloEOptionId": eachQuestion['SelectedOptionId'],
             "hsrchERequestId": ResponseRequest['eRequestId'],
             "desExplainQuestionHscha": eachQuestion['desExplainQuestionHscha'],
+            "namScoreHscha": eachQuestion['namScoreHscha'],
             "createDate": new Date()
           }
 
