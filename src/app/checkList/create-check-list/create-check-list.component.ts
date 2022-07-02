@@ -76,10 +76,10 @@ export class CreateCheckListComponent implements OnInit {
   ngOnInit() {
     this.newRowObj = {}
     if (this.commonService.activeUser.accessLevel == "مدیر") {
-      this.displayedColumns = ['number', 'namChkHecli', 'unitCehckListsHecli', 'namDepartmentHecli','flgChkHecli', 'process'];
+      this.displayedColumns = ['number', 'namChkHecli', 'unitCehckListsHecli', 'namDepartmentHecli', 'flgChkHecli', 'process'];
     }
     else {
-      this.displayedColumns = ['number', 'namChkHecli', 'unitCehckListsHecli', 'namDepartmentHecli','flgChkHecli'];
+      this.displayedColumns = ['number', 'namChkHecli', 'unitCehckListsHecli', 'namDepartmentHecli', 'flgChkHecli'];
 
     }
   }
@@ -88,9 +88,9 @@ export class CreateCheckListComponent implements OnInit {
     this.commonService.loading = true;
     this.checkListService.selectListOfcheckLists().subscribe((success) => {
       this.ListOfcheckLists = success
-      let filteredcheckList=[]
-      if(this.commonService.activeUser.accessLevel!="مدیر"){
-        
+      let filteredcheckList = []
+      if (this.commonService.activeUser.accessLevel != "مدیر") {
+
         this.ListOfcheckLists.forEach(eachcheckLists => {
           if ((eachcheckLists.unitCehckListsHecli).replace(/\s/g, "") == (this.commonService.activeUser.section).replace(/\s/g, "")) {
             filteredcheckList.push(eachcheckLists)
@@ -117,6 +117,7 @@ export class CreateCheckListComponent implements OnInit {
       "namChkHecli": this.newRowObj.namChkHecli,
       "unitCehckListsHecli": this.newRowObj.unitCehckListsHecli,
       "namDepartmentHecli": this.newRowObj.namDepartmentHecli,
+      "flgChkHecli":Number(this.newRowObj.flgChkHecli),
       "createDate": new Date()
     }
 
